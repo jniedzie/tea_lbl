@@ -32,4 +32,5 @@
 
 # option 5: only specify local input and output directories
 input_directory = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune/merged/"
-output_dir = "/eos/cms/store/cmst3/group/lightbylight/analysis_jeremi/skimmed_neutralExlusivity/"
+output_dir = "/eos/cms/store/cmst3/group/lightbylight/analysis_jeremi/ntuples/collisionData/"
+# output_dir = "/eos/cms/store/cmst3/group/lightbylight/analysis_jeremi/skimmed_neutralExlusivity/"

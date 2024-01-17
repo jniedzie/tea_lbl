@@ -53,7 +53,10 @@ void LbLSelections::InsertGoodPhotonsCollection(std::shared_ptr<Event> event) {
     if ((int)photon->Get("hasConversionTracks")) continue;
 
     // Check sigma ietaieta
-    if ((float)photon->Get("sigmaIEtaIEta2012") > 0.02) continue;
+    if (absEta < 1.479 && (float)photon->Get("sigmaIEtaIEta2012") > 0.02)
+      continue;
+    else if (absEta < 3.0 && (float)photon->Get("sigmaIEtaIEta2012") > 0.06)
+      continue;
 
     // Check seed time
     if (fabs((float)photon->Get("seedTime") > 3.0)) continue;
