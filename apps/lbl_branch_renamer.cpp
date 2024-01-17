@@ -4,39 +4,43 @@
 using namespace std;
 
 map<string, vector<float>*> vectors;
+map<string, vector<int>*> vectorsInt;
 
-void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<string>> &renameMap) {
+void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<string>>& renameMap) {
   TObjArray* branches = tree->GetListOfBranches();
   for (int i = 0; i < branches->GetEntries(); ++i) {
     TBranch* branch = (TBranch*)branches->At(i);
     string branchName = branch->GetName();
 
-    if(renameMap.find(branchName) == renameMap.end()) continue;
+    if (renameMap.find(branchName) == renameMap.end()) continue;
 
     string newBranchName = renameMap[branchName][0];
 
-    if(renameMap[branchName][1] == "vector<float>"){
+    if (renameMap[branchName][1] == "vector<float>") {
       vectors[branchName] = nullptr;
       tree->SetBranchAddress(branchName.c_str(), &vectors[branchName]);
       outputTree->Branch(renameMap[branchName][0].c_str(), &vectors[branchName]);
-    }
-    else{
+    } else if (renameMap[branchName][1] == "vector<int>") {
+      vectorsInt[branchName] = nullptr;
+      tree->SetBranchAddress(branchName.c_str(), &vectorsInt[branchName]);
+      outputTree->Branch(renameMap[branchName][0].c_str(), &vectorsInt[branchName]);
+    } else {
       outputTree->Branch(newBranchName.c_str(), branch->GetAddress(), renameMap[branchName][1].c_str());
     }
   }
 }
 
-void MergeTrees(vector<TTree*> inputTrees, TTree* outputTree, map<string, vector<string>> &renameMap, int maxEntries = -1) {
-  Long64_t nentries = maxEntries > 0 ? maxEntries : inputTrees[0]->GetEntries();
+void MergeTrees(vector<TTree*> inputTrees, TTree* outputTree, map<string, vector<string>>& renameMap, int maxEntries = -1) {
+  Long64_t nEntries = maxEntries > 0 ? maxEntries : inputTrees[0]->GetEntries();
 
-  for(auto tree : inputTrees) SetupBranchesForMerging(tree, outputTree, renameMap);
-  
-  for (Long64_t i = 0; i < nentries; ++i) {
-    for(auto tree : inputTrees) tree->GetEntry(i);
+  for (auto tree : inputTrees) SetupBranchesForMerging(tree, outputTree, renameMap);
+
+  for (Long64_t i = 0; i < nEntries; ++i) {
+    if (i % 1000 == 0) info() << "Processing event " << i << " out of " << nEntries << endl;
+    for (auto tree : inputTrees) tree->GetEntry(i);
     outputTree->Fill();
   }
 }
-
 
 void CheckArgs(int argc, char** argv) {
   if (argc != 2 && argc != 4) {
@@ -78,8 +82,11 @@ int main(int argc, char** argv) {
   map<string, vector<string>> renameMap;
   config.GetMap("branchesNames", renameMap);
 
+  int maxEntries;
+  config.GetValue("nEvents", maxEntries);
+
   // Process each tree
-  MergeTrees({inputTree1, inputTree2, inputTree3}, outputTree, renameMap, 100);
+  MergeTrees({inputTree1, inputTree2, inputTree3}, outputTree, renameMap, maxEntries);
 
   // Write the output tree to the file
   outputTree->Write();
