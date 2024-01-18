@@ -11,107 +11,6 @@ LbLSelections::LbLSelections() {
               2.853, 3.000, 3.139, 3.314, 3.489, 3.664, 3.839, 4.013, 4.191, 4.363, 4.538, 4.716, 4.889, 5.191};
 }
 
-void LbLSelections::InsertGoodPhotonsCollection(std::shared_ptr<Event> event) {
-  auto &config = ConfigManager::GetInstance();
-
-  auto photons = event->GetCollection("photon");
-  auto goodPhotons = make_shared<PhysicsObjects>();
-
-  for (auto photon : *photons) {
-    if ((float)photon->Get("et") < 2.5) continue;
-
-    float absEta = fabs((float)photon->Get("eta"));
-    if (absEta > 2.2) continue;
-
-    // Check the crack
-    float absEtaSC = fabs((float)photon->Get("SCEta"));
-    if (absEtaSC > 1.4442 && absEtaSC < 1.566) continue;
-
-    // // Check η shower shape
-    if (absEta < 1.479 && (float)photon->Get("SCEtaWidth") > 0.0106)
-      continue;
-    else if (absEta < 3.0 && (float)photon->Get("SCEtaWidth") > 0.0272)
-      continue;
-
-    // Check H/E
-    if (absEta < 1.479 && (float)photon->Get("hOverE") > 0.04596)
-      continue;
-    else if (absEta < 3.0 && (float)photon->Get("hOverE") > 0.0590)
-      continue;
-
-    // Check swiss cross
-    float swissCross = 0;
-    swissCross += (float)photon->Get("energyTop");
-    swissCross += (float)photon->Get("energyBottom");
-    swissCross += (float)photon->Get("energyLeft");
-    swissCross += (float)photon->Get("energyRight");
-    swissCross /= (float)photon->Get("maxEnergyCrystal");
-    swissCross = 1 - swissCross;
-
-    if (swissCross > 1) {
-      warn() << "Swiss cross cannot be calculated. The event will pass this selection automatically" << endl;
-    } else if (swissCross >= 0.95)
-      continue;
-
-    // Check for conversions
-    if ((int)photon->Get("hasConversionTracks")) continue;
-
-    // Check sigma ietaieta
-    if (absEta < 1.479 && (float)photon->Get("sigmaIEtaIEta2012") > 0.02)
-      continue;
-    else if (absEta < 3.0 && (float)photon->Get("sigmaIEtaIEta2012") > 0.06)
-      continue;
-
-    // Check seed time
-    if (fabs((float)photon->Get("seedTime") > 3.0)) continue;
-
-    // check HEM
-    float etaSC = photon->Get("SCEta");
-    float phiSC = photon->Get("SCPhi");
-    if (etaSC > -2.4 && etaSC < -1.39 && phiSC > -1.6 && phiSC < -0.9) continue;
-
-    goodPhotons->push_back(photon);
-  }
-
-  event->AddCollection("goodPhoton", goodPhotons);
-}
-
-void LbLSelections::InsertGoodElectronsCollection(std::shared_ptr<Event> event) {
-  auto &config = ConfigManager::GetInstance();
-
-  auto electrons = event->GetCollection("electron");
-  auto goodElectrons = make_shared<PhysicsObjects>();
-
-  for (auto electron : *electrons) {
-    if ((float)electron->Get("pt") <= 2.0) continue;
-
-    float absEta = fabs((float)electron->Get("eta"));
-    if (absEta > 2.2) continue;
-
-    // Check the crack
-    float absEtaSC = fabs((float)electron->Get("SCEta"));
-    if (absEtaSC > 1.4442 && absEtaSC < 1.566) continue;
-
-    // Check missing hits
-    if ((int)electron->Get("nMissHits") > 1) continue;
-
-    // Check delta eta at vertex
-    if (abs((float)electron->Get("deltaEtaAtVertex")) >= 0.1) continue;
-
-    // Check H/E
-    if ((float)electron->Get("hOverE") > 0.005) continue;
-
-    // check HEM
-    float etaSC = electron->Get("SCEta");
-    float phiSC = electron->Get("SCPhi");
-    if (etaSC > -2.4 && etaSC < -1.39 && phiSC > -1.6 && phiSC < -0.9) continue;
-
-    goodElectrons->push_back(electron);
-  }
-
-  event->AddCollection("goodElectron", goodElectrons);
-}
-
 int LbLSelections::EtaToIeta(float eta) {
   int iEta = 1;
   float absEta = fabs(eta);
@@ -196,6 +95,14 @@ bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<
   auto diphoton = photon1vec + photon2vec;
   if (diphoton.M() < 5) return false;
   cutFlowManager->UpdateCutFlow("diphotonMass");
+
+  return true;
+}
+
+
+bool LbLSelections::PassesChargedExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager)
+{
+
 
   return true;
 }

@@ -6,12 +6,10 @@ class LbLSelections {
  public:
   LbLSelections();
   ~LbLSelections() = default;
-  
-  void InsertGoodPhotonsCollection(std::shared_ptr<Event> event);
-  void InsertGoodElectronsCollection(std::shared_ptr<Event> event);
 
   bool HasAdditionalTowers(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   bool PassesDiphotonSelection(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+  bool PassesChargedExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
 
  private:
   bool OverlapsWithOtherObjects(std::shared_ptr<PhysicsObject> physicsObject, std::shared_ptr<PhysicsObjects> otherObjects,

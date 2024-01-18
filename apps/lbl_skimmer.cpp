@@ -9,6 +9,7 @@
 #include "LbLSelections.hpp"
 #include "Logger.hpp"
 #include "Profiler.hpp"
+#include "LbLObjectsManager.hpp"
 
 using namespace std;
 
@@ -35,9 +36,11 @@ int main(int argc, char **argv) {
   auto eventProcessor = make_unique<EventProcessor>();
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   auto lblSelections = make_unique<LbLSelections>();
+  auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  bool applyTwoPhotons, applyNeutralExclusivity, applyZDC;
+  bool applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyZDC;
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
+  config.GetValue("applyChargedExclusivity", applyChargedExclusivity);
   config.GetValue("applyNeutralExclusivity", applyNeutralExclusivity);
   config.GetValue("applyZDC", applyZDC);
 
@@ -46,6 +49,9 @@ int main(int argc, char **argv) {
   if (applyTwoPhotons) {
     cutFlowManager->RegisterCut("twoGoodPhotons");
     cutFlowManager->RegisterCut("diphotonMass");
+  }
+  if(applyChargedExclusivity) {
+    cutFlowManager->RegisterCut("chargedExclusivity");
   }
   if (applyNeutralExclusivity) {
     cutFlowManager->RegisterCut("HBtowers");
@@ -64,13 +70,21 @@ int main(int argc, char **argv) {
   
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
-    lblSelections->InsertGoodPhotonsCollection(event);
-    lblSelections->InsertGoodElectronsCollection(event);
+    lblObjectsManager->InsertGoodPhotonsCollection(event);
+    lblObjectsManager->InsertGoodElectronsCollection(event);
+    lblObjectsManager->InsertGoodTracksCollection(event);
 
     cutFlowManager->UpdateCutFlow("initial");
 
     if (applyTwoPhotons) {
       if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager)) continue;
+    }
+
+    if(applyChargedExclusivity){
+      int nElectrons = event->GetCollection("goodElectron")->size();
+      int nTracks = event->GetCollection("goodTrack")->size();
+      if (nElectrons + nTracks > 0) continue;
+      cutFlowManager->UpdateCutFlow("chargedExclusivity");
     }
 
     if (applyNeutralExclusivity) {

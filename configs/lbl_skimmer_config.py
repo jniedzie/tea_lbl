@@ -4,7 +4,8 @@ printEveryNevents = 1000
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 applyTwoPhotons = True
-applyNeutralExclusivity = False
+applyChargedExclusivity = True
+applyNeutralExclusivity = True
 applyZDC = False
 
 sample = "collisionData"
@@ -18,7 +19,7 @@ skim = "skimmed_twoPhotons"
 inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
 treeOutputFilePath = inputFilePath.replace("initial", skim)
 
-weightsBranchName = "genWeight"
+# weightsBranchName = "genWeight"
 eventsTreeNames = ["Events",]
 
 extraEventCollections = {
