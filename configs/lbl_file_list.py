@@ -14,14 +14,14 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 # output_dir = f"{base_path}/ntuples/cep/initial/"
 
 
-# neutral exclusivity
 sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 
-skim = "skimmed_twoPhotons"
+# skim = "skimmed_twoPhotons"
 # skim = "skimmed_neutralExclusivity"
+skim = "skimmed_allSelections"
 
 input_directory = f"{base_path}/ntuples/{sample}/initial/"
 output_dir = f"{base_path}/ntuples/{sample}/{skim}/"

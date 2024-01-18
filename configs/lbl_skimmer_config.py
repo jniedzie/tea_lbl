@@ -6,15 +6,17 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 applyTwoPhotons = True
 applyChargedExclusivity = True
 applyNeutralExclusivity = True
-applyZDC = False
+applyDiphotonPt = True
+applyZDC = True
 
 sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 
-skim = "skimmed_twoPhotons"
+# skim = "skimmed_twoPhotons"
 # skim = "skimmed_neutralExclusivity"
+skim = "skimmed_allSelections"
 
 inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
 treeOutputFilePath = inputFilePath.replace("initial", skim)

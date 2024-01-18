@@ -2,16 +2,17 @@ import os
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/"
 
-skim = "skimmed_twoPhotons"
+# skim = "skimmed_twoPhotons"
 # skim = "skimmed_neutralExclusivity"
+skim = "skimmed_allSelections"
 
 hist_path = ""
 
 sample_paths = (
     "collisionData",
-    "lbl",
-    "cep",
-    "qed",
+    # "lbl",
+    # "cep",
+    # "qed",
 )
 
 

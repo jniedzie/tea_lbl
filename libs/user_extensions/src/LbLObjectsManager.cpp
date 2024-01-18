@@ -20,10 +20,12 @@ bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<PhysicsObject> photon) {
     if ((float)photon->Get("SCEtaWidth") > 0.0106) return false;
     if ((float)photon->Get("hOverE") > 0.04596) return false;
     if ((float)photon->Get("sigmaIEtaIEta2012") > 0.02) return false;
-  } else if (absEta < 3.0) {  // endcap
+  } else if (absEta < 2.2) {  // endcap
     if ((float)photon->Get("SCEtaWidth") > 0.0272) return false;
     if ((float)photon->Get("hOverE") > 0.0590) return false;
     if ((float)photon->Get("sigmaIEtaIEta2012") > 0.06) return false;
+  } else{
+    return false;
   }
 
   // Check swiss cross

@@ -47,26 +47,26 @@ bool LbLSelections::IsAnyECalTowerGood(string towersCollectionName, shared_ptr<E
   return false;
 }
 
-bool LbLSelections::HasAdditionalTowers(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  if (event->GetCollection("PassingHBtower")->size() != 0) return true;
+bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (event->GetCollection("PassingHBtower")->size() != 0) return false;
   cutFlowManager->UpdateCutFlow("HBtowers");
 
-  if (IsAnyTowerAlive(event->GetCollection("PassingHEtowerPlus"), {16})) return true;
-  if (IsAnyTowerAlive(event->GetCollection("PassingHEtowerMinus"), {-16})) return true;
+  if (IsAnyTowerAlive(event->GetCollection("PassingHEtowerPlus"), {16})) return false;
+  if (IsAnyTowerAlive(event->GetCollection("PassingHEtowerMinus"), {-16})) return false;
   cutFlowManager->UpdateCutFlow("HEtowers");
 
-  if (IsAnyTowerAlive(event->GetCollection("PassingHFtowerPlus"), {29, 30})) return true;
-  if (IsAnyTowerAlive(event->GetCollection("PassingHFtowerMinus"), {-29, -30})) return true;
+  if (IsAnyTowerAlive(event->GetCollection("PassingHFtowerPlus"), {29, 30})) return false;
+  if (IsAnyTowerAlive(event->GetCollection("PassingHFtowerMinus"), {-29, -30})) return false;
   cutFlowManager->UpdateCutFlow("HFtowers");
 
-  if (IsAnyECalTowerGood("PassingEBtower", event, 0.15, 0.7)) return true;
+  if (IsAnyECalTowerGood("PassingEBtower", event, 0.15, 0.7)) return false;
   cutFlowManager->UpdateCutFlow("EBtowers");
 
-  if (IsAnyECalTowerGood("PassingEEtowerPlus", event, 0.15, 0.4)) return true;
-  if (IsAnyECalTowerGood("PassingEEtowerMinus", event, 0.15, 0.4)) return true;
+  if (IsAnyECalTowerGood("PassingEEtowerPlus", event, 0.15, 0.4)) return false;
+  if (IsAnyECalTowerGood("PassingEEtowerMinus", event, 0.15, 0.4)) return false;
   cutFlowManager->UpdateCutFlow("EEtowers");
 
-  return false;
+  return true;
 }
 
 bool LbLSelections::OverlapsWithOtherObjects(shared_ptr<PhysicsObject> physicsObject, shared_ptr<PhysicsObjects> otherObjects,
@@ -99,10 +99,30 @@ bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<
   return true;
 }
 
+bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  int nElectrons = event->GetCollection("goodElectron")->size();
+  if (nElectrons > 0) return false;
+  cutFlowManager->UpdateCutFlow("nElectrons");
 
-bool LbLSelections::PassesChargedExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager)
-{
+  int nTracks = event->GetCollection("goodTrack")->size();
+  if (nTracks > 0) return false;
+  cutFlowManager->UpdateCutFlow("nTracks");
 
+  return true;
+}
+
+bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (event->GetCollection("goodPhoton")->size() != 2) return false;
+  
+  auto photon1 = event->GetCollection("goodPhoton")->at(0);
+  auto photon2 = event->GetCollection("goodPhoton")->at(1);
+  TLorentzVector photon1vec, photon2vec;
+  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
+  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
+
+  auto diphoton = photon1vec + photon2vec;
+  if (diphoton.Pt() > 1) return false;
+  cutFlowManager->UpdateCutFlow("diphotonPt");
 
   return true;
 }

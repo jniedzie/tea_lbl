@@ -6,10 +6,10 @@
 #include "ExtensionsHelpers.hpp"
 #include "HistogramsFiller.hpp"
 #include "HistogramsHandler.hpp"
+#include "LbLObjectsManager.hpp"
 #include "LbLSelections.hpp"
 #include "Logger.hpp"
 #include "Profiler.hpp"
-#include "LbLObjectsManager.hpp"
 
 using namespace std;
 
@@ -38,10 +38,11 @@ int main(int argc, char **argv) {
   auto lblSelections = make_unique<LbLSelections>();
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  bool applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyZDC;
+  bool applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC;
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
   config.GetValue("applyChargedExclusivity", applyChargedExclusivity);
   config.GetValue("applyNeutralExclusivity", applyNeutralExclusivity);
+  config.GetValue("applyDiphotonPt", applyDiphotonPt);
   config.GetValue("applyZDC", applyZDC);
 
   cutFlowManager->RegisterCut("initial");
@@ -50,8 +51,9 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("twoGoodPhotons");
     cutFlowManager->RegisterCut("diphotonMass");
   }
-  if(applyChargedExclusivity) {
-    cutFlowManager->RegisterCut("chargedExclusivity");
+  if (applyChargedExclusivity) {
+    cutFlowManager->RegisterCut("nElectrons");
+    cutFlowManager->RegisterCut("nTracks");
   }
   if (applyNeutralExclusivity) {
     cutFlowManager->RegisterCut("HBtowers");
@@ -60,6 +62,9 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("EBtowers");
     cutFlowManager->RegisterCut("EEtowers");
   }
+  if (applyDiphotonPt) {
+    cutFlowManager->RegisterCut("diphotonPt");
+  }
   if (applyZDC) cutFlowManager->RegisterCut("ZDC");
 
   vector<string> eventsTreeNames;
@@ -67,7 +72,7 @@ int main(int argc, char **argv) {
 
   auto &profiler = Profiler::GetInstance();
   profiler.Start("total");
-  
+
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
     lblObjectsManager->InsertGoodPhotonsCollection(event);
@@ -80,15 +85,16 @@ int main(int argc, char **argv) {
       if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager)) continue;
     }
 
-    if(applyChargedExclusivity){
-      int nElectrons = event->GetCollection("goodElectron")->size();
-      int nTracks = event->GetCollection("goodTrack")->size();
-      if (nElectrons + nTracks > 0) continue;
-      cutFlowManager->UpdateCutFlow("chargedExclusivity");
+    if (applyChargedExclusivity) {
+      if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
     }
 
     if (applyNeutralExclusivity) {
-      if (lblSelections->HasAdditionalTowers(event, cutFlowManager)) continue;
+      if (!lblSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;
+    }
+
+    if (applyDiphotonPt) {
+      if (!lblSelections->PassesDiphotonPt(event, cutFlowManager)) continue;
     }
 
     if (applyZDC) {
