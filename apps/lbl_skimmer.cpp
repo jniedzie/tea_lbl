@@ -7,6 +7,7 @@
 #include "HistogramsFiller.hpp"
 #include "HistogramsHandler.hpp"
 #include "LbLSelections.hpp"
+#include "Logger.hpp"
 #include "Profiler.hpp"
 
 using namespace std;
@@ -35,13 +36,32 @@ int main(int argc, char **argv) {
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
   auto lblSelections = make_unique<LbLSelections>();
 
+  bool applyTwoPhotons, applyNeutralExclusivity, applyZDC;
+  config.GetValue("applyTwoPhotons", applyTwoPhotons);
+  config.GetValue("applyNeutralExclusivity", applyNeutralExclusivity);
+  config.GetValue("applyZDC", applyZDC);
+
   cutFlowManager->RegisterCut("initial");
-  cutFlowManager->RegisterCut("ZDC");
-  lblSelections->RegisterCuts(cutFlowManager);
+
+  if (applyTwoPhotons) {
+    cutFlowManager->RegisterCut("twoGoodPhotons");
+    cutFlowManager->RegisterCut("diphotonMass");
+  }
+  if (applyNeutralExclusivity) {
+    cutFlowManager->RegisterCut("HBtowers");
+    cutFlowManager->RegisterCut("HEtowers");
+    cutFlowManager->RegisterCut("HFtowers");
+    cutFlowManager->RegisterCut("EBtowers");
+    cutFlowManager->RegisterCut("EEtowers");
+  }
+  if (applyZDC) cutFlowManager->RegisterCut("ZDC");
 
   vector<string> eventsTreeNames;
   config.GetVector("eventsTreeNames", eventsTreeNames);
 
+  auto &profiler = Profiler::GetInstance();
+  profiler.Start("total");
+  
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
     lblSelections->InsertGoodPhotonsCollection(event);
@@ -49,19 +69,38 @@ int main(int argc, char **argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
 
-    if (event->GetCollection("PassingZDCcounts")->size() != 0) continue;
-    cutFlowManager->UpdateCutFlow("ZDC");
+    if (applyTwoPhotons) {
+      if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager)) continue;
+    }
 
-    if (lblSelections->HasAdditionalTowers(event, cutFlowManager)) continue;
+    if (applyNeutralExclusivity) {
+      if (lblSelections->HasAdditionalTowers(event, cutFlowManager)) continue;
+    }
+
+    if (applyZDC) {
+      try {
+        if (event->GetCollection("PassingZDCcounts")->size() != 0) continue;
+      } catch (Exception &e) {
+        warn() << "No ZDC collection, ZDC cuts won't be applied" << endl;
+      }
+      cutFlowManager->UpdateCutFlow("ZDC");
+    }
 
     for (string eventsTreeName : eventsTreeNames) {
       eventWriter->AddCurrentEvent(eventsTreeName);
     }
   }
 
+  profiler.Stop("total");
+
   cutFlowManager->SaveCutFlow();
   cutFlowManager->Print();
   eventWriter->Save();
+
+  auto &logger = Logger::GetInstance();
+  logger.Print();
+
+  profiler.Print();
 
   return 0;
 }

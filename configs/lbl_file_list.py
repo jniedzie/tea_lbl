@@ -1,36 +1,27 @@
-# option 1: list input files and one output directory
-# output files will have the same name as inputs, but be stored the output_dir
-# input_file_list = (
-#   "../samples/background_dy.root",
-#   "../samples/background_tt.root"
-#   "../samples/signal_ttz.root"
-#   "../samples/data.root"
-# )
-# output_dir = "../samples/skimmed"
+base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
+
+# for renaming
+# input_directory = f"{base_path}/ntuples_pranati/collisionData/"
+# output_dir = f"{base_path}/ntuples/collisionData/initial/"
+
+# input_directory = f"{base_path}/ntuples_pranati/lbl/"
+# output_dir = f"{base_path}/ntuples/lbl/initial/"
+
+# input_directory = f"{base_path}/ntuples_pranati/qed/"
+# output_dir = f"{base_path}/ntuples/qed/initial/"
+
+# input_directory = f"{base_path}/ntuples_pranati/cep/"
+# output_dir = f"{base_path}/ntuples/cep/initial/"
 
 
-# option 2: list input files and output files
-# input_output_file_list = (
-#   ("../samples/background_dy.root", "../samples/background_dy_skimmed.root"),
-#   ("../samples/background_tt.root", "../samples/background_tt_skimmed.root"),
-#   ("../samples/signal_ttz.root", "../samples/signal_ttz_skimmed.root"),
-#   ("../samples/data.root", "../samples/data_skimmed.root"),
-# )
+# neutral exclusivity
+sample = "collisionData"
+# sample = "lbl"
+# sample = "cep"
+# sample = "qed"
 
+skim = "skimmed_twoPhotons"
+# skim = "skimmed_neutralExclusivity"
 
-# option 3: give DAS dataset name and output path: will run for all files in dataset (or up to max_files)
-# dataset = "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM"
-# output_dir = "../samples/skim"
-# max_files = 2
-
-
-# option 4: give DAS dataset name, output path and specify a particular file name you want to run on
-# dataset = "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM"
-# output_dir = "../samples/skim"
-# file_name = "8ED6072D-6880-724A-A0E2-A57C700C78CC.root"
-
-
-# option 5: only specify local input and output directories
-input_directory = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune/merged/"
-output_dir = "/eos/cms/store/cmst3/group/lightbylight/analysis_jeremi/ntuples/collisionData/"
-# output_dir = "/eos/cms/store/cmst3/group/lightbylight/analysis_jeremi/skimmed_neutralExlusivity/"
+input_directory = f"{base_path}/ntuples/{sample}/initial/"
+output_dir = f"{base_path}/ntuples/{sample}/{skim}/"

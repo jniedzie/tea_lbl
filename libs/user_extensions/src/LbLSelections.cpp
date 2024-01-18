@@ -18,7 +18,7 @@ void LbLSelections::InsertGoodPhotonsCollection(std::shared_ptr<Event> event) {
   auto goodPhotons = make_shared<PhysicsObjects>();
 
   for (auto photon : *photons) {
-    if ((float)photon->Get("et") < 2.0) continue;
+    if ((float)photon->Get("et") < 2.5) continue;
 
     float absEta = fabs((float)photon->Get("eta"));
     if (absEta > 2.2) continue;
@@ -40,11 +40,15 @@ void LbLSelections::InsertGoodPhotonsCollection(std::shared_ptr<Event> event) {
       continue;
 
     // Check swiss cross
-    float swissCross = (float)photon->Get("energyTop") + (float)photon->Get("energyBottom") + (float)photon->Get("energyLeft") +
-                       (float)photon->Get("energyRight");
+    float swissCross = 0;
+    swissCross += (float)photon->Get("energyTop");
+    swissCross += (float)photon->Get("energyBottom");
+    swissCross += (float)photon->Get("energyLeft");
+    swissCross += (float)photon->Get("energyRight");
     swissCross /= (float)photon->Get("maxEnergyCrystal");
+    swissCross = 1 - swissCross;
 
-    if (swissCross < 0) {
+    if (swissCross > 1) {
       warn() << "Swiss cross cannot be calculated. The event will pass this selection automatically" << endl;
     } else if (swissCross >= 0.95)
       continue;
@@ -144,14 +148,6 @@ bool LbLSelections::IsAnyECalTowerGood(string towersCollectionName, shared_ptr<E
   return false;
 }
 
-void LbLSelections::RegisterCuts(shared_ptr<CutFlowManager> cutFlowManager) {
-  cutFlowManager->RegisterCut("HBtowers");
-  cutFlowManager->RegisterCut("HEtowers");
-  cutFlowManager->RegisterCut("HFtowers");
-  cutFlowManager->RegisterCut("EBtowers");
-  cutFlowManager->RegisterCut("EEtowers");
-}
-
 bool LbLSelections::HasAdditionalTowers(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   if (event->GetCollection("PassingHBtower")->size() != 0) return true;
   cutFlowManager->UpdateCutFlow("HBtowers");
@@ -185,4 +181,21 @@ bool LbLSelections::OverlapsWithOtherObjects(shared_ptr<PhysicsObject> physicsOb
     if (deltaEta < maxDeltaEta && deltaPhi < maxDeltaPhi) return true;
   }
   return false;
+}
+
+bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (event->GetCollection("goodPhoton")->size() != 2) return false;
+  cutFlowManager->UpdateCutFlow("twoGoodPhotons");
+
+  auto photon1 = event->GetCollection("goodPhoton")->at(0);
+  auto photon2 = event->GetCollection("goodPhoton")->at(1);
+  TLorentzVector photon1vec, photon2vec;
+  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
+  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
+
+  auto diphoton = photon1vec + photon2vec;
+  if (diphoton.M() < 5) return false;
+  cutFlowManager->UpdateCutFlow("diphotonMass");
+
+  return true;
 }

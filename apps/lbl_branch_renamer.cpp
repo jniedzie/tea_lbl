@@ -8,8 +8,13 @@ map<string, vector<int>*> vectorsInt;
 
 void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<string>>& renameMap) {
   TObjArray* branches = tree->GetListOfBranches();
+  if(!branches) {
+    fatal() << "No branches found in tree " << tree->GetName() << endl;
+    exit(1);
+  }
+
   for (int i = 0; i < branches->GetEntries(); ++i) {
-    TBranch* branch = (TBranch*)branches->At(i);
+    auto branch = (TBranch*)branches->At(i);
     string branchName = branch->GetName();
 
     if (renameMap.find(branchName) == renameMap.end()) continue;
@@ -70,9 +75,18 @@ int main(int argc, char** argv) {
   // Open the input files and get the trees
   auto inputFile = TFile::Open(inputPath.c_str());
 
-  auto inputTree1 = (TTree*)inputFile->Get("ggHiNtuplizer/EventTree");  // Replace with your tree names
-  auto inputTree2 = (TTree*)inputFile->Get("rechitanalyzerpp/zdcrechit");
-  auto inputTree3 = (TTree*)inputFile->Get("l1object/L1UpgradeFlatTree");
+  vector<TTree*> trees;
+
+  vector<string> treeNames = {"ggHiNtuplizer/EventTree", "rechitanalyzerpp/zdcrechit", "l1object/L1UpgradeFlatTree"};
+
+  for(auto treeName : treeNames) {
+    auto tree = (TTree*)inputFile->Get(treeName.c_str());
+    if (!tree || tree->IsZombie()) {
+      error() << "Tree " << treeName << " not found in file " << inputPath << ". It will be skipped" << endl;
+      continue;
+    }
+    trees.push_back(tree);
+  }
 
   // Create the output file and tree
   auto outputFile = new TFile(outputPath.c_str(), "recreate");
@@ -86,7 +100,7 @@ int main(int argc, char** argv) {
   config.GetValue("nEvents", maxEntries);
 
   // Process each tree
-  MergeTrees({inputTree1, inputTree2, inputTree3}, outputTree, renameMap, maxEntries);
+  MergeTrees(trees, outputTree, renameMap, maxEntries);
 
   // Write the output tree to the file
   outputTree->Write();
