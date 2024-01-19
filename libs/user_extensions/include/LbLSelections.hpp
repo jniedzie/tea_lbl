@@ -4,7 +4,7 @@
 
 class LbLSelections {
  public:
-  LbLSelections();
+  LbLSelections() = default;
   ~LbLSelections() = default;
 
   bool PassesNeutralExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
@@ -19,5 +19,5 @@ class LbLSelections {
   std::vector<float> etaEdges;
   int EtaToIeta(float eta);
   bool IsAnyTowerAlive(std::shared_ptr<PhysicsObjects> towers, std::vector<int> deadEtas);
-  bool IsAnyECalTowerGood(std::string towersCollectionName, std::shared_ptr<Event> event, float maxDeltaEta, float maxDeltaPhi);
+  bool IsAnyECalTowerGood(std::string towersCollectionName, std::shared_ptr<Event> event, float maxDeltaEta, float maxDeltaPhi, bool checkHem);
 };

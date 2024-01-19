@@ -4,7 +4,7 @@ from lbl_extra_collections import extraEventCollections
 nEvents = -1
 printEveryNevents = 1000
 
-inputFilePath = "./skimmed.root"
+inputFilePath = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/collisionData/merged_skimmed_allSelections.root"
 histogramsOutputFilePath = "./histograms.root"
 
 defaultHistParams = (

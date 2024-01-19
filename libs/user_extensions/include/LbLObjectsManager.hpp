@@ -4,7 +4,7 @@
 
 class LbLObjectsManager {
  public:
-  LbLObjectsManager() {}
+  LbLObjectsManager();
   ~LbLObjectsManager() = default;
 
   void InsertGoodPhotonsCollection(std::shared_ptr<Event> event);
@@ -15,4 +15,7 @@ class LbLObjectsManager {
   bool IsGoodPhoton(const std::shared_ptr<PhysicsObject> photon);
   bool IsGoodElectron(const std::shared_ptr<PhysicsObject> electron);
   bool IsGoodTrack(const std::shared_ptr<PhysicsObject> track);
+
+  std::map<std::string, float> photonCuts, detectorParams, caloEtaEdges;
+
 };

@@ -56,11 +56,7 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("nTracks");
   }
   if (applyNeutralExclusivity) {
-    cutFlowManager->RegisterCut("HBtowers");
-    cutFlowManager->RegisterCut("HEtowers");
-    cutFlowManager->RegisterCut("HFtowers");
-    cutFlowManager->RegisterCut("EBtowers");
-    cutFlowManager->RegisterCut("EEtowers");
+    cutFlowManager->RegisterCut("neutralExclusivity");
   }
   if (applyDiphotonPt) {
     cutFlowManager->RegisterCut("diphotonPt");

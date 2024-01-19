@@ -1,4 +1,4 @@
-from lbl_extra_collections import extraEventCollections
+from lbl_extra_collections import *
 
 nEvents = -1
 printEveryNevents = 1000
@@ -12,9 +12,9 @@ applyDiphotonPt = True
 applyZDC = True
 
 # sample = "collisionData"
-# sample = "lbl"
+sample = "lbl"
 # sample = "cep"
-sample = "qed"
+# sample = "qed"
 
 # skim = "skimmed_twoPhotons"
 # skim = "skimmed_neutralExclusivity"
@@ -30,9 +30,6 @@ eventsTreeNames = ["Events",]
 # define simple event-level selections
 eventSelections = {}
 
-specialBranchSizes = {
-    "Particle": "Event_numberP",
-}
-
+specialBranchSizes = {}
 branchesToKeep = ["*"]
 branchesToRemove = []

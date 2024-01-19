@@ -1,9 +1,9 @@
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-# sample = "collisionData"
+sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
-sample = "qed"
+# sample = "qed"
 
 # skim = "skimmed_twoPhotons"
 # skim = "skimmed_neutralExclusivity"

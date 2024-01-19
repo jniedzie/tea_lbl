@@ -2,69 +2,27 @@
 
 #include "ConfigManager.hpp"
 #include "Logger.hpp"
+#include "UserExtensionsHelpers.hpp"
 
 using namespace std;
 
-LbLSelections::LbLSelections() {
-  etaEdges = {0.000, 0.087, 0.174, 0.261, 0.348, 0.435, 0.522, 0.609, 0.696, 0.783, 0.870, 0.957, 1.044, 1.131,
-              1.218, 1.305, 1.392, 1.479, 1.566, 1.653, 1.740, 1.830, 1.930, 2.043, 2.172, 2.322, 2.500, 2.650,
-              2.853, 3.000, 3.139, 3.314, 3.489, 3.664, 3.839, 4.013, 4.191, 4.363, 4.538, 4.716, 4.889, 5.191};
-}
-
-int LbLSelections::EtaToIeta(float eta) {
-  int iEta = 1;
-  float absEta = fabs(eta);
-
-  while (absEta > etaEdges[iEta] && iEta < etaEdges.size() - 1) iEta++;
-  if (eta < 0) iEta = -iEta;
-
-  return iEta;
-}
-
-bool LbLSelections::IsAnyTowerAlive(shared_ptr<PhysicsObjects> towers, vector<int> deadEtas) {
-  for (auto tower : *towers) {
-    int ieta = EtaToIeta((float)tower->Get("eta"));
-    if (find(deadEtas.begin(), deadEtas.end(), ieta) != deadEtas.end()) continue;
-    return true;
-  }
-  return false;
-}
-
-bool LbLSelections::IsAnyECalTowerGood(string towersCollectionName, shared_ptr<Event> event, float maxDeltaEta, float maxDeltaPhi) {
-  auto towers = event->GetCollection(towersCollectionName);
-
-  for (auto tower : *towers) {
-    if (OverlapsWithOtherObjects(tower, event->GetCollection("goodPhoton"), 0.15, 0.4)) continue;
-    if (OverlapsWithOtherObjects(tower, event->GetCollection("goodElectron"), 0.15, 0.4)) continue;
-
-    // Check HEM
-    float etaSC = tower->Get("eta");
-    float phiSC = tower->Get("phi");
-    if (etaSC > -2.4 && etaSC < -1.39 && phiSC > -1.6 && phiSC < -0.9) continue;
-
-    return true;
-  }
-  return false;
-}
-
 bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  if (event->GetCollection("PassingHBtower")->size() != 0) return false;
-  cutFlowManager->UpdateCutFlow("HBtowers");
+  auto towers = event->GetCollection("CaloTower");
 
-  if (IsAnyTowerAlive(event->GetCollection("PassingHEtowerPlus"), {16})) return false;
-  if (IsAnyTowerAlive(event->GetCollection("PassingHEtowerMinus"), {-16})) return false;
-  cutFlowManager->UpdateCutFlow("HEtowers");
+  for (auto physicsObject : *towers) {
+    auto tower = asCaloTower(physicsObject);
+    if (tower->IsDead()) continue;
 
-  if (IsAnyTowerAlive(event->GetCollection("PassingHFtowerPlus"), {29, 30})) return false;
-  if (IsAnyTowerAlive(event->GetCollection("PassingHFtowerMinus"), {-29, -30})) return false;
-  cutFlowManager->UpdateCutFlow("HFtowers");
+    if (tower->IsHadronicEnergyAboveNoiseThreshold()) return false;
 
-  if (IsAnyECalTowerGood("PassingEBtower", event, 0.15, 0.7)) return false;
-  cutFlowManager->UpdateCutFlow("EBtowers");
+    if (tower->IsEtaAboveLimit()) continue;
+    if (tower->IsInHEM()) continue;
+    if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
+    if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
 
-  if (IsAnyECalTowerGood("PassingEEtowerPlus", event, 0.15, 0.4)) return false;
-  if (IsAnyECalTowerGood("PassingEEtowerMinus", event, 0.15, 0.4)) return false;
-  cutFlowManager->UpdateCutFlow("EEtowers");
+    if (tower->IsElectromagneticEnergyAboveNoiseThreshold()) return false;
+  }
+  cutFlowManager->UpdateCutFlow("neutralExclusivity");
 
   return true;
 }
@@ -113,7 +71,7 @@ bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr
 
 bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   if (event->GetCollection("goodPhoton")->size() != 2) return false;
-  
+
   auto photon1 = event->GetCollection("goodPhoton")->at(0);
   auto photon2 = event->GetCollection("goodPhoton")->at(1);
   TLorentzVector photon1vec, photon2vec;
