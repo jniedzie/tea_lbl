@@ -1,6 +1,7 @@
 #include "CutFlowManager.hpp"
 #include "Event.hpp"
 #include "Helpers.hpp"
+#include "UserExtensionsHelpers.hpp"
 
 class LbLObjectsManager {
  public:
@@ -12,10 +13,9 @@ class LbLObjectsManager {
   void InsertGoodTracksCollection(std::shared_ptr<Event> event);
 
  private:
-  bool IsGoodPhoton(const std::shared_ptr<PhysicsObject> photon);
+  bool IsGoodPhoton(const std::shared_ptr<Photon> photon);
   bool IsGoodElectron(const std::shared_ptr<PhysicsObject> electron);
   bool IsGoodTrack(const std::shared_ptr<PhysicsObject> track);
 
-  std::map<std::string, float> photonCuts, detectorParams, caloEtaEdges;
-
+  std::map<std::string, float> detectorParams, caloEtaEdges;
 };

@@ -7,54 +7,22 @@ using namespace std;
 
 LbLObjectsManager::LbLObjectsManager() {
   auto &config = ConfigManager::GetInstance();
-  config.GetMap("photonCuts", photonCuts);
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
 }
 
-bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<PhysicsObject> photon) {
-  if ((int)photon->Get("hasConversionTracks")) return false;
+bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon) {
+  if (!photon->PassesConversionCuts()) return false;
+  if (!photon->PassesEtCuts()) return false;
+  if (!photon->PassesSwissCross()) return false;
 
-  if ((float)photon->Get("et") < photonCuts["min_et"]) return false;
+  if (photon->IsEtaAboveLimit()) return false;
+  if (photon->IsInCrack()) return false;
+  if (photon->IsInHEM()) return false;
 
-  // Check swiss cross
-  float swissCross = 0;
-  swissCross += (float)photon->Get("energyTop");
-  swissCross += (float)photon->Get("energyBottom");
-  swissCross += (float)photon->Get("energyLeft");
-  swissCross += (float)photon->Get("energyRight");
-
-  if (swissCross < 0) {
-    warn() << "Swiss cross cannot be calculated. The event will pass this selection automatically" << endl;
-  } else {
-    swissCross /= (float)photon->Get("maxEnergyCrystal");
-    // swissCross = 1 - swissCross;
-    if (swissCross > photonCuts["max_swissCross"]) return false;
-  }
-
-  float absEta = fabs((float)photon->Get("eta"));
-  if (absEta > photonCuts["max_absEta"]) return false;
-
-  // Check the crack
-  float absEtaSC = fabs((float)photon->Get("SCEta"));
-  if (absEtaSC > detectorParams["crack_start"] && absEtaSC < detectorParams["crack_end"]) return false;
-
-  // check HEM
-  float etaSC = photon->Get("SCEta");
-  float phiSC = photon->Get("SCPhi");
-
-  if (etaSC > detectorParams["hem_etaStart"] && etaSC < detectorParams["hem_etaEnd"] && phiSC > detectorParams["hem_phiStart"] &&
-      phiSC < detectorParams["hem_phiEnd"]) {
-    return false;
-  }
-
-  string detRegion = absEta < caloEtaEdges["maxEB"] ? "barrel" : "endcap";
-
-  if ((float)photon->Get("SCEtaWidth") > photonCuts["max_SCEtaWidth_"+detRegion]) return false;
-  if ((float)photon->Get("sigmaIEtaIEta2012") > photonCuts["max_sigmaIEtaIEta_"+detRegion]) return false;
-  if ((float)photon->Get("hOverE") > photonCuts["max_hOverE_"+detRegion]) return false;
-
-  if (fabs((float)photon->Get("seedTime")) > photonCuts["max_seedTime"]) return false;
+  if (!photon->PassesShowerShape()) return false;
+  if (!photon->PassesHoverE()) return false;
+  if (!photon->PassesSeedTimeCuts()) return false;
 
   return true;
 }
@@ -109,9 +77,10 @@ void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event) {
   auto photons = event->GetCollection("photon");
   auto goodPhotons = make_shared<PhysicsObjects>();
 
-  for (auto photon : *photons) {
+  for (auto physicsObject : *photons) {
+    auto photon = asPhoton(physicsObject);
     if (!IsGoodPhoton(photon)) continue;
-    goodPhotons->push_back(photon);
+    goodPhotons->push_back(physicsObject);
   }
 
   event->AddCollection("goodPhoton", goodPhotons);

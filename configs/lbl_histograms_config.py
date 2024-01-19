@@ -1,5 +1,5 @@
 from scale_factors_config import *
-from lbl_extra_collections import extraEventCollections
+from lbl_extra_collections import *
 
 nEvents = -1
 printEveryNevents = 1000
