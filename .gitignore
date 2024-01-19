@@ -3,3 +3,4 @@ bin/*
 
 .__afs*
 .vscode
+*.root
