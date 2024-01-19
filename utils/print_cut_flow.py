@@ -8,8 +8,9 @@ sample = "collisionData"
 # sample = "cep"
 # sample = "qed"
 
-skim = "skimmed_twoPhotons"
+# skim = "skimmed_twoPhotons"
 # skim = "skimmed_neutralExclusivity"
+skim = "skimmed_allSelections"
 
 input_path = f"{base_path}/{sample}/merged_{skim}.root"
 # input_path = f"{base_path}/{sample}/{skim}/ntuple_10.root"
@@ -42,6 +43,8 @@ def main():
     for key in keys:
         hist = dir.Get(key.GetName())
         hist_dict[key.GetName()] = hist.GetBinContent(1)
+
+    hist_dict = OrderedDict(sorted(hist_dict.items(), key=lambda x: int(x[0].split("_")[0])))
 
     print("CutFlow:")
     initial = -1

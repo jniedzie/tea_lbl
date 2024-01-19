@@ -49,7 +49,7 @@ bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<PhysicsObject> photon) {
   // check HEM
   float etaSC = photon->Get("SCEta");
   float phiSC = photon->Get("SCPhi");
-  if (etaSC > -2.4 && etaSC < -1.39 && phiSC > -1.6 && phiSC < -0.9) return false;
+  if (etaSC > -2.2 && etaSC < -1.39 && phiSC > -1.6 && phiSC < -0.9) return false;
 
   return true;
 }
