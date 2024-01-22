@@ -3,8 +3,8 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-# sample = "collisionData"
-sample = "lbl"
+sample = "collisionData"
+# sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 

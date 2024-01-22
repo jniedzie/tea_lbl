@@ -56,7 +56,10 @@ trackCuts = {
     "max_dzOverError": 999999,
 }
 
-muonCuts = {}
+muonCuts = {
+    "min_pt": 2.5,
+    "max_absEta": 2.4,
+}
 
 # calorimeter cuts
 extraEventCollections = {

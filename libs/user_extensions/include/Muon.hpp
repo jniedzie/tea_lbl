@@ -16,6 +16,9 @@ class Muon {
   std::string GetOriginalCollection() { return physicsObject->GetOriginalCollection(); }
   void Reset() { physicsObject->Reset(); }
 
+  bool PassesPtCuts();
+  bool IsEtaAboveLimit();
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
 
