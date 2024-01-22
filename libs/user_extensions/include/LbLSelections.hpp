@@ -4,7 +4,7 @@
 
 class LbLSelections {
  public:
-  LbLSelections() = default;
+  LbLSelections();
   ~LbLSelections() = default;
 
   bool PassesNeutralExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
@@ -12,4 +12,7 @@ class LbLSelections {
   bool PassesChargedExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   bool PassesDiphotonPt(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   bool PassesZDC(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+
+private:
+  std::map<std::string, float> eventCuts;
 };
