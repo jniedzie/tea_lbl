@@ -3,13 +3,13 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-sample = "collisionData"
-# sample = "lbl"
+# sample = "collisionData"
+sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 
-inputFilePath = f"{base_path}/ntuples_pranati/{sample}/merged_ntuples_41.root"
-treeOutputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_41.root"
+inputFilePath = f"{base_path}/ntuples_pranati/{sample}/ntuples_loose_selections_3.root"
+treeOutputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_3.root"
 
 branchesNames = {
   "run"                   : ("runNumber"                  , "runNumber/I"  ),
