@@ -6,6 +6,7 @@
 #include "Photon.hpp"
 #include "Electron.hpp"
 #include "Track.hpp"
+#include "Muon.hpp"
 #include "PhysicsObject.hpp"
 #include "Event.hpp"
 
@@ -25,6 +26,10 @@ inline std::shared_ptr<Electron> asElectron(const std::shared_ptr<PhysicsObject>
 
 inline std::shared_ptr<Track> asTrack(const std::shared_ptr<PhysicsObject> physicsObject) {
   return std::make_shared<Track>(physicsObject);
+}
+
+inline std::shared_ptr<Muon> asMuon(const std::shared_ptr<PhysicsObject> physicsObject) {
+  return std::make_shared<Muon>(physicsObject);
 }
 
 #endif /* UserExtensionsHelpers_hpp */

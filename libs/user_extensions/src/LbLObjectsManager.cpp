@@ -6,7 +6,7 @@
 using namespace std;
 
 LbLObjectsManager::LbLObjectsManager() {
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
 }
@@ -25,7 +25,7 @@ bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon) {
   return true;
 }
 
-bool LbLObjectsManager::IsGoodElectron(const std::shared_ptr<Electron> electron) {
+bool LbLObjectsManager::IsGoodElectron(const shared_ptr<Electron> electron) {
   if (!electron->PassesPtCuts()) return false;
   if (electron->IsInCrack()) return false;
   if (electron->IsEtaAboveLimit()) return false;
@@ -38,15 +38,17 @@ bool LbLObjectsManager::IsGoodElectron(const std::shared_ptr<Electron> electron)
   return true;
 }
 
-bool LbLObjectsManager::IsGoodTrack(const std::shared_ptr<Track> track) {
-  if(!track->PassesPtCuts()) return false;
-  if(track->IsEtaAboveLimit()) return false;
-  if(!track->PassesValidHitsCuts()) return false;
-  if(!track->PassesChi2Cuts()) return false;
-  if(!track->PassesDistanceToPVCuts()) return false;
+bool LbLObjectsManager::IsGoodTrack(const shared_ptr<Track> track) {
+  if (!track->PassesPtCuts()) return false;
+  if (track->IsEtaAboveLimit()) return false;
+  if (!track->PassesValidHitsCuts()) return false;
+  if (!track->PassesChi2Cuts()) return false;
+  if (!track->PassesDistanceToPVCuts()) return false;
 
   return true;
 }
+
+bool LbLObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) { return true; }
 
 void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event) {
   auto photons = event->GetCollection("photon");
@@ -85,4 +87,17 @@ void LbLObjectsManager::InsertGoodTracksCollection(shared_ptr<Event> event) {
   }
 
   event->AddCollection("goodTrack", goodTracks);
+}
+
+void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event) {
+  auto muons = event->GetCollection("muon");
+  auto goodMuons = make_shared<PhysicsObjects>();
+
+  for (auto physicsObject : *muons) {
+    auto muon = asMuon(physicsObject);
+    if (!IsGoodMuon(muon)) continue;
+    goodMuons->push_back(physicsObject);
+  }
+
+  event->AddCollection("goodMuon", goodMuons);
 }

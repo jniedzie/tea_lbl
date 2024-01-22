@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
   if (applyChargedExclusivity) {
     cutFlowManager->RegisterCut("nElectrons");
     cutFlowManager->RegisterCut("nTracks");
+    cutFlowManager->RegisterCut("nMuons");
   }
   if (applyNeutralExclusivity) {
     cutFlowManager->RegisterCut("neutralExclusivity");
@@ -74,6 +75,7 @@ int main(int argc, char **argv) {
     lblObjectsManager->InsertGoodPhotonsCollection(event);
     lblObjectsManager->InsertGoodElectronsCollection(event);
     lblObjectsManager->InsertGoodTracksCollection(event);
+    lblObjectsManager->InsertGoodMuonsCollection(event);
 
     cutFlowManager->UpdateCutFlow("initial");
 

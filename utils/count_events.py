@@ -2,6 +2,13 @@ import ROOT
 import glob
 import os
 
+# directory = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/collisionData/bad_names"
+directory = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/collisionData/initial"
+pattern = "ntuple_*.root"
+
+# tree_name = "ggHiNtuplizer/EventTree"
+tree_name = "Events"
+
 
 def count_tree_entries(directory, pattern, tree_name):
     total_entries = 0
@@ -28,11 +35,6 @@ def count_tree_entries(directory, pattern, tree_name):
 
 
 def main():
-    # Example usage
-    directory = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune"
-    pattern = "ntuples_loose_selections_*.root"
-    tree_name = "ggHiNtuplizer/EventTree"
-
     total = count_tree_entries(directory, pattern, tree_name)
     print(f"Total entries in all trees: {total}")
 

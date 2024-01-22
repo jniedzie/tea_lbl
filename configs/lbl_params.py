@@ -1,16 +1,16 @@
 # event cuts
-
 eventCuts = {
- "max_ZDCenergy": 10.0,   
- 
- "min_Nphotons": 2,
- "max_Nphotons": 2,
- "min_diphotonMass": 5.0,
- "max_diphotonPt": 1.0,
- 
- "max_Ntracks": 0,
- "max_Nelectrons": 0,
- "max_Ntowers": 0,
+    "max_ZDCenergy": 10.0,
+
+    "min_Nphotons": 2,
+    "max_Nphotons": 2,
+    "min_diphotonMass": 5.0,
+    "max_diphotonPt": 1.0,
+
+    "max_Ntracks": 0,
+    "max_Nelectrons": 0,
+    "max_Nmuons": 0,
+    "max_Ntowers": 0,
 }
 
 # good object definitions
@@ -48,13 +48,15 @@ trackCuts = {
     "min_pt": 0.3,
     "max_absEta": 2.4,
     "min_nValidHits": 4,
-    
+
     "max_normalizedChi2": 999999,
     "max_dxy": 999999,
     "max_dz": 999999,
     "max_dxyOverError": 999999,
     "max_dzOverError": 999999,
 }
+
+muonCuts = {}
 
 # calorimeter cuts
 extraEventCollections = {

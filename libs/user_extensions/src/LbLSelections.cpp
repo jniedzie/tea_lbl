@@ -58,12 +58,16 @@ bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<
 
 bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   int nElectrons = event->GetCollection("goodElectron")->size();
-  if (nElectrons > eventCuts["maxNelectrons"]) return false;
+  if (nElectrons > eventCuts["max_Nelectrons"]) return false;
   cutFlowManager->UpdateCutFlow("nElectrons");
 
   int nTracks = event->GetCollection("goodTrack")->size();
-  if (nTracks > eventCuts["maxNtracks"]) return false;
+  if (nTracks > eventCuts["max_Ntracks"]) return false;
   cutFlowManager->UpdateCutFlow("nTracks");
+
+  int nMuons = event->GetCollection("goodMuon")->size();
+  if (nMuons > eventCuts["max_Nmuons"]) return false;
+  cutFlowManager->UpdateCutFlow("nMuons");
 
   return true;
 }
