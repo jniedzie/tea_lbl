@@ -14,8 +14,8 @@ class LbLObjectsManager {
 
  private:
   bool IsGoodPhoton(const std::shared_ptr<Photon> photon);
-  bool IsGoodElectron(const std::shared_ptr<PhysicsObject> electron);
-  bool IsGoodTrack(const std::shared_ptr<PhysicsObject> track);
+  bool IsGoodElectron(const std::shared_ptr<Electron> electron);
+  bool IsGoodTrack(const std::shared_ptr<Track> track);
 
   std::map<std::string, float> detectorParams, caloEtaEdges;
 };
