@@ -90,9 +90,9 @@ branchesNames = {
   "eleSCPhi"              : ("electron_SCPhi"             , "vector<float>"),
   "eleSCEn"               : ("electron_SCEnergy"          , "vector<float>"),  
 
-  "muPt"                  : ("muon_Pt"                    , "vector<float>"),
-  "muEta"                 : ("muon_Eta"                   , "vector<float>"),
-  "muPhi"                 : ("muon_Phi"                   , "vector<float>"),
+  "muPt"                  : ("muon_pt"                    , "vector<float>"),
+  "muEta"                 : ("muon_eta"                   , "vector<float>"),
+  "muPhi"                 : ("muon_phi"                   , "vector<float>"),
   "muCharge"              : ("muon_charge"                , "vector<int>"  ),
   "muHoverE"              : ("muon_hOverE"                , "vector<float>"),
   "muMissHits"            : ("muon_nMissHits"             , "vector<int>"  ),
