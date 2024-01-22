@@ -27,19 +27,6 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   return true;
 }
 
-bool LbLSelections::OverlapsWithOtherObjects(shared_ptr<PhysicsObject> physicsObject, shared_ptr<PhysicsObjects> otherObjects,
-                                             float maxDeltaEta, float maxDeltaPhi) {
-  float eta = physicsObject->Get("eta");
-  float phi = physicsObject->Get("phi");
-
-  for (auto otherObject : *otherObjects) {
-    float deltaEta = fabs((float)otherObject->Get("SCEta") - eta);
-    float deltaPhi = fabs(TVector2::Phi_mpi_pi((float)otherObject->Get("SCPhi") - phi));
-    if (deltaEta < maxDeltaEta && deltaPhi < maxDeltaPhi) return true;
-  }
-  return false;
-}
-
 bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   if (event->GetCollection("goodPhoton")->size() != 2) return false;
   cutFlowManager->UpdateCutFlow("twoGoodPhotons");
@@ -81,6 +68,17 @@ bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlow
   auto diphoton = photon1vec + photon2vec;
   if (diphoton.Pt() > 1) return false;
   cutFlowManager->UpdateCutFlow("diphotonPt");
+
+  return true;
+}
+
+bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  try {
+    if (event->GetCollection("PassingZDCcounts")->size() != 0) return false;
+  } catch (Exception &e) {
+    warn() << "No ZDC collection, ZDC cuts won't be applied" << endl;
+  }
+  cutFlowManager->UpdateCutFlow("ZDC");
 
   return true;
 }

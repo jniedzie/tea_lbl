@@ -94,12 +94,7 @@ int main(int argc, char **argv) {
     }
 
     if (applyZDC) {
-      try {
-        if (event->GetCollection("PassingZDCcounts")->size() != 0) continue;
-      } catch (Exception &e) {
-        warn() << "No ZDC collection, ZDC cuts won't be applied" << endl;
-      }
-      cutFlowManager->UpdateCutFlow("ZDC");
+      if (!lblSelections->PassesZDC(event, cutFlowManager)) continue;
     }
 
     for (string eventsTreeName : eventsTreeNames) {
