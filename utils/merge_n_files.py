@@ -9,25 +9,32 @@ def merge_n_files(directory, pattern, output_path, output_pattern, n_to_merge):
     file_paths = glob.glob(path_pattern)
     print(f"Found {len(file_paths)} files matching pattern {path_pattern}")
 
-    merge_counter = 0
     files_to_merge = []
     output_ntuple_counter = 0
 
     for filename in file_paths:
-        if merge_counter == n_to_merge:
+        if len(files_to_merge) == n_to_merge:
             output_filename = output_pattern.format(output_ntuple_counter)
             output_filename = os.path.join(output_path, output_filename)
 
+            print(f"\n\nMerging files: {files_to_merge}")
             print(f"Merging into: {output_filename}")
 
             os.system(f"hadd -f -j -k {output_filename} {' '.join(files_to_merge)}")
 
-            merge_counter = 0
             files_to_merge = []
             output_ntuple_counter += 1
-        else:
-            files_to_merge.append(filename)
-            merge_counter += 1
+            
+        files_to_merge.append(filename)
+
+    if len(files_to_merge) != 0:
+        output_filename = output_pattern.format(output_ntuple_counter)
+        output_filename = os.path.join(output_path, output_filename)
+
+        print(f"\n\nMerging files: {files_to_merge}")
+        print(f"Merging into: {output_filename}")
+
+        os.system(f"hadd -f -j -k {output_filename} {' '.join(files_to_merge)}")
 
     return total_entries
 
