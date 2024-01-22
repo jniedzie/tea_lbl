@@ -3,8 +3,8 @@ from collections import OrderedDict
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples"
 
-sample = "collisionData"
-# sample = "lbl"
+# sample = "collisionData"
+sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 
@@ -13,8 +13,8 @@ sample = "collisionData"
 skim = "skimmed_allSelections"
 
 # input_path = "../bin/skimmed.root"
-input_path = f"{base_path}/{sample}/merged_{skim}.root"
-# input_path = f"{base_path}/{sample}/{skim}/ntuple_10.root"
+# input_path = f"{base_path}/{sample}/merged_{skim}.root"
+input_path = f"{base_path}/{sample}/{skim}/ntuple_3.root"
 
 scale = False if sample == "collisionData" else True
 
