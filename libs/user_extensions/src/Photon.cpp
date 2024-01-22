@@ -47,10 +47,7 @@ bool Photon::PassesShowerShape() {
   return true;
 }
 
-bool Photon::PassesHoverE() {
-  if ((float)Get("hOverE") > photonCuts["max_hOverE_" + detRegion]) return false;
-  return true;
-}
+bool Photon::PassesHoverE() { return (float)Get("hOverE") < photonCuts["max_hOverE_" + detRegion]; }
 
 bool Photon::PassesSwissCross() {
   float swissCross = GetSwissCross();
@@ -64,14 +61,8 @@ bool Photon::PassesSwissCross() {
   return true;
 }
 
-bool Photon::PassesEtCuts() {
-  return (float)Get("et") > photonCuts["min_et"];
-}
+bool Photon::PassesEtCuts() { return (float)Get("et") > photonCuts["min_et"]; }
 
-bool Photon::PassesSeedTimeCuts() {
-  return fabs((float)Get("seedTime")) < photonCuts["max_seedTime"];
-}
+bool Photon::PassesSeedTimeCuts() { return fabs((float)Get("seedTime")) < photonCuts["max_seedTime"]; }
 
-bool Photon::PassesConversionCuts() {
-  return !(int)Get("hasConversionTracks");
-}
+bool Photon::PassesConversionCuts() { return !(int)Get("hasConversionTracks"); }

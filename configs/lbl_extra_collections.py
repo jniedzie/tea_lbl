@@ -70,3 +70,20 @@ photonCuts = {
     "max_sigmaIEtaIEta_endcap": 0.06,
     "max_seedTime": 3.0,
 }
+
+electronCuts = {
+    "min_pt": 2.0,
+    "max_absEtaSC": 2.2,
+
+    "max_nMissingHits": 1,
+    "max_hOverE": 0.005,
+    "max_deltaEtaAtVertex": 0.1,
+
+    "max_PFChIso_barrel": 999999,
+    "max_PFPhoIso_barrel": 999999,
+    "max_PFNeuIso_barrel": 999999,
+
+    "max_PFChIso_endcap": 999999,
+    "max_PFPhoIso_endcap": 999999,
+    "max_PFNeuIso_endcap": 999999,
+}

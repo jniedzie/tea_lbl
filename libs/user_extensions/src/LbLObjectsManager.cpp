@@ -27,35 +27,20 @@ bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon) {
   return true;
 }
 
-bool LbLObjectsManager::IsGoodElectron(const std::shared_ptr<PhysicsObject> electron) {
-  if ((float)electron->Get("pt") <= 2.0) return false;
+bool LbLObjectsManager::IsGoodElectron(const std::shared_ptr<PhysicsObject> physicsObject) {
+  auto electron = asElectron(physicsObject);
 
-  float absEtaSC = fabs((float)electron->Get("SCEta"));
+  if (!electron->PassesPtCuts()) return false;
 
-  // Check eta and crack
-  if (absEtaSC > 1.4442 && absEtaSC < 1.566) return false;
-  if (absEtaSC > 2.2) return false;
+  if (electron->IsInCrack()) return false;
+  if (electron->IsEtaAboveLimit()) return false;
+  if (electron->IsInHEM()) return false;
 
-  // Check for HEM issue
-  float etaSC = electron->Get("SCEta");
-  float phiSC = electron->Get("SCPhi");
-  if (etaSC > -2.4 && etaSC < -1.39 && phiSC > -1.6 && phiSC < -0.9) return false;
+  if (!electron->PassesMissingHitsCuts()) return false;
+  if (!electron->PassesHoverE()) return false;
+  if (!electron->PassesDeltaEtaAtVertex()) return false;
+  if (!electron->PassesIsolationCuts()) return false;
 
-  // Check other parameters
-  if ((int)electron->Get("nMissHits") > 1) return false;
-  if ((float)electron->Get("hOverE") > 0.005) return false;
-  if (abs((float)electron->Get("deltaEtaAtVertex")) > 0.1) return false;
-
-  // Check isolation
-  if (absEtaSC < 1.479) {  // barrel
-    if ((float)electron->Get("PFChIso") > 99999) return false;
-    if ((float)electron->Get("PFPhoIso") > 99999) return false;
-    if ((float)electron->Get("PFNeuIso") > 99999) return false;
-  } else if (absEtaSC < 3.0) {  // endcap
-    if ((float)electron->Get("PFChIso") > 99999) return false;
-    if ((float)electron->Get("PFPhoIso") > 99999) return false;
-    if ((float)electron->Get("PFNeuIso") > 99999) return false;
-  }
   return true;
 }
 
