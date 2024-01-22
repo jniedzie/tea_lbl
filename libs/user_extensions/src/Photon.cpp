@@ -29,7 +29,7 @@ float Photon::GetSwissCross() {
   swissCross += (float)Get("energyRight");
   swissCross /= (float)Get("maxEnergyCrystal");
 
-  return swissCross;
+  return 1 - swissCross;
 }
 
 bool Photon::IsInHEM() {
@@ -51,14 +51,12 @@ bool Photon::PassesHoverE() { return (float)Get("hOverE") < photonCuts["max_hOve
 
 bool Photon::PassesSwissCross() {
   float swissCross = GetSwissCross();
-  if (swissCross < 0) {
+  if (swissCross > 1) {
     warn() << "Swiss cross cannot be calculated. The event will pass this selection automatically" << endl;
     return true;
-  } else if (swissCross > photonCuts["max_swissCross"]) {
-    return false;
   }
 
-  return true;
+  return swissCross < photonCuts["max_swissCross"];
 }
 
 bool Photon::PassesEtCuts() { return (float)Get("et") > photonCuts["min_et"]; }
