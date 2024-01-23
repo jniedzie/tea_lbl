@@ -1,6 +1,6 @@
 # event cuts
 eventCuts = {
-    "max_ZDCenergy": 10.0,
+    "max_ZDCenergyPerSide": 10000.0,
 
     "min_Nphotons": 2,
     "max_Nphotons": 2,
@@ -12,6 +12,7 @@ eventCuts = {
     "max_Nmuons": 0,
     "max_Ntowers": 0,
 }
+
 
 # good object definitions
 photonCuts = {
@@ -61,11 +62,8 @@ muonCuts = {
     "max_absEta": 2.4,
 }
 
-# calorimeter cuts
-extraEventCollections = {
-    "PassingZDCcounts":  {"inputCollections": ("ZDC",), "energy": (eventCuts["max_ZDCenergy"], 9999999.)},
-}
 
+# calorimeter cuts
 caloNoiseThresholds = {
     "HFm": 6.0,
     "HFp": 6.0,
