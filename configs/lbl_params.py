@@ -48,7 +48,7 @@ electronCuts = {
 trackCuts = {
     "min_pt": 0.3,
     "max_absEta": 2.4,
-    "min_nValidHits": 4,
+    "min_nValidHits": 4,  # 3 ?
 
     "max_normalizedChi2": 999999,
     "max_dxy": 999999,
@@ -96,10 +96,10 @@ caloEtaEdges = {
     "maxEE": 3.0,
 
     "maxHB": 1.305,
-    "minHE": 1.305,
+    "minHE": 1.305,  # 1.41 ?
     "maxHE": 3.0,
 
-    "minHF": 2.9,
+    "minHF": 2.9,  # 3.15 ?
     "maxHF": 5.2,
 }
 
