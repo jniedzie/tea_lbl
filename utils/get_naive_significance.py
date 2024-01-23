@@ -2,7 +2,10 @@ import ROOT
 
 input_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/{}/merged_skimmed_allSelectionshistograms.root"
 
+
 luminosity = 1647.228136  # μb^-1
+
+cep_scale = 0.0012475821798342804
 
 lbl_scale = 2.59 * 0.8477 * 0.9322 * 0.9771**2 * 0.8643 * 1.0006  # xsec * SFs
 n_lbl_events = 466000
@@ -26,21 +29,24 @@ def main():
 
     hist_lbl.Scale(lbl_scale*luminosity/n_lbl_events)
     hist_qed.Scale(qed_scale*luminosity/n_qed_events)
-    
-    hist_data_no_background = hist_data.Clone()
-    hist_data_no_background.Add(hist_lbl, -1)
-    hist_data_no_background.Add(hist_qed, -1)
+    hist_cep.Scale(cep_scale)
 
-    # get integral of data histogram above 0.02
-    integral_data = hist_data_no_background.Integral(
-        hist_data_no_background.FindBin(0.02), hist_data_no_background.GetNbinsX())
-    integral_cep = hist_cep.Integral(
-        hist_cep.FindBin(0.02), hist_cep.GetNbinsX())
+    integral_data = hist_data.Integral(1, hist_data.FindFixBin(0.01)-1)
+    integral_lbl = hist_lbl.Integral(1, hist_lbl.FindFixBin(0.01)-1)
+    integral_cep = hist_cep.Integral(1, hist_cep.FindFixBin(0.01)-1)
+    integral_qed = hist_qed.Integral(1, hist_qed.FindFixBin(0.01)-1)
 
-    scale = integral_data / integral_cep
-
-    print(f"scale: {scale}")
+    print(f"N data events: {integral_data}")
+    print(f"N LbL events: {integral_lbl}")
     print(f"N CEP events: {integral_cep}")
+    print(f"N QED events: {integral_qed}")
+
+    total_background = integral_cep+integral_qed
+    
+    print(f"total background: {total_background}")
+    
+    print(f"Expected naive significance: {integral_lbl/(integral_lbl+total_background)**(1/2)}")
+    print(f"Observed naive significance: {(integral_data-total_background)/(integral_data)**(1/2)}")
 
 
 if __name__ == "__main__":

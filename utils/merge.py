@@ -6,12 +6,12 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/"
 # skim = "skimmed_neutralExclusivity"
 skim = "skimmed_allSelections"
 
-hist_path = ""
-# hist_path = "histograms"
+# hist_path = ""
+hist_path = "histograms"
 
 sample_paths = (
-    "collisionData",
-    # "lbl",
+    # "collisionData",
+    "lbl",
     # "cep",
     # "qed",
 )
@@ -20,7 +20,7 @@ sample_paths = (
 def main():
     for sample_path in sample_paths:
         input_path = f"{base_path}/{sample_path}/{skim}/{hist_path}/*.root"
-        output_path = input_path.replace("*.root", f"../merged_{skim}{hist_path}.root")
+        output_path = f"{base_path}/{sample_path}/merged_{skim}{hist_path}.root"
 
         print(f"{sample_path=}")
         print(f"{output_path=}")
