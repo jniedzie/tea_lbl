@@ -89,11 +89,32 @@ bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlow
 }
 
 bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  try {
-    if (event->GetCollection("PassingZDCcounts")->size() != 0) return false;
-  } catch (Exception &e) {
-    warn() << "No ZDC collection, ZDC cuts won't be applied" << endl;
+  
+  shared_ptr<PhysicsObjects> zdcEnergies;
+
+  try{
+    zdcEnergies = event->GetCollection("ZDC");
   }
+  catch(Exception &e){
+    warn() << "No ZDC collection found in event. Will skip ZDC cuts." << endl;
+    cutFlowManager->UpdateCutFlow("ZDC");
+    return true;
+  }
+
+  float totalEnergyPlus = 0;
+  float totalEnergyMinus = 0;
+
+  for (auto physicsObject : *zdcEnergies) {
+    auto zdcEnergy = asZDCEnergy(physicsObject);
+
+    if (zdcEnergy->GetSide() > 0) {
+      totalEnergyPlus += zdcEnergy->GetEnergy();
+    } else if (zdcEnergy->GetSide() < 0) {
+      totalEnergyMinus += zdcEnergy->GetEnergy();
+    }
+  }
+
+  if(totalEnergyPlus > eventCuts["max_ZDCenergyPerSide"] || totalEnergyMinus > eventCuts["max_ZDCenergyPerSide"]) return false;
   cutFlowManager->UpdateCutFlow("ZDC");
 
   return true;

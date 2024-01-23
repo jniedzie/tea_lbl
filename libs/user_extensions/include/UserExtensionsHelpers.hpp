@@ -7,6 +7,7 @@
 #include "Electron.hpp"
 #include "Track.hpp"
 #include "Muon.hpp"
+#include "ZDCEnergy.hpp"
 #include "PhysicsObject.hpp"
 #include "Event.hpp"
 
@@ -30,6 +31,10 @@ inline std::shared_ptr<Track> asTrack(const std::shared_ptr<PhysicsObject> physi
 
 inline std::shared_ptr<Muon> asMuon(const std::shared_ptr<PhysicsObject> physicsObject) {
   return std::make_shared<Muon>(physicsObject);
+}
+
+inline std::shared_ptr<ZDCEnergy> asZDCEnergy(const std::shared_ptr<PhysicsObject> physicsObject) {
+  return std::make_shared<ZDCEnergy>(physicsObject);
 }
 
 #endif /* UserExtensionsHelpers_hpp */
