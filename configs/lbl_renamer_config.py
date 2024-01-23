@@ -8,8 +8,8 @@ sample = "collisionData"
 # sample = "cep"
 # sample = "qed"
 
-inputFilePath = f"{base_path}/ntuples_pranati/{sample}/ntuples_loose_selections_3.root"
-treeOutputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_3.root"
+inputFilePath = f"{base_path}/ntuples/{sample}/bad_names/ntuple_0.root"
+treeOutputFilePath = "./renamed_test.root"
 
 branchesNames = {
   "run"                   : ("runNumber"                  , "runNumber/I"  ),
@@ -118,9 +118,9 @@ branchesNames = {
   "n"                     : ("nZDC"                       , "nZDC/I"),
   "e"                     : ("ZDC_energy"                 , "ZDC_energy[nZDC]/F"),
   "saturation"            : ("ZDC_saturation"             , "ZDC_saturation[nZDC]/F"),
-  "zside"                 : ("ZDC_zSide"                  , "ZDC_zSide[nZDC]/F"),
-  "section"               : ("ZDC_section"                , "ZDC_section[nZDC]/F"),
-  "channel"               : ("ZDC_channel"                , "ZDC_channel[nZDC]/F"),
+  "zside"                 : ("ZDC_zSide"                  , "ZDC_zSide[nZDC]/I"),
+  "section"               : ("ZDC_section"                , "ZDC_section[nZDC]/I"),
+  "channel"               : ("ZDC_channel"                , "ZDC_channel[nZDC]/I"),
 
   # "nCastorTower": ("nCastorTower", "vector<float>"),
   # "CastorTower_hadE": ("CastorTower_hadE", "vector<float>"),

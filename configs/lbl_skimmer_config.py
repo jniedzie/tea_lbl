@@ -20,9 +20,10 @@ sample = "lbl"
 # skim = "skimmed_neutralExclusivity"
 skim = "skimmed_allSelections"
 
-inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_3.root"
+inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
+# inputFilePath = "./renamed_test.root"
 # treeOutputFilePath = inputFilePath.replace("initial", skim)
-treeOutputFilePath = "./skimmed.root"
+treeOutputFilePath = "./skimmed_test.root"
 
 # weightsBranchName = "genWeight"
 eventsTreeNames = ["Events",]

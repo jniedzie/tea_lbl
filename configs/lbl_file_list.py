@@ -1,7 +1,7 @@
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-sample = "collisionData"
-# sample = "lbl"
+# sample = "collisionData"
+sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 
@@ -10,13 +10,13 @@ sample = "collisionData"
 skim = "skimmed_allSelections"
 
 # for renaming
-# input_directory = f"{base_path}/ntuples_pranati/{sample}/"
+# input_directory = f"{base_path}/ntuples/{sample}/bad_names/"
 # output_dir = f"{base_path}/ntuples/{sample}/initial/"
 
 # for skimming
-input_directory = f"{base_path}/ntuples/{sample}/initial/"
-output_dir = f"{base_path}/ntuples/{sample}/{skim}/"
+# input_directory = f"{base_path}/ntuples/{sample}/initial/"
+# output_dir = f"{base_path}/ntuples/{sample}/{skim}/"
 
 # for histogramming
-# input_directory = f"{base_path}/ntuples/{sample}/{skim}/"
-# output_dir = f"{base_path}/ntuples/{sample}/{skim}/histograms/"
+input_directory = f"{base_path}/ntuples/{sample}/{skim}/"
+output_dir = f"{base_path}/ntuples/{sample}/{skim}/histograms/"

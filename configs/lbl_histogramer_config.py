@@ -4,8 +4,8 @@ from lbl_params import *
 nEvents = -1
 printEveryNevents = 1000
 
-inputFilePath = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/collisionData/merged_skimmed_allSelections.root"
-histogramsOutputFilePath = "./histograms.root"
+inputFilePath = "./skimmed_data.root"
+histogramsOutputFilePath = "./histograms_data.root"
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
