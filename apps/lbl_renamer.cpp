@@ -5,10 +5,15 @@ using namespace std;
 
 map<string, vector<float>*> vectors;
 map<string, vector<int>*> vectorsInt;
+map<string, int> sizes;
+map<string, uint> uints;
+map<string, ULong64_t> longs;
+map<string, float[9999]> floats;
+map<string, int[9999]> ints;
 
 void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<string>>& renameMap) {
   TObjArray* branches = tree->GetListOfBranches();
-  if(!branches) {
+  if (!branches) {
     fatal() << "No branches found in tree " << tree->GetName() << endl;
     exit(1);
   }
@@ -29,8 +34,28 @@ void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<
       vectorsInt[branchName] = nullptr;
       tree->SetBranchAddress(branchName.c_str(), &vectorsInt[branchName]);
       outputTree->Branch(renameMap[branchName][0].c_str(), &vectorsInt[branchName]);
+    } else if (branchName == "run" || branchName == "lumis") {
+      uints[branchName] = 0;
+      tree->SetBranchAddress(branchName.c_str(), &uints[branchName]);
+      outputTree->Branch(newBranchName.c_str(), &uints[branchName], renameMap[branchName][1].c_str());
+    } else if (branchName == "event") {
+      longs[branchName] = 0;
+      tree->SetBranchAddress(branchName.c_str(), &longs[branchName]);
+      outputTree->Branch(newBranchName.c_str(), &longs[branchName], renameMap[branchName][1].c_str());
+    } else if (renameMap[branchName][1].find("]/I") != string::npos) {
+      // ints[branchName] = {0}
+      tree->SetBranchAddress(branchName.c_str(), &ints[branchName]);
+      outputTree->Branch(newBranchName.c_str(), &ints[branchName], renameMap[branchName][1].c_str());
+    } else if (renameMap[branchName][1].find("/I") != string::npos) {
+      sizes[branchName] = 0;
+      tree->SetBranchAddress(branchName.c_str(), &sizes[branchName]);
+      outputTree->Branch(newBranchName.c_str(), &sizes[branchName], renameMap[branchName][1].c_str());
+    } else if (renameMap[branchName][1].find("/F") != string::npos) {
+      // floats[branchName] = {0};
+      tree->SetBranchAddress(branchName.c_str(), &floats[branchName]);
+      outputTree->Branch(newBranchName.c_str(), &floats[branchName], renameMap[branchName][1].c_str());
     } else {
-      outputTree->Branch(newBranchName.c_str(), branch->GetAddress(), renameMap[branchName][1].c_str());
+      error() << "Not clear how to handle branch: " << branchName << " with type: " << renameMap[branchName][1] << endl;
     }
   }
 }
@@ -79,7 +104,7 @@ int main(int argc, char** argv) {
 
   vector<string> treeNames = {"ggHiNtuplizer/EventTree", "rechitanalyzerpp/zdcrechit", "l1object/L1UpgradeFlatTree"};
 
-  for(auto treeName : treeNames) {
+  for (auto treeName : treeNames) {
     auto tree = (TTree*)inputFile->Get(treeName.c_str());
     if (!tree || tree->IsZombie()) {
       error() << "Tree " << treeName << " not found in file " << inputPath << ". It will be skipped" << endl;
