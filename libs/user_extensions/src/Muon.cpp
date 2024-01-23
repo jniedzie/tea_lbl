@@ -10,11 +10,25 @@ Muon::Muon(shared_ptr<PhysicsObject> physicsObject_) : physicsObject(physicsObje
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
 
-  eta = Get("eta");
-  phi = Get("phi");
+  try {
+    eta = Get("Eta");
+  } catch (Exception &e) {
+    eta = Get("eta");
+  }
+  try {
+    phi = Get("Phi");
+  } catch (Exception &e) {
+    phi = Get("phi");
+  }
+  try {
+    pt = Get("Pt");
+  } catch (Exception &e) {
+    pt = Get("pt");
+  }
+
   absEta = fabs(eta);
 }
 
-bool Muon::PassesPtCuts() { return (float)Get("pt") > muonCuts["min_pt"]; }
+bool Muon::PassesPtCuts() { return pt > muonCuts["min_pt"]; }
 
 bool Muon::IsEtaAboveLimit() { return absEta > muonCuts["max_absEta"]; }

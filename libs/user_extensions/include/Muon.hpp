@@ -23,7 +23,7 @@ class Muon {
   std::shared_ptr<PhysicsObject> physicsObject;
 
   std::map<std::string, float> muonCuts, detectorParams, caloEtaEdges;
-  float eta, phi, absEta;
+  float eta, phi, pt, absEta;
 };
 
 #endif /* Muon_hpp */

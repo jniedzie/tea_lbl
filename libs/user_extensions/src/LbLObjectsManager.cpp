@@ -48,7 +48,12 @@ bool LbLObjectsManager::IsGoodTrack(const shared_ptr<Track> track) {
   return true;
 }
 
-bool LbLObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) { return true; }
+bool LbLObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) { 
+  if(!muon->PassesPtCuts()) return false;
+  if(muon->IsEtaAboveLimit()) return false;
+
+  return true; 
+}
 
 void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event) {
   auto photons = event->GetCollection("photon");
