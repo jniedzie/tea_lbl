@@ -2,18 +2,18 @@ import os
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/"
 
-# skim = "skimmed_twoPhotons"
-# skim = "skimmed_neutralExclusivity"
-skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections_track3validHits"
+skim = "skimmed_allSelections_maxDiphotonPt2"
 
 # hist_path = ""
 hist_path = "histograms"
 
 sample_paths = (
-    # "collisionData",
+    "collisionData",
     "lbl",
-    # "cep",
-    # "qed",
+    "cep",
+    "qed",
 )
 
 
