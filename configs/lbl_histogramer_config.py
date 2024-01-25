@@ -4,7 +4,18 @@ from lbl_params import *
 nEvents = -1
 printEveryNevents = 1000
 
-inputFilePath = "./skimmed_data.root"
+base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
+
+sample = "collisionData"
+# sample = "lbl"
+# sample = "cep"
+# sample = "qed"
+
+# skim = "skimmed_twoPhotons"
+# skim = "skimmed_neutralExclusivity"
+# skim = "skimmed_allSelections"
+
+inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
 histogramsOutputFilePath = "./histograms_data.root"
 
 defaultHistParams = (
@@ -12,6 +23,9 @@ defaultHistParams = (
   ("goodPhoton"  , "et"            , 100,    0,       200,     ""  ),
   ("goodPhoton"  , "eta"           , 100,    -2.5,    2.5,     ""  ),
   ("goodPhoton"  , "phi"           , 100,    -2.5,    2.5,     ""  ),
+  ("electron"    , "PFChIso"           , 1000,    0,    10,     ""  ),
+  ("electron"    , "PFPhoIso"           , 1000,    0,    10,     ""  ),
+  ("electron"    , "PFNeuIso"           , 1000,    0,    10,     ""  ),
   # ("Event"       , "nGoodLeptons"  , 50,     0,       50,      ""  ),
 )
 

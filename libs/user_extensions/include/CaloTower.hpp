@@ -20,6 +20,8 @@ class CaloTower {
   std::string GetElectromagneticSubdetectorName();
 
   bool IsDead();
+  bool IsInHadronicCrack();
+  bool IsInElectromagneticCrack();
   bool IsInHEM();
   bool IsEtaAboveLimit();
   bool IsHadronicEnergyAboveNoiseThreshold();

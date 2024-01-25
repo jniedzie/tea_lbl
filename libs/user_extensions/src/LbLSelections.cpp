@@ -18,12 +18,13 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   for (auto physicsObject : *towers) {
     auto tower = asCaloTower(physicsObject);
     if (tower->IsDead()) continue;
-    if (tower->IsHadronicEnergyAboveNoiseThreshold()) {
+    if (tower->IsHadronicEnergyAboveNoiseThreshold() /* && !tower->IsInHadronicCrack()*/) {
       nPassingTowers++;
       if (nPassingTowers > eventCuts["max_Ntowers"]) return false;
     } else {
       if (tower->IsEtaAboveLimit()) continue;
       if (tower->IsInHEM()) continue;
+      // if (tower->IsInElectromagneticCrack()) continue;
       if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
       if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
       if (tower->IsElectromagneticEnergyAboveNoiseThreshold()) nPassingTowers++;
@@ -40,7 +41,7 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
 bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   int nPhotons = event->GetCollection("goodPhoton")->size();
   if (nPhotons < eventCuts["min_Nphotons"] || nPhotons > eventCuts["max_Nphotons"]) return false;
-  
+
   cutFlowManager->UpdateCutFlow("twoGoodPhotons");
 
   auto photon1 = event->GetCollection("goodPhoton")->at(0);
@@ -89,13 +90,11 @@ bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlow
 }
 
 bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  
   shared_ptr<PhysicsObjects> zdcEnergies;
 
-  try{
+  try {
     zdcEnergies = event->GetCollection("ZDC");
-  }
-  catch(Exception &e){
+  } catch (Exception &e) {
     warn() << "No ZDC collection found in event. Will skip ZDC cuts." << endl;
     cutFlowManager->UpdateCutFlow("ZDC");
     return true;
@@ -114,7 +113,7 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
     }
   }
 
-  if(totalEnergyPlus > eventCuts["max_ZDCenergyPerSide"] || totalEnergyMinus > eventCuts["max_ZDCenergyPerSide"]) return false;
+  if (totalEnergyPlus > eventCuts["max_ZDCenergyPerSide"] || totalEnergyMinus > eventCuts["max_ZDCenergyPerSide"]) return false;
   cutFlowManager->UpdateCutFlow("ZDC");
 
   return true;

@@ -35,6 +35,14 @@ bool CaloTower::IsDead() {
   return find(deadEtasForDetector.begin(), deadEtasForDetector.end(), iEta) != deadEtasForDetector.end();
 }
 
+bool CaloTower::IsInHadronicCrack(){
+  return (absEta > detectorParams["crackHadron_start"] && absEta < detectorParams["crackHadron_end"]);
+}
+
+bool CaloTower::IsInElectromagneticCrack(){
+  return (absEta > detectorParams["crack_start"] && absEta < detectorParams["crack_end"]);
+}
+
 string CaloTower::GetHadronicSubdetectorName() {
   if (eta > -caloEtaEdges["maxHF"] && eta < -caloEtaEdges["minHF"]) return "HFm";
   if (eta > caloEtaEdges["minHF"] && eta < caloEtaEdges["maxHF"]) return "HFp";
