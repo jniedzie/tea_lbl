@@ -5,3 +5,5 @@ bin/*
 .vscode
 *.root
 plots/*
+combine/*
+utils/__pycache__/*
