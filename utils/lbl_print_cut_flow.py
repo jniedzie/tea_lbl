@@ -3,16 +3,7 @@ from collections import OrderedDict
 
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
 from lbl_cep_scale_calculator import get_cep_scale
-
-
-base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples"
-
-samples = (
-    "collisionData",
-    "lbl",
-    "cep",
-    "qed",
-)
+from lbl_paths import base_path, processes
 
 # skim = "skimmed_twoPhotons"
 # skim = "skimmed_neutralExclusivity"
@@ -23,17 +14,17 @@ skim = "skimmed_allSelections_photonEt2p0"
 def main():
     ROOT.gROOT.SetBatch(True)
 
-    for sample in samples:
-        input_path = f"{base_path}/{sample}/merged_{skim}.root"
+    for process in processes:
+        input_path = f"{base_path}/{process}/merged_{skim}.root"
         print(f"Analyzing file: {input_path}")
 
-        if sample == "cep":
+        if process == "cep":
             scale = get_cep_scale(skim)
-        elif sample == "collisionData":
+        elif process == "collisionData":
             scale = 1
         else:
-            scale = luminosity*crossSections[sample]*scaleFactors[sample]
-            scale /= nGenEvents[sample]
+            scale = luminosity*crossSections[process]*scaleFactors[process]
+            scale /= nGenEvents[process]
 
         file = ROOT.TFile(input_path, "READ")
         dir = file.Get("CutFlow")

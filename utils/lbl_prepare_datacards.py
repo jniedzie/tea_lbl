@@ -2,6 +2,7 @@ from lbl_cep_scale_calculator import load_histograms, get_cep_scale
 from lbl_cep_scale_calculator import input_histograms
 from lbl_params import n_acoplanarity_bins, uncertainty_on_zero
 from lbl_params import systematic_uncertainty
+from lbl_paths import processes
 import ROOT
 import os
 
@@ -42,8 +43,6 @@ skim = "skimmed_allSelections_photonEt2p0"
 
 output_path = f"../combine/significance_histograms_{skim}"
 output_path += f"_nBins{n_acoplanarity_bins}.root"
-
-processes = ["collisionData", "lbl", "qed", "cep"]
 
 
 def save_output_histograms():
@@ -86,8 +85,8 @@ def add_datacard_header(file, observed_rate):
     return file
 
 
-def add_datacard_rates(file, lblRate, cepRate, qedRate):
-    file += f"rate            {lblRate} {cepRate} {qedRate}\n"
+def add_datacard_rates(file, rates):
+    file += f"rate            {rates['lbl']} {rates['cep']} {rates['qed']}\n"
     return file
 
 
@@ -99,15 +98,13 @@ def add_datacard_nuisances(file):
 
 
 def save_datacard():
-    observed_rate = input_histograms["collisionData"].Integral()
-    lbl_rate = input_histograms["lbl"].Integral()
-    cep_rate = input_histograms["cep"].Integral()
-    qed_rate = input_histograms["qed"].Integral()
+    rates = {}
+    for process in processes:
+        rates[process] = input_histograms[process].Integral()
 
     output_file = ""
-
-    output_file = add_datacard_header(output_file, observed_rate)
-    output_file = add_datacard_rates(output_file, lbl_rate, cep_rate, qed_rate)
+    output_file = add_datacard_header(output_file, rates["collisionData"])
+    output_file = add_datacard_rates(output_file, rates)
     output_file = add_datacard_nuisances(output_file)
 
     outfile = open(output_path.replace(".root", ".txt"), "w")

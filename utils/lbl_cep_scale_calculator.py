@@ -1,10 +1,9 @@
 import ROOT
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
 from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity
+from lbl_path import processes, merged_histograms_path
+from lbl_path import acoplanarity_histogram_name
 
-processes = ["collisionData", "lbl", "qed", "cep"]
-hist_name = "diphoton_acoplanarity{}"
-input_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/{}/merged_{}histograms.root"
 
 input_files = {}
 input_histograms = {}
@@ -12,12 +11,14 @@ input_histograms = {}
 
 def load_histograms(skim):
     for process in processes:
-        input_files[process] = ROOT.TFile.Open(
-            input_path.format(process, skim))
-        input_histograms[process] = input_files[process].Get(
-            hist_name.format(n_acoplanarity_bins))
-        if input_histograms[process] is None or type(input_histograms[process]) == ROOT.TObject:
-            print(f"ERROR - hist {hist_name.format(n_acoplanarity_bins)} not found in file: {input_path.format(process, skim)}")
+        file_path = merged_histograms_path.format(process, skim)
+        input_files[process] = ROOT.TFile.Open(file_path)
+
+        hist_name = acoplanarity_histogram_name.format(n_acoplanarity_bins)
+
+        input_histograms[process] = input_files[process].Get(hist_name)
+        if input_histograms[process] is None or type(input_histograms[process]) is ROOT.TObject:
+            print(f"ERROR - hist {hist_name} not found in file: {file_path}")
             exit()
 
 

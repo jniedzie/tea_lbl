@@ -5,8 +5,7 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from lbl_cep_scale_calculator import get_cep_scale
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
-
-base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/"
+from lbl_paths import base_path
 
 # skim = "initial"
 # skim = "skimmed_allSelections"
