@@ -126,3 +126,46 @@ caloMatching = {
     "maxDeltaEta_EE": 0.15,  # (0.15)
     "maxDeltaPhi_EE": 0.4,  # (0.4)
 }
+
+
+#  scaling parameters
+
+luminosity = 1647.180726  # μb^-1, with ZDC
+# luminosity = 1609.910015010; // from brilcalc, 1/μb
+# luminosity = 1639.207543; // from Ruchi, 1/μb
+
+crossSections = {
+    "lbl": 2.59,  # μb
+    "qed": 8827.220,  # μb
+    "cep": -1,  # we scale it to data
+}
+
+scaleFactors = {
+    # photon ET > 2.5 GeV, diphoton pt < 1 GeV
+    #      NE       ChE      HFveto   L1EG     Reco+ID
+    "lbl": 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.9771**2,
+    "qed": 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2,
+    "cep": -1,  # we scale it to data
+
+    # photon ET > 2.0 GeV, diphoton pt < 2 GeV
+    #      NE     ChE    HFveto  L1EG    Reco+ID
+    # "lbl": 0.85 * 0.93 * 0.866 * 1.008 * 1.037**2,
+    # "qed": 0.85 * 0.93 * 0.866 * 1.008 * 0.976**2,
+    # "cep": -1,  # we scale it to data
+}
+
+nGenEvents = {
+    "lbl": 466000,
+    "qed": 59260000,
+    "cep": -1,  # we scale it to data
+}
+
+cep_scaling_min_acoplanarity = 0.02
+
+#  significance & limits parameters
+
+n_acoplanarity_bins = 500
+uncertainty_on_zero = 1.84  # 95% CL
+# uncertainty_on_zero = 1.14  # 68% CL
+
+systematic_uncertainty = 1.25

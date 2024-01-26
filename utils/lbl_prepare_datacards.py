@@ -1,4 +1,7 @@
-from params import *
+from lbl_cep_scale_calculator import load_histograms, get_cep_scale
+from lbl_cep_scale_calculator import input_histograms
+from lbl_params import n_acoplanarity_bins, uncertainty_on_zero
+from lbl_params import systematic_uncertainty
 import ROOT
 import os
 
@@ -36,51 +39,11 @@ import os
 skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections_photonEt2p5"
 
-max_acoplanarity = 0.1
-max_aco_text = f"{max_acoplanarity:.1f}".replace(".", "p")
 
-n_bins = 500
-
-hist_name = f"diphoton_acoplanarity{n_bins}"
-
-input_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/{}/merged_{}histograms.root"
-output_path = f"../combine/significance_histograms_{skim}_nBins{n_bins}.root"
-
-uncertainty_on_zero = 1.84  # 95% CL
-# uncertainty_on_zero = 1.14  # 68% CL
-
-systematic_uncertainty = 1.25
-
+output_path = f"../combine/significance_histograms_{skim}"
+output_path += f"_nBins{n_acoplanarity_bins}.root"
 
 processes = ["collisionData", "lbl", "qed", "cep"]
-
-input_files = {}
-input_histograms = {}
-
-def create_limited_range_histogram(input_histogram, xmin, xmax):
-    bin_width = input_histogram.GetBinWidth(1)
-    nbins = int((xmax - xmin) / bin_width)
-    output_histogram = ROOT.TH1D(input_histogram.GetName(), input_histogram.GetTitle(), nbins, xmin, xmax)
-    for i in range(1, input_histogram.GetNbinsX()):
-        if input_histogram.GetBinCenter(i) < xmin:
-            continue
-        elif input_histogram.GetBinCenter(i) > xmax:
-            break
-        output_histogram.SetBinContent(i, input_histogram.GetBinContent(i))
-        output_histogram.SetBinError(i, input_histogram.GetBinError(i))
-    return output_histogram
-
-
-def load_histograms():
-    for process in processes:
-        input_files[process] = ROOT.TFile.Open(
-            input_path.format(process, skim))
-        input_histograms[process] = input_files[process].Get(hist_name)
-        
-        # input_histograms[process] = create_limited_range_histogram(input_histograms[process], 0, max_acoplanarity)
-        
-        if input_histograms[process] is None:
-            print(f"ERROR - hist not found: {hist_name}")
 
 
 def save_output_histograms():
@@ -91,26 +54,19 @@ def save_output_histograms():
 
     for process in processes:
         scale = 1
-        
-        if process == "lbl":
-            scale = luminosity*lbl_scale/n_lbl_events
-        elif process == "qed":
-            scale = luminosity*qed_scale/n_qed_events
-        elif process == "cep":
-            scale = get_cep_scale(input_histograms["collisionData"],
-                                  input_histograms["lbl"],
-                                  input_histograms["qed"],
-                                  input_histograms["cep"]
-                                  )
+
+        if process == "cep":
+            scale = get_cep_scale(skim)
             print(f"{scale=}")
-        
+
         input_histograms[process].Scale(scale)
 
         for i in range(1, input_histograms[process].GetNbinsX()):
             if input_histograms[process].GetBinContent(i) == 0:
                 input_histograms[process].SetBinError(i, uncertainty_on_zero)
 
-        input_histograms[process].SetName(process if process != "collisionData" else "data_obs")
+        input_histograms[process].SetName(
+            process if process != "collisionData" else "data_obs")
         input_histograms[process].Write()
 
     output_file.Close()
@@ -119,8 +75,9 @@ def save_output_histograms():
 def add_datacard_header(file, observed_rate):
     file += "imax 1  number of channels\n"
     file += "jmax 2  number of backgrounds\n"
-    file += "kmax *  number of nuisance parameters (sources of systematical uncertainties)\n"
-    file += f"shapes * * {output_path.replace('../combine/', '')}  $PROCESS $PROCESS_$SYSTEMATIC\n"
+    file += "kmax *  number of nuisance parameters\n"
+    file += f"shapes * * {output_path.replace('../combine/', '')} "
+    file += " $PROCESS $PROCESS_$SYSTEMATIC\n"
     file += "bin bin1\n"
     file += f"observation {observed_rate}\n"
     file += "bin            bin1  bin1 bin1\n"
@@ -135,7 +92,8 @@ def add_datacard_rates(file, lblRate, cepRate, qedRate):
 
 
 def add_datacard_nuisances(file):
-    file += f"bck_syst     lnN    -  {systematic_uncertainty}  {systematic_uncertainty}\n"
+    file += "bck_syst     lnN    -  "
+    file += f"{systematic_uncertainty}  {systematic_uncertainty}\n"
     file += "bin1   autoMCStats  10\n"
     return file
 
@@ -157,7 +115,7 @@ def save_datacard():
 
 
 def main():
-    load_histograms()
+    load_histograms(skim)
     save_output_histograms()
     save_datacard()
 

@@ -40,10 +40,12 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/"
 # skim = "skimmed_allSelections_EE3p5_1track"
 # skim = "skimmed_allSelections_EE3p5_deadHEfix"
 # skim = "skimmed_allSelections_deltaEtaEE0p8"
-skim = "skimmed_allSelections_EE3p5_deltaEtaEE0p25"
+# skim = "skimmed_allSelections_EE3p5_deltaEtaEE0p25"
+skim = "skimmed_allSelections_photonEt2p0"
+# skim = "skimmed_allSelections_photonEt2p5"
 
-# hist_path = ""
-hist_path = "histograms"
+hist_path = ""
+# hist_path = "histograms"
 
 sample_paths = (
     "collisionData",

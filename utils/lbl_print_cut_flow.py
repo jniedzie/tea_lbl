@@ -1,6 +1,10 @@
 import ROOT
 from collections import OrderedDict
 
+from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
+from lbl_cep_scale_calculator import get_cep_scale
+
+
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples"
 
 samples = (
@@ -12,19 +16,8 @@ samples = (
 
 # skim = "skimmed_twoPhotons"
 # skim = "skimmed_neutralExclusivity"
-skim = "skimmed_allSelections"
-
-
-luminosity = 1647.228136  # μb^-1
-
-scale = {
-    "collisionData": 1,
-    # lumi * xsec * SFs / n_gen
-    "lbl": luminosity * 2.59 * 0.8477 * 0.9322 * 0.9771**2 * 0.8643 * 1.0006 / 466000,
-    # lumi * xsec * SFs / n_gen
-    "qed": luminosity * 8827.220 * 0.8477 * 0.9322 * 0.952**2 * 0.8643 * 1.0006 / 59260000,
-    "cep": 0.0012475821798342804,
-}
+# skim = "skimmed_allSelections"
+skim = "skimmed_allSelections_photonEt2p0"
 
 
 def main():
@@ -33,6 +26,14 @@ def main():
     for sample in samples:
         input_path = f"{base_path}/{sample}/merged_{skim}.root"
         print(f"Analyzing file: {input_path}")
+
+        if sample == "cep":
+            scale = get_cep_scale(skim)
+        elif sample == "collisionData":
+            scale = 1
+        else:
+            scale = luminosity*crossSections[sample]*scaleFactors[sample]
+            scale /= nGenEvents[sample]
 
         file = ROOT.TFile(input_path, "READ")
         dir = file.Get("CutFlow")
@@ -48,7 +49,7 @@ def main():
 
         print("CutFlow:")
         for key, value in hist_dict.items():
-            print(f"{key:30} {value:10}\t\t{value*scale[sample]:.4f}")
+            print(f"{key:30} {value:10}\t\t{value*scale:.4f}")
 
 
 if __name__ == "__main__":

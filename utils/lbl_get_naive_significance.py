@@ -1,7 +1,5 @@
-import ROOT
-from params import *
-
-hist_name = "diphoton_acoplanarity500"
+from lbl_cep_scale_calculator import load_histograms, get_cep_scale
+from lbl_cep_scale_calculator import input_histograms
 
 # skim = "skimmed_allSelections"
 # skim = "skimmed_allSelections_track3validHits"
@@ -44,45 +42,32 @@ hist_name = "diphoton_acoplanarity500"
 skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections_photonEt2p5"
 
-input_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/{}/merged_{}histograms.root"
-
 
 def main():
-    file_data = ROOT.TFile(input_path.format("collisionData", skim), "READ")
-    hist_data = file_data.Get(hist_name)
+    cep_scale = get_cep_scale(skim)
+    input_histograms["cep"].Scale(cep_scale)
 
-    file_lbl = ROOT.TFile(input_path.format("lbl", skim), "READ")
-    hist_lbl = file_lbl.Get(hist_name)
+    integrals = {}
+    for process, histogram in input_histograms.items():
+        integrals[process] = histogram.Integral(
+            1, histogram.FindFixBin(0.01)-1)
 
-    file_qed = ROOT.TFile(input_path.format("qed", skim), "READ")
-    hist_qed = file_qed.Get(hist_name)
+    for (process, integral) in integrals.items():
+        print(f"{process}: {integral:.3f}")
 
-    file_cep = ROOT.TFile(input_path.format("cep", skim), "READ")
-    hist_cep = file_cep.Get(hist_name)
-
-    hist_lbl.Scale(lbl_scale*luminosity/n_lbl_events)
-    hist_qed.Scale(qed_scale*luminosity/n_qed_events)
-
-    cep_scale = get_cep_scale(hist_data, hist_lbl, hist_qed, hist_cep)
-
-    hist_cep.Scale(cep_scale)
-
-    integral_data = hist_data.Integral(1, hist_data.FindFixBin(0.01)-1)
-    integral_lbl = hist_lbl.Integral(1, hist_lbl.FindFixBin(0.01)-1)
-    integral_cep = hist_cep.Integral(1, hist_cep.FindFixBin(0.01)-1)
-    integral_qed = hist_qed.Integral(1, hist_qed.FindFixBin(0.01)-1)
-    total_background = integral_cep+integral_qed
-
-    print(f"N data events: {integral_data:.3f}")
-    print(f"N LbL events: {integral_lbl:.3f}")
-    print(f"N CEP events: {integral_cep:.3f}")
-    print(f"N QED events: {integral_qed:.3f}")
+    total_background = integrals["cep"]+integrals["qed"]
     print(f"total background: {total_background:.3f}")
-    print(
-        f"Expected naive significance: {integral_lbl/(integral_lbl+total_background)**(1/2):.2f}")
-    print(
-        f"Observed naive significance: {(integral_data-total_background)/(integral_data)**(1/2):.2f}")
+
+    expected_significance = integrals["lbl"]
+    expected_significance /= (integrals["lbl"]+total_background)**(1/2)
+
+    observed_significance = (integrals["collisionData"]-total_background)
+    observed_significance /= (integrals["collisionData"])**(1/2)
+
+    print(f"Expected naive significance: {expected_significance:.2f}")
+    print(f"Observed naive significance: {observed_significance:.2f}")
 
 
 if __name__ == "__main__":
+    load_histograms(skim)
     main()
