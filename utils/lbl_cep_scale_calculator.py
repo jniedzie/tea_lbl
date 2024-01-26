@@ -1,15 +1,21 @@
 import ROOT
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
 from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity
-from lbl_path import processes, merged_histograms_path
-from lbl_path import acoplanarity_histogram_name
+from lbl_paths import processes, merged_histograms_path
+from lbl_paths import acoplanarity_histogram_name
+from Logger import warn
 
 
 input_files = {}
 input_histograms = {}
 
+qed_and_lbl_scaled = False
+
 
 def load_histograms(skim):
+    if len(input_files) > 0:
+        return
+    
     for process in processes:
         file_path = merged_histograms_path.format(process, skim)
         input_files[process] = ROOT.TFile.Open(file_path)
@@ -23,6 +29,13 @@ def load_histograms(skim):
 
 
 def scale_lbl_and_qed_histograms():
+    if not hasattr(scale_lbl_and_qed_histograms, "called"):
+        scale_lbl_and_qed_histograms.called = True
+    else:
+        warn("scale_lbl_and_qed_histograms() called more than once!")
+        return
+
+    print("Scaling qed and lbl histograms...")
     for process in processes:
         if process != "lbl" and process != "qed":
             continue

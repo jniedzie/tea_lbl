@@ -2,8 +2,9 @@ import ROOT
 import glob
 import os
 
-# directory = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/collisionData/bad_names"
-directory = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/collisionData/initial"
+from lbl_paths import base_path
+
+directory = f"{base_path}/collisionData/initial"
 pattern = "ntuple_*.root"
 
 # tree_name = "ggHiNtuplizer/EventTree"
