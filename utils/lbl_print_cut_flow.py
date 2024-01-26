@@ -2,7 +2,7 @@ import ROOT
 from collections import OrderedDict
 
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
-from lbl_cep_scale_calculator import get_cep_scale
+from lbl_helpers import get_cep_scale
 from lbl_paths import base_path, processes
 
 skim = "skimmed_allSelections"

@@ -3,13 +3,12 @@ from Sample import Sample, SampleType
 from Legend import Legend
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
-from lbl_cep_scale_calculator import get_cep_scale
+from lbl_helpers import get_cep_scale
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
 from lbl_paths import base_path
 
 # skim = "initial"
-# skim = "skimmed_allSelections"
-skim = "skimmed_allSelections_swissCross0p99"
+skim = "skimmed_allSelections"
 
 output_path = "../plots/first_test/"
 
@@ -78,6 +77,10 @@ histograms = (
     Histogram("diphoton_acoplanarity400", "", False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label),
     Histogram("diphoton_acoplanarity500", "", False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label),
     Histogram("diphoton_acoplanarity600", "", False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label),
+    
+    Histogram("diphoton_mass", "", False, NormalizationType.to_lumi, 1,   0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label),
+    
+    
     Histogram("cutFlow", "", True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )
 

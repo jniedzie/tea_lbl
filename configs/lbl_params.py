@@ -36,10 +36,10 @@ electronCuts = {
     "max_hOverE": 0.005,
     "max_deltaEtaAtVertex": 0.1,
 
+    # we don't apply electron isolation:
     "max_PFChIso_barrel": 999999,
     "max_PFPhoIso_barrel": 999999,
     "max_PFNeuIso_barrel": 999999,
-
     "max_PFChIso_endcap": 999999,
     "max_PFPhoIso_endcap": 999999,
     "max_PFNeuIso_endcap": 999999,
@@ -50,6 +50,7 @@ trackCuts = {
     "max_absEta": 2.4,
     "min_nValidHits": 4,
 
+    # we don't apply these track selections:
     "max_normalizedChi2": 999999,
     "max_dxy": 999999,
     "max_dz": 999999,
@@ -134,30 +135,70 @@ luminosity = 1647.180726  # μb^-1, with ZDC
 # luminosity = 1609.910015010; // from brilcalc, 1/μb
 # luminosity = 1639.207543; // from Ruchi, 1/μb
 
+reference_alp_cross_section = 10e-3  # μb
+
 crossSections = {
     "lbl": 2.59,  # μb
     "qed": 8827.220,  # μb
     "cep": -1,  # we scale it to data
+
+    "alp_5": reference_alp_cross_section,
+    "alp_6": reference_alp_cross_section,
+    "alp_9": reference_alp_cross_section,
+    "alp_11": reference_alp_cross_section,
+    "alp_14": reference_alp_cross_section,
+    "alp_16": reference_alp_cross_section,
+    "alp_22": reference_alp_cross_section,
+    "alp_30": reference_alp_cross_section,
+    "alp_50": reference_alp_cross_section,
+    "alp_90": reference_alp_cross_section,
 }
 
+
+# photon ET > 2.5 GeV, diphoton pt < 1 GeV
+#                       NE       ChE      HFveto   L1EG     Reco+ID
+photon_scale_factor   = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.9771**2
+electron_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2
+
+
+# photon ET > 2.0 GeV, diphoton pt < 2 GeV
+#                       NE       ChE      HFveto   L1EG     Reco+ID
+# photon_scale_factor   = 0.85  *  0.93  *  0.866 *  1.008 *  1.037**2
+# electron_scale_factor = 0.85  *  0.93  *  0.866 *  1.008 *  0.976**2
+
+
 scaleFactors = {
-    # photon ET > 2.5 GeV, diphoton pt < 1 GeV
-    #      NE       ChE      HFveto   L1EG     Reco+ID
-    "lbl": 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.9771**2,
-    "qed": 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2,
+    "lbl": photon_scale_factor,
+    "qed": electron_scale_factor,
     "cep": -1,  # we scale it to data
 
-    # photon ET > 2.0 GeV, diphoton pt < 2 GeV
-    #      NE     ChE    HFveto  L1EG    Reco+ID
-    # "lbl": 0.85 * 0.93 * 0.866 * 1.008 * 1.037**2,
-    # "qed": 0.85 * 0.93 * 0.866 * 1.008 * 0.976**2,
-    # "cep": -1,  # we scale it to data
+    "alp_5": photon_scale_factor,
+    "alp_6": photon_scale_factor,
+    "alp_9": photon_scale_factor,
+    "alp_11": photon_scale_factor,
+    "alp_14": photon_scale_factor,
+    "alp_16": photon_scale_factor,
+    "alp_22": photon_scale_factor,
+    "alp_30": photon_scale_factor,
+    "alp_50": photon_scale_factor,
+    "alp_90": photon_scale_factor,
 }
 
 nGenEvents = {
     "lbl": 466000,
     "qed": 59260000,
     "cep": -1,  # we scale it to data
+
+    "alp_5": 754000,
+    "alp_6": 729000,
+    "alp_9": 722000,
+    "alp_11": 692000,
+    "alp_14": 712000,
+    "alp_16": 682000,
+    "alp_22": 694000,
+    "alp_30": 719000,
+    "alp_50": 511000,
+    "alp_90": 449000,
 }
 
 cep_scaling_min_acoplanarity = 0.02
@@ -172,3 +213,4 @@ uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
 
 systematic_uncertainty = 1.25
+alp_mc_uncertainty = 1.03

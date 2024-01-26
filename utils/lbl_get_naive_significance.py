@@ -1,5 +1,5 @@
-from lbl_cep_scale_calculator import load_histograms, get_cep_scale
-from lbl_cep_scale_calculator import input_histograms
+from lbl_helpers import load_histograms, get_cep_scale
+from lbl_helpers import input_aco_histograms
 
 # skim = "skimmed_allSelections"
 skim = "skimmed_allSelections_swissCross0p99"
@@ -7,10 +7,10 @@ skim = "skimmed_allSelections_swissCross0p99"
 
 def main():
     cep_scale = get_cep_scale(skim)
-    input_histograms["cep"].Scale(cep_scale)
+    input_aco_histograms["cep"].Scale(cep_scale)
 
     integrals = {}
-    for process, histogram in input_histograms.items():
+    for process, histogram in input_aco_histograms.items():
         integrals[process] = histogram.Integral(
             1, histogram.FindFixBin(0.01)-1)
 
