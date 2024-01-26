@@ -53,5 +53,10 @@ void LbLHistogramsFiller::Fill(const std::shared_ptr<Event> event) {
 
   histogramsHandler->Fill("diphoton_pt", diphoton.Pt(), GetWeight(event));
   histogramsHandler->Fill("diphoton_mass", diphoton.M(), GetWeight(event));
-  histogramsHandler->Fill("diphoton_acoplanarity", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity200", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity300", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity400", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity500", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity600", acoplanarity, GetWeight(event));
+
 }

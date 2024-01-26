@@ -32,23 +32,43 @@ import os
 # skim = "skimmed_allSelections_EE3p5_1track"
 # skim = "skimmed_allSelections_EE3p5_deadHEfix"
 # skim = "skimmed_allSelections_deltaEtaEE0p8"
-skim = "skimmed_allSelections_EE3p5_deltaEtaEE0p25"
+# skim = "skimmed_allSelections_EE3p5_deltaEtaEE0p25"
+skim = "skimmed_allSelections_photonEt2p0"
+# skim = "skimmed_allSelections_photonEt2p5"
+
+max_acoplanarity = 0.1
+max_aco_text = f"{max_acoplanarity:.1f}".replace(".", "p")
+
+n_bins = 500
+
+hist_name = f"diphoton_acoplanarity{n_bins}"
 
 input_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/{}/merged_{}histograms.root"
-
-output_path = f"../combine/significance_histograms_{skim}.root"
-
-hist_name = "diphoton_acoplanarity"
+output_path = f"../combine/significance_histograms_{skim}_nBins{n_bins}.root"
 
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
 
 systematic_uncertainty = 1.25
 
+
 processes = ["collisionData", "lbl", "qed", "cep"]
 
 input_files = {}
 input_histograms = {}
+
+def create_limited_range_histogram(input_histogram, xmin, xmax):
+    bin_width = input_histogram.GetBinWidth(1)
+    nbins = int((xmax - xmin) / bin_width)
+    output_histogram = ROOT.TH1D(input_histogram.GetName(), input_histogram.GetTitle(), nbins, xmin, xmax)
+    for i in range(1, input_histogram.GetNbinsX()):
+        if input_histogram.GetBinCenter(i) < xmin:
+            continue
+        elif input_histogram.GetBinCenter(i) > xmax:
+            break
+        output_histogram.SetBinContent(i, input_histogram.GetBinContent(i))
+        output_histogram.SetBinError(i, input_histogram.GetBinError(i))
+    return output_histogram
 
 
 def load_histograms():
@@ -56,6 +76,9 @@ def load_histograms():
         input_files[process] = ROOT.TFile.Open(
             input_path.format(process, skim))
         input_histograms[process] = input_files[process].Get(hist_name)
+        
+        # input_histograms[process] = create_limited_range_histogram(input_histograms[process], 0, max_acoplanarity)
+        
         if input_histograms[process] is None:
             print(f"ERROR - hist not found: {hist_name}")
 
@@ -67,10 +90,12 @@ def save_output_histograms():
     output_file.cd()
 
     for process in processes:
+        scale = 1
+        
         if process == "lbl":
-            input_histograms[process].Scale(luminosity*lbl_scale/n_lbl_events)
+            scale = luminosity*lbl_scale/n_lbl_events
         elif process == "qed":
-            input_histograms[process].Scale(luminosity*qed_scale/n_qed_events)
+            scale = luminosity*qed_scale/n_qed_events
         elif process == "cep":
             scale = get_cep_scale(input_histograms["collisionData"],
                                   input_histograms["lbl"],
@@ -78,7 +103,8 @@ def save_output_histograms():
                                   input_histograms["cep"]
                                   )
             print(f"{scale=}")
-            input_histograms[process].Scale(scale)
+        
+        input_histograms[process].Scale(scale)
 
         for i in range(1, input_histograms[process].GetNbinsX()):
             if input_histograms[process].GetBinContent(i) == 0:

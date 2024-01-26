@@ -16,7 +16,7 @@ eventCuts = {
 
 # good object definitions
 photonCuts = {
-    "min_et": 2.5,
+    "min_et": 2.5,  # (2.5)
     "max_swissCross": 0.95,  # (0.95)
     "max_absEta": 2.2,  # (2.2)
     "max_SCEtaWidth_barrel": 0.0106,
@@ -70,7 +70,7 @@ caloNoiseThresholds = {
     "HB": 2.8,  # (2.8)
     "HE": 1.0,  # (1.0)
     "EB": 0.7,  # (0.7)
-    "EE": 3.5,  # (3.0)
+    "EE": 3.0,  # (3.0)
 }
 
 caloNoiseVariables = {

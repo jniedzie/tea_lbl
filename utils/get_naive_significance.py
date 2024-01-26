@@ -1,6 +1,8 @@
 import ROOT
 from params import *
 
+hist_name = "diphoton_acoplanarity500"
+
 # skim = "skimmed_allSelections"
 # skim = "skimmed_allSelections_track3validHits"
 # skim = "skimmed_allSelections_maxDiphotonPt2"
@@ -38,23 +40,25 @@ from params import *
 # skim = "skimmed_allSelections_EE3p5_1track"
 # skim = "skimmed_allSelections_EE3p5_deadHEfix"
 # skim = "skimmed_allSelections_deltaEtaEE0p8"
-skim = "skimmed_allSelections_EE3p5_deltaEtaEE0p25"
+# skim = "skimmed_allSelections_EE3p5_deltaEtaEE0p25"
+skim = "skimmed_allSelections_photonEt2p0"
+# skim = "skimmed_allSelections_photonEt2p5"
 
 input_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/{}/merged_{}histograms.root"
 
 
 def main():
     file_data = ROOT.TFile(input_path.format("collisionData", skim), "READ")
-    hist_data = file_data.Get("diphoton_acoplanarity")
+    hist_data = file_data.Get(hist_name)
 
     file_lbl = ROOT.TFile(input_path.format("lbl", skim), "READ")
-    hist_lbl = file_lbl.Get("diphoton_acoplanarity")
+    hist_lbl = file_lbl.Get(hist_name)
 
     file_qed = ROOT.TFile(input_path.format("qed", skim), "READ")
-    hist_qed = file_qed.Get("diphoton_acoplanarity")
+    hist_qed = file_qed.Get(hist_name)
 
     file_cep = ROOT.TFile(input_path.format("cep", skim), "READ")
-    hist_cep = file_cep.Get("diphoton_acoplanarity")
+    hist_cep = file_cep.Get(hist_name)
 
     hist_lbl.Scale(lbl_scale*luminosity/n_lbl_events)
     hist_qed.Scale(qed_scale*luminosity/n_qed_events)

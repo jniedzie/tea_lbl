@@ -32,7 +32,11 @@ defaultHistParams = (
 histParams = (
   ("diphoton"     , "pt"            , 100, 0, 100, ""),
   ("diphoton"     , "mass"          , 100, 0, 100, ""),
-  ("diphoton"     , "acoplanarity"  , 200, 0, 1, ""),
+  ("diphoton"     , "acoplanarity200"  , 200, 0, 1, ""),
+  ("diphoton"     , "acoplanarity300"  , 300, 0, 1, ""),
+  ("diphoton"     , "acoplanarity400"  , 400, 0, 1, ""),
+  ("diphoton"     , "acoplanarity500"  , 500, 0, 1, ""),
+  ("diphoton"     , "acoplanarity600"  , 600, 0, 1, ""),
 )
 
 eventsTreeNames = ["Events",]
