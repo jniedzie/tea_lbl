@@ -3,10 +3,10 @@ import os
 from lbl_paths import base_path, processes
 
 # skim = "initial"
-# skim = "skimmed_allSelections"
-skim = "skimmed_allSelections_swissCross0p99"
+skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections_swissCross0p99"
 
-merge_histograms = True
+merge_histograms = False  # False for merging ntuples
 
 
 def main():

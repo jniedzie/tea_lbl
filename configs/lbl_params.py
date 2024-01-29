@@ -142,16 +142,16 @@ crossSections = {
     "qed": 8827.220,  # μb
     "cep": -1,  # we scale it to data
 
-    "alp_5": reference_alp_cross_section,
-    "alp_6": reference_alp_cross_section,
-    "alp_9": reference_alp_cross_section,
-    "alp_11": reference_alp_cross_section,
-    "alp_14": reference_alp_cross_section,
-    "alp_16": reference_alp_cross_section,
-    "alp_22": reference_alp_cross_section,
-    "alp_30": reference_alp_cross_section,
-    "alp_50": reference_alp_cross_section,
-    "alp_90": reference_alp_cross_section,
+    "alps_5": reference_alp_cross_section,
+    "alps_6": reference_alp_cross_section,
+    "alps_9": reference_alp_cross_section,
+    "alps_11": reference_alp_cross_section,
+    "alps_14": reference_alp_cross_section,
+    "alps_16": reference_alp_cross_section,
+    "alps_22": reference_alp_cross_section,
+    "alps_30": reference_alp_cross_section,
+    "alps_50": reference_alp_cross_section,
+    "alps_90": reference_alp_cross_section,
 }
 
 
@@ -172,16 +172,16 @@ scaleFactors = {
     "qed": electron_scale_factor,
     "cep": -1,  # we scale it to data
 
-    "alp_5": photon_scale_factor,
-    "alp_6": photon_scale_factor,
-    "alp_9": photon_scale_factor,
-    "alp_11": photon_scale_factor,
-    "alp_14": photon_scale_factor,
-    "alp_16": photon_scale_factor,
-    "alp_22": photon_scale_factor,
-    "alp_30": photon_scale_factor,
-    "alp_50": photon_scale_factor,
-    "alp_90": photon_scale_factor,
+    "alps_5": photon_scale_factor,
+    "alps_6": photon_scale_factor,
+    "alps_9": photon_scale_factor,
+    "alps_11": photon_scale_factor,
+    "alps_14": photon_scale_factor,
+    "alps_16": photon_scale_factor,
+    "alps_22": photon_scale_factor,
+    "alps_30": photon_scale_factor,
+    "alps_50": photon_scale_factor,
+    "alps_90": photon_scale_factor,
 }
 
 nGenEvents = {
@@ -189,16 +189,16 @@ nGenEvents = {
     "qed": 59260000,
     "cep": -1,  # we scale it to data
 
-    "alp_5": 754000,
-    "alp_6": 729000,
-    "alp_9": 722000,
-    "alp_11": 692000,
-    "alp_14": 712000,
-    "alp_16": 682000,
-    "alp_22": 694000,
-    "alp_30": 719000,
-    "alp_50": 511000,
-    "alp_90": 449000,
+    "alps_5": 754000,
+    "alps_6": 729000,
+    "alps_9": 722000,
+    "alps_11": 692000,
+    "alps_14": 712000,
+    "alps_16": 682000,
+    "alps_22": 694000,
+    "alps_30": 719000,
+    "alps_50": 511000,
+    "alps_90": 449000,
 }
 
 cep_scaling_min_acoplanarity = 0.02

@@ -37,7 +37,7 @@ def main():
 
         print("CutFlow:")
         for key, value in hist_dict.items():
-            print(f"{key:30} {value:10}\t\t{value*scale:.4f}")
+            print(f"{key:30}: {value:10}\t\t{value*scale:.4f}")
 
 
 if __name__ == "__main__":
