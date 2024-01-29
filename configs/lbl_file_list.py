@@ -5,6 +5,17 @@ samples = (
     "lbl",
     "cep",
     "qed",
+
+    "alps_5",
+    "alps_6",
+    "alps_9",   
+    "alps_11",
+    "alps_14",
+    "alps_16",
+    "alps_22",
+    "alps_30",
+    "alps_50",
+    "alps_90",
 )
 
 sample_path = ""
@@ -14,13 +25,13 @@ sample_path = ""
 skim = "skimmed_allSelections_swissCross0p99"
 
 # for renaming
-# input_directory = f"{base_path}/ntuples/{sample}/bad_names/"
-# output_dir = f"{base_path}/ntuples/{sample}/initial/"
+input_directory = f"{base_path}/ntuples/{sample}/bad_names/"
+output_dir = f"{base_path}/ntuples/{sample}/initial/"
 
 # for skimming
 # input_directory = f"{base_path}/ntuples/{sample_path}/initial/"
 # output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"
 
 # for histogramming
-input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
-output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"
+# input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
+# output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"

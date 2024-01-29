@@ -3,12 +3,13 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-sample = "collisionData"
+# sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
 # sample = "qed"
+sample = "alps_11"
 
-inputFilePath = f"{base_path}/ntuples/{sample}/bad_names/ntuple_0.root"
+inputFilePath = f"{base_path}/ntuples/{sample}/bad_names/ntuples_loose_selections_1.root"
 treeOutputFilePath = "./renamed_test.root"
 
 branchesNames = {

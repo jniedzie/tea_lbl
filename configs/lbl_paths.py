@@ -7,16 +7,16 @@ processes = (
     "qed",
     "cep",
 
-    "alp_5",
-    "alp_6",
-    "alp_9",
-    "alp_11",
-    "alp_14",
-    "alp_16",
-    "alp_22",
-    "alp_30",
-    "alp_50",
-    "alp_90",
+    "alps_5",
+    "alps_6",
+    "alps_9",
+    "alps_11",
+    "alps_14",
+    "alps_16",
+    "alps_22",
+    "alps_30",
+    "alps_50",
+    "alps_90",
 )
 
 acoplanarity_histogram_name = "diphoton_acoplanarity{}"
