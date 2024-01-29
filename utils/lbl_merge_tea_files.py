@@ -6,7 +6,7 @@ from lbl_paths import base_path, processes
 skim = "skimmed_allSelections"
 # skim = "skimmed_allSelections_swissCross0p99"
 
-merge_histograms = False  # False for merging ntuples
+merge_histograms = True  # False for merging ntuples
 
 
 def main():

@@ -15,7 +15,7 @@ output_path = "../plots/first_test/"
 samples = [
     Sample(
         name="lbl",
-        file_path=f"{base_path}/lbl/merged_{skim}histograms.root",
+        file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
         type=SampleType.background,
         cross_section=crossSections["lbl"]*scaleFactors["lbl"],
         initial_weight_sum=nGenEvents["lbl"],
@@ -27,7 +27,7 @@ samples = [
     ),
     Sample(
         name="cep",
-        file_path=f"{base_path}/cep/merged_{skim}histograms.root",
+        file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
         type=SampleType.background,
         cross_section=get_cep_scale(skim),
         initial_weight_sum=luminosity,
@@ -38,7 +38,7 @@ samples = [
     ),
     Sample(
         name="qed",
-        file_path=f"{base_path}/qed/merged_{skim}histograms.root",
+        file_path=f"{base_path}/qed/merged_{skim}_histograms.root",
         type=SampleType.background,
         cross_section=crossSections["qed"]*scaleFactors["qed"],
         initial_weight_sum=nGenEvents["qed"],
@@ -50,7 +50,7 @@ samples = [
     ),
     Sample(
         name="data",
-        file_path=f"{base_path}/collisionData/merged_{skim}histograms.root",
+        file_path=f"{base_path}/collisionData/merged_{skim}_histograms.root",
         type=SampleType.data,
         line_color=ROOT.kBlack,
         line_style=ROOT.kSolid,
@@ -86,7 +86,7 @@ legend_height = 0.05
 legend_max_y = 0.90
 
 
-alp_scale = 1.0
+alp_scale = 2.0
 alp_index = 0
 for process in processes:
     if "alps" not in process:
@@ -132,7 +132,8 @@ histograms = (
     Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label),
     Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label),
 
-    Histogram("diphoton_mass", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label),
+    Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label),
+    Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label),
 
     Histogram("cutFlow", "", False, True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )

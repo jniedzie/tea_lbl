@@ -1,6 +1,6 @@
 from lbl_helpers import load_histograms, get_cep_scale, input_mass_histograms
 from lbl_helpers import input_aco_histograms, scale_non_cep_histograms
-from lbl_params import n_acoplanarity_bins, uncertainty_on_zero
+from lbl_params import n_acoplanarity_bins, uncertainty_on_zero, n_mass_bins
 from lbl_params import systematic_uncertainty, alp_mc_uncertainty
 from lbl_paths import processes
 from Logger import info
@@ -12,7 +12,8 @@ skim = "skimmed_allSelections"
 output_path_aco = f"../combine/significance_histograms_{skim}"
 output_path_aco += f"_nBins{n_acoplanarity_bins}.root"
 
-output_path_mass = f"../combine/limits_histograms_{skim}.root"
+output_path_mass = f"../combine/limits_histograms_{skim}"
+output_path_mass += f"_nBins{n_mass_bins}.root"
 
 
 def add_uncertainties_on_zero(histogram):
@@ -43,10 +44,8 @@ def save_output_histograms():
             input_aco_histograms[process].Scale(scale)
             input_mass_histograms[process].Scale(scale)
 
-        input_aco_histograms[process] = add_uncertainties_on_zero(
-            input_aco_histograms[process])
-        input_mass_histograms[process] = add_uncertainties_on_zero(
-            input_mass_histograms[process])
+        input_aco_histograms[process] = add_uncertainties_on_zero(input_aco_histograms[process])
+        # input_mass_histograms[process] = add_uncertainties_on_zero(input_mass_histograms[process])
 
         name = process if process != "collisionData" else "data_obs"
 
@@ -67,10 +66,15 @@ def save_output_histograms():
 
 def add_datacard_header(file, observed_rate, alp_name=""):
 
+    if alp_name == "":
+        histograms_path = output_path_aco.replace("../combine/", "")
+    else:
+        histograms_path = output_path_mass.replace("../combine/", "")
+
     file += "imax 1  number of channels\n"
     file += f"jmax {3 if alp_name!='' else 2}  number of backgrounds\n"
     file += "kmax *  number of nuisance parameters\n"
-    file += f"shapes * * {output_path_aco.replace('../combine/', '')} "
+    file += f"shapes * * {histograms_path} "
     file += " $PROCESS $PROCESS_$SYSTEMATIC\n"
     file += "bin bin1\n"
     file += f"observation {observed_rate}\n"
@@ -81,7 +85,7 @@ def add_datacard_header(file, observed_rate, alp_name=""):
 
 
 def add_datacard_rates(file, rates, alp_name=""):
-    file += f"rate           {rates[alp_name] if alp_name!='' else ''}"
+    file += f"rate           {rates[alp_name] if alp_name!='' else ''}  "
     file += f"{rates['lbl']} {rates['cep']} {rates['qed']}\n"
     return file
 
@@ -115,7 +119,7 @@ def save_datacard():
     outfile.write(output_file)
 
     for process in processes:
-        if "alp" not in process:
+        if "alps" not in process:
             continue
 
         if process not in input_aco_histograms:

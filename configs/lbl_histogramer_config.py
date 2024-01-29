@@ -31,7 +31,8 @@ defaultHistParams = (
 
 histParams = (
   ("diphoton"     , "pt"            , 100, 0, 100, ""),
-  ("diphoton"     , "mass"          , 100, 0, 100, ""),
+  ("diphoton"     , "mass200"          , 200, 0, 200, ""),
+  ("diphoton"     , "mass100"          , 100, 0, 200, ""),
   ("diphoton"     , "acoplanarity200"  , 200, 0, 1, ""),
   ("diphoton"     , "acoplanarity300"  , 300, 0, 1, ""),
   ("diphoton"     , "acoplanarity400"  , 400, 0, 1, ""),

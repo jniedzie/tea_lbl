@@ -1,6 +1,6 @@
 import ROOT
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
-from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity
+from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity, n_mass_bins
 from lbl_paths import processes, merged_histograms_path
 from lbl_paths import acoplanarity_histogram_name, mass_histogram_name
 from Logger import info, warn, fatal
@@ -33,15 +33,15 @@ def load_histograms(skim):
         try:
             input_files[process] = ROOT.TFile.Open(file_path)
 
-        except (OSError):
+        except OSError:
             warn(f"File not found: {file_path}")
             continue
 
         aco_hist_name = acoplanarity_histogram_name.format(n_acoplanarity_bins)
+        mass_hist_name = mass_histogram_name.format(n_mass_bins)
 
         input_aco_histograms[process] = input_files[process].Get(aco_hist_name)
-        input_mass_histograms[process] = input_files[process].Get(
-            mass_histogram_name)
+        input_mass_histograms[process] = input_files[process].Get(mass_hist_name)
 
         if any([input_aco_histograms[process] is None,
                 type(input_aco_histograms[process]) is ROOT.TObject,

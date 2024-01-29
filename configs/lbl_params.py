@@ -209,6 +209,8 @@ cep_scaling_min_acoplanarity = 0.02
 #  significance & limits parameters
 
 n_acoplanarity_bins = 500
+n_mass_bins = 200
+
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
 

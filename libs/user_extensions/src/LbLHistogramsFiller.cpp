@@ -52,7 +52,8 @@ void LbLHistogramsFiller::Fill(const std::shared_ptr<Event> event) {
   double acoplanarity = 1 - (fabs(deltaPhi)/TMath::Pi());  
 
   histogramsHandler->Fill("diphoton_pt", diphoton.Pt(), GetWeight(event));
-  histogramsHandler->Fill("diphoton_mass", diphoton.M(), GetWeight(event));
+  histogramsHandler->Fill("diphoton_mass100", diphoton.M(), GetWeight(event));
+  histogramsHandler->Fill("diphoton_mass200", diphoton.M(), GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity200", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity300", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity400", acoplanarity, GetWeight(event));

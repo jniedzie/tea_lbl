@@ -1,10 +1,10 @@
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 samples = (
-    # "collisionData",
-    # "lbl",
-    # "cep",
-    # "qed",
+    "collisionData",
+    "lbl",
+    "cep",
+    "qed",
 
     "alps_5",
     "alps_6",
