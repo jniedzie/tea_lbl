@@ -22,10 +22,19 @@ class Track {
   bool PassesChi2Cuts();
   bool PassesDistanceToPVCuts();
 
+  bool OverlapsWithOtherObjects(std::shared_ptr<PhysicsObjects> otherObjects) {
+    for (auto otherObject : *otherObjects) {
+      float deltaEta = fabs((float)otherObject->Get("eta") - eta);
+      float deltaPhi = fabs(TVector2::Phi_mpi_pi((float)otherObject->Get("phi") - phi));
+      if (deltaEta < electronTrackMatching.at("maxDeltaEta") && deltaPhi < electronTrackMatching.at("maxDeltaPhi")) return true;
+    }
+    return false;
+  }
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
   
-  std::map<std::string, float> trackCuts, detectorParams, caloEtaEdges;
+  std::map<std::string, float> trackCuts, detectorParams, caloEtaEdges, electronTrackMatching;
   float eta, phi, absEta;
 };
 

@@ -38,8 +38,9 @@ int main(int argc, char **argv) {
   auto lblSelections = make_unique<LbLSelections>();
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  bool applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC;
+  bool applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons;
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
+  config.GetValue("applyTwoElectrons", applyTwoElectrons);
   config.GetValue("applyChargedExclusivity", applyChargedExclusivity);
   config.GetValue("applyNeutralExclusivity", applyNeutralExclusivity);
   config.GetValue("applyDiphotonPt", applyDiphotonPt);
@@ -50,6 +51,13 @@ int main(int argc, char **argv) {
   if (applyTwoPhotons) {
     cutFlowManager->RegisterCut("twoGoodPhotons");
     cutFlowManager->RegisterCut("diphotonMass");
+  }
+  if (applyTwoElectrons) {
+    cutFlowManager->RegisterCut("twoGoodElectrons");
+    cutFlowManager->RegisterCut("nPhotons");
+    cutFlowManager->RegisterCut("nTracks");
+    cutFlowManager->RegisterCut("dielectronMass");
+    cutFlowManager->RegisterCut("dielectronPt");
   }
   if (applyChargedExclusivity) {
     cutFlowManager->RegisterCut("nElectrons");
@@ -81,6 +89,10 @@ int main(int argc, char **argv) {
 
     if (applyTwoPhotons) {
       if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager)) continue;
+    }
+
+    if (applyTwoElectrons) {
+      if (!lblSelections->PassesDielectronSelection(event, cutFlowManager)) continue;
     }
 
     if (applyChargedExclusivity) {

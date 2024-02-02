@@ -9,6 +9,7 @@ class LbLSelections {
 
   bool PassesNeutralExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   bool PassesDiphotonSelection(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
+  bool PassesDielectronSelection(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   bool PassesChargedExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   bool PassesDiphotonPt(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);
   bool PassesZDC(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager);

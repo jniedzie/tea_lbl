@@ -11,11 +11,12 @@ sample = "collisionData"
 # sample = "cep"
 # sample = "qed"
 
-# skim = "skimmed_twoPhotons"
-# skim = "skimmed_neutralExclusivity"
-# skim = "skimmed_allSelections"
+# skim = "initial"
+skim = "skimmed_allSelections"
+# skim = "skimmed_qedSelections"
 
-inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
+# inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
+inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
 histogramsOutputFilePath = "./histograms_data.root"
 
 defaultHistParams = (
@@ -38,6 +39,10 @@ histParams = (
   ("diphoton"     , "acoplanarity400"  , 400, 0, 1, ""),
   ("diphoton"     , "acoplanarity500"  , 500, 0, 1, ""),
   ("diphoton"     , "acoplanarity600"  , 600, 0, 1, ""),
+  
+  ("dielectron"   , "pt"            , 100, 0, 1, ""),
+  ("dielectron"   , "mass"          , 200, 0, 200, ""),
+  ("dielectron"   , "acoplanarity"  , 1000, 0, 1, ""),
 )
 
 eventsTreeNames = ["Events",]

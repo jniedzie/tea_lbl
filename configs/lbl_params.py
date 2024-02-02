@@ -2,13 +2,19 @@
 eventCuts = {
     "max_ZDCenergyPerSide": 10000.0,
 
-    "min_Nphotons": 2,
-    "max_Nphotons": 2,
-    "min_diphotonMass": 5.0,
-    "max_diphotonPt": 1.0,
+    "min_Nphotons": 0,  # 2 for LbL analysis, 0 for QED analysis
+    "max_Nphotons": 0,  # 2 for LbL analysis, 0 for QED analysis
+
+    "min_diphotonMass": 5.0,  # only used in LbL analysis
+    "max_diphotonPt": 1.0,  # only used in LbL analysis
+
+    "min_Nelectrons": 2,  # 0 for LbL analysis, 2 for QED analysis
+    "max_Nelectrons": 2,  # 0 for LbL analysis, 2 for QED analysis
+
+    "min_dielectronMass": 5.0,  # only used in QED analysis
+    "max_dielectronPt": 1.0,  # only used in QED analysis
 
     "max_Ntracks": 0,
-    "max_Nelectrons": 0,
     "max_Nmuons": 0,
     "max_Ntowers": 0,
 }
@@ -129,6 +135,19 @@ caloMatching = {
 }
 
 
+# matching between photons and electrons
+electronPhotonMatching = {
+    "maxDeltaEta": 0.5,  # ???
+    "maxDeltaPhi": 0.5,  # ???
+}
+
+# matching between tracks and electrons
+electronTrackMatching = {
+    "maxDeltaEta": 0.15,
+    "maxDeltaPhi": 0.7,
+}
+
+
 #  scaling parameters
 
 luminosity = 1647.180726  # μb^-1, with ZDC
@@ -157,7 +176,7 @@ crossSections = {
 
 # photon ET > 2.5 GeV, diphoton pt < 1 GeV
 #                       NE       ChE      HFveto   L1EG     Reco+ID
-photon_scale_factor   = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.9771**2
+photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.9771**2
 electron_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2
 
 

@@ -5,10 +5,16 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-applyTwoPhotons = True
-applyChargedExclusivity = True
+# for LbL analysis:
+applyTwoPhotons = False
+applyDiphotonPt = False
+applyChargedExclusivity = False
+
+# for QED analysis:
+applyTwoElectrons = True
+
+# for both analyses:
 applyNeutralExclusivity = True
-applyDiphotonPt = True
 applyZDC = True
 
 # sample = "collisionData"
@@ -16,9 +22,8 @@ sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 
-# skim = "skimmed_twoPhotons"
-# skim = "skimmed_neutralExclusivity"
-skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections"
+skim = "skimmed_qedSelections"
 
 inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
 # inputFilePath = "./renamed_test.root"

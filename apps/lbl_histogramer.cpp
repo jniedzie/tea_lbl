@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
     auto event = eventReader->GetEvent(iEvent);
 
     lblObjectsManager->InsertGoodPhotonsCollection(event);
+    lblObjectsManager->InsertGoodElectronsCollection(event);
 
     cutFlowManager->UpdateCutFlow("initial");
     histogramsFiller->FillDefaultVariables(event);

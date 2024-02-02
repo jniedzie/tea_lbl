@@ -9,6 +9,7 @@ Photon::Photon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(ph
   config.GetMap("photonCuts", photonCuts);
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
+  config.GetMap("electronPhotonMatching", electronPhotonMatching);
 
   eta = Get("eta");
   phi = Get("phi");

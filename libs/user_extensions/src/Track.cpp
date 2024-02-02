@@ -8,6 +8,7 @@ Track::Track(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(phys
   config.GetMap("trackCuts", trackCuts);
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
+  config.GetMap("electronTrackMatching", electronTrackMatching);
 
   eta = Get("eta");
   phi = Get("phi");
