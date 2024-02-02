@@ -118,6 +118,12 @@ def save_datacard():
     outfile = open(output_path_aco.replace(".root", ".txt"), "w")
     outfile.write(output_file)
 
+    rates = {}
+    for process in processes:
+        if process not in input_aco_histograms:
+            continue
+        rates[process] = input_mass_histograms[process].Integral()
+
     for process in processes:
         if "alps" not in process:
             continue
