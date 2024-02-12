@@ -2,6 +2,7 @@
 
 #include "ConfigManager.hpp"
 #include "ExtensionsHelpers.hpp"
+#include "UserExtensionsHelpers.hpp"
 
 using namespace std;
 
@@ -54,6 +55,11 @@ void LbLHistogramsFiller::Fill(const std::shared_ptr<Event> event) {
     histogramsHandler->Fill("diphoton_acoplanarity400", acoplanarity, GetWeight(event));
     histogramsHandler->Fill("diphoton_acoplanarity500", acoplanarity, GetWeight(event));
     histogramsHandler->Fill("diphoton_acoplanarity600", acoplanarity, GetWeight(event));
+
+    histogramsHandler->Fill("diphoton_seedTime", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
+    if(acoplanarity < 0.01) {
+      histogramsHandler->Fill("diphoton_seedTimeSR", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
+    }
   }
 
   auto electrons = event->GetCollection("goodElectron");
@@ -73,5 +79,9 @@ void LbLHistogramsFiller::Fill(const std::shared_ptr<Event> event) {
     histogramsHandler->Fill("dielectron_mass", dielectron.M(), GetWeight(event));
     histogramsHandler->Fill("dielectron_acoplanarity", acoplanarity, GetWeight(event));
   }
+
+  auto lblEvent = asLbLEvent(event);
+  float deltaEt = lblEvent->GetDeltaEt();
+  histogramsHandler->Fill("event_deltaEt", deltaEt, GetWeight(event));
 
 }

@@ -4,6 +4,7 @@
 #include "EventReader.hpp"
 #include "EventWriter.hpp"
 #include "ExtensionsHelpers.hpp"
+#include "UserExtensionsHelpers.hpp"
 #include "HistogramsFiller.hpp"
 #include "HistogramsHandler.hpp"
 #include "LbLObjectsManager.hpp"
@@ -38,13 +39,14 @@ int main(int argc, char **argv) {
   auto lblSelections = make_unique<LbLSelections>();
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  bool applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons;
+  bool applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons, applyEtDelta;
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
   config.GetValue("applyTwoElectrons", applyTwoElectrons);
   config.GetValue("applyChargedExclusivity", applyChargedExclusivity);
   config.GetValue("applyNeutralExclusivity", applyNeutralExclusivity);
   config.GetValue("applyDiphotonPt", applyDiphotonPt);
   config.GetValue("applyZDC", applyZDC);
+  config.GetValue("applyEtDelta", applyEtDelta);
 
   cutFlowManager->RegisterCut("initial");
 
@@ -71,6 +73,7 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("diphotonPt");
   }
   if (applyZDC) cutFlowManager->RegisterCut("ZDC");
+  if (applyEtDelta) cutFlowManager->RegisterCut("etDelta");
 
   vector<string> eventsTreeNames;
   config.GetVector("eventsTreeNames", eventsTreeNames);
@@ -109,6 +112,12 @@ int main(int argc, char **argv) {
 
     if (applyZDC) {
       if (!lblSelections->PassesZDC(event, cutFlowManager)) continue;
+    }
+
+    if (applyEtDelta) {
+      auto lblEvent = asLbLEvent(event);
+      if (lblEvent->GetDeltaEt() > 0.65) continue;
+      cutFlowManager->UpdateCutFlow("etDelta");
     }
 
     for (string eventsTreeName : eventsTreeNames) {

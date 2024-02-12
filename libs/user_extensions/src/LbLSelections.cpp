@@ -39,13 +39,19 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
 }
 
 bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  int nPhotons = event->GetCollection("goodPhoton")->size();
+  auto goodPhotons = event->GetCollection("goodPhoton");
+  int nPhotons = goodPhotons->size();
   if (nPhotons < eventCuts.at("min_Nphotons") || nPhotons > eventCuts.at("max_Nphotons")) return false;
 
   cutFlowManager->UpdateCutFlow("twoGoodPhotons");
 
-  auto photon1 = event->GetCollection("goodPhoton")->at(0);
-  auto photon2 = event->GetCollection("goodPhoton")->at(1);
+  if (nPhotons < 2) {
+    fatal() << "Requested diphoton selections, but <2 good photons found in event." << endl;
+    fatal() << "Consider adjusting min_Nphotons and max_Nphotons in the configuration file." << endl;
+    exit(0);
+  }
+  auto photon1 = goodPhotons->at(0);
+  auto photon2 = goodPhotons->at(1);
   TLorentzVector photon1vec, photon2vec;
   photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
   photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
@@ -53,7 +59,6 @@ bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<
   auto diphoton = photon1vec + photon2vec;
   if (diphoton.M() < eventCuts.at("min_diphotonMass")) return false;
   cutFlowManager->UpdateCutFlow("diphotonMass");
-
   return true;
 }
 
@@ -68,7 +73,7 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
   // check electron charge
   auto electron1 = electrons->at(0);
   auto electron2 = electrons->at(1);
-  if((int)electron1->Get("charge") * (int)electron2->Get("charge") > 0) return false;
+  if ((int)electron1->Get("charge") * (int)electron2->Get("charge") > 0) return false;
   cutFlowManager->UpdateCutFlow("electronCharge");
 
   // check charge exclusivity
@@ -92,7 +97,6 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
   // if (nNonOverlappingPhotons > eventCuts.at("max_Nphotons")) return false;
   // cutFlowManager->UpdateCutFlow("nPhotons");
 
-  
   TLorentzVector electron1vec, electron2vec;
   electron1vec.SetPtEtaPhiM(electron1->Get("pt"), electron1->Get("eta"), electron1->Get("phi"), 0);
   electron2vec.SetPtEtaPhiM(electron2->Get("pt"), electron2->Get("eta"), electron2->Get("phi"), 0);
