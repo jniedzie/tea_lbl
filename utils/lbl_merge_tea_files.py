@@ -3,8 +3,8 @@ import os
 from lbl_paths import base_path, processes
 
 # skim = "initial"
-# skim = "skimmed_allSelections"
-skim = "skimmed_qedSelections"
+skim = "skimmed_allSelections"
+# skim = "skimmed_qedSelections"
 
 merge_histograms = True  # False for merging ntuples
 

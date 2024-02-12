@@ -10,7 +10,7 @@ output_path_mass = "../combine/limits_histograms_2015.root"
 
 input_mass_histograms = {}
 
-systematic_uncertainty = 1.25
+systematic_uncertainty = 1.24
 alp_mc_uncertainty = 1.03
 
 

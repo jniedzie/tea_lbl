@@ -74,6 +74,29 @@ cross_section_limits = {
     90: (0.4459, 0.1322, 0.2325, 0.4453, 0.8607, 1.3503)
 }
 
+# observed
+# ./findCoupling 02.88656 5000 50000 5 288.656
+# ./findCoupling 00.62088 5000 50000 6 62.088
+# ./findCoupling 00.22086 5000 50000 9 22.086
+# ./findCoupling 00.23425 5000 50000 11 23.425
+# ./findCoupling 00.12965 5000 50000 14 12.965
+# ./findCoupling 00.08875 5000 50000 16 08.875
+# ./findCoupling 00.05306 5000 50000 22 05.306
+# ./findCoupling 00.04515 5000 50000 30 04.515
+# ./findCoupling 00.04459 5000 50000 90 04.459
+
+# expected
+# ./findCoupling 03.4375 5000 50000 5 343.75
+# ./findCoupling 00.7375 5000 50000 6 73.75
+# ./findCoupling 00.29531 5000 50000 9 29.531
+# ./findCoupling 00.20 5000 50000 11 20.
+# ./findCoupling 00.13711 5000 50000 14 13.711
+# ./findCoupling 00.09414 5000 50000 16 09.414
+# ./findCoupling 00.07148 5000 50000 22 07.148
+# ./findCoupling 00.05352 5000 50000 30 05.352
+# ./findCoupling 00.04453 5000 50000 90 04.453
+
+
 
 def main():
     scale = reference_alp_cross_section * 1e3  # convert from μb to nb
