@@ -2,14 +2,14 @@
 eventCuts = {
     "max_ZDCenergyPerSide": 10000.0,
 
-    "min_Nphotons": 0,  # 2 for LbL analysis, 0 for QED analysis
-    "max_Nphotons": 0,  # 2 for LbL analysis, 0 for QED analysis
+    "min_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
+    "max_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
 
     "min_diphotonMass": 5.0,  # only used in LbL analysis
     "max_diphotonPt": 1.0,  # only used in LbL analysis
 
-    "min_Nelectrons": 2,  # 0 for LbL analysis, 2 for QED analysis
-    "max_Nelectrons": 2,  # 0 for LbL analysis, 2 for QED analysis
+    "min_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
+    "max_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
 
     "min_dielectronMass": 5.0,  # only used in QED analysis
     "max_dielectronPt": 1.0,  # only used in QED analysis
@@ -233,5 +233,5 @@ n_mass_bins = 200
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
 
-systematic_uncertainty = 1.25
+systematic_uncertainty = 1.26
 alp_mc_uncertainty = 1.03

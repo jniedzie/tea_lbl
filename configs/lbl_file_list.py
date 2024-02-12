@@ -21,18 +21,26 @@ samples = (
 sample_path = ""
 
 # skim = "initial"
-# skim = "skimmed_allSelections"
-skim = "skimmed_qedSelections"
+skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections_noSeedTime"
+# skim = "skimmed_qedSelections"
 # skim = "skimmed_allSelections_swissCross0p99"
+# skim = "skimmed_allSelections_deltaEt"
+# skim = "skimmed_allSelections_deltaEt0p65"
+
 
 # for renaming
 # input_directory = f"{base_path}/ntuples/{sample_path}/bad_names/"
 # output_dir = f"{base_path}/ntuples/{sample_path}/initial/"
 
 # for skimming
-input_directory = f"{base_path}/ntuples/{sample_path}/initial/"
-output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"
+# input_directory = f"{base_path}/ntuples/{sample_path}/initial/"
+# output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"
+
+# for skimming (deltaEt cut)
+# input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
+# output_dir = f"{base_path}/ntuples/{sample_path}/{skim}_deltaEt0p65/"
 
 # for histogramming
-# input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
-# output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"
+input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
+output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"

@@ -8,8 +8,8 @@ from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
 from lbl_paths import base_path, processes
 
 # skim = "initial"
-# skim = "skimmed_allSelections"
-skim = "skimmed_qedSelections"
+skim = "skimmed_allSelections"
+# skim = "skimmed_qedSelections"
 
 output_path = "../plots/first_test/"
 
@@ -20,23 +20,27 @@ samples = [
         type=SampleType.background,
         cross_section=crossSections["lbl"]*scaleFactors["lbl"],
         initial_weight_sum=nGenEvents["lbl"],
+        # line_color=ROOT.kOrange+1,
         fill_color=ROOT.kOrange+1,
         fill_alpha=1.0,
+        # fill_alpha=0.0,
         legend_description="LbL",
         # if you add a custom legend for this sample, it will override the default legend.
         # custom_legend = Legend(0.5, 0.5, 0.7, 0.8, "f"),
     ),
-    # Sample(
-    #     name="cep",
-    #     file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
-    #     type=SampleType.background,
-    #     cross_section=get_cep_scale(skim),
-    #     initial_weight_sum=luminosity,
-    #     fill_color=ROOT.kAzure-4,
-    #     fill_alpha=1.0,
-    #     legend_description="CEP",
-    #     # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
-    # ),
+    Sample(
+        name="cep",
+        file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
+        type=SampleType.background,
+        cross_section=get_cep_scale(skim),
+        initial_weight_sum=luminosity,
+        # line_color=ROOT.kAzure-4,
+        fill_color=ROOT.kAzure-4,
+        fill_alpha=1.0,
+        # fill_alpha=0.0,
+        legend_description="CEP",
+        # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
+    ),
     Sample(
         name="qed",
         file_path=f"{base_path}/qed/merged_{skim}_histograms.root",
@@ -44,8 +48,10 @@ samples = [
         cross_section=crossSections["qed"]*scaleFactors["qed"],
         initial_weight_sum=nGenEvents["qed"],
         line_style=ROOT.kSolid,
+        # line_color=ROOT.kRed,
         fill_color=ROOT.kYellow,
         fill_alpha=1.0,
+        # fill_alpha=0.0,
         marker_size=0.0,
         legend_description="QED"
     ),
@@ -123,6 +129,8 @@ y_label = "# events (2018)"
 
 histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
+    Histogram("goodPhoton_seedTime", "", False, True, NormalizationType.to_one, 1,   -5, 5, -1, -1, "Photon seed time", y_label),
+    
     Histogram("electron_PFChIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFChIso", y_label),
     Histogram("electron_PFPhoIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFPhoIso", y_label),
     Histogram("electron_PFNeuIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFNeuIso", y_label),
@@ -140,6 +148,8 @@ histograms = (
     Histogram("dielectron_acoplanarity", "", False, True, NormalizationType.to_lumi, 1,   0, 0.06, 1e-1, 1e5, "A_{#phi}^{ee}", y_label),
     Histogram("dielectron_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label),
     Histogram("dielectron_pt", "", False, True, NormalizationType.to_lumi, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label),
+
+    Histogram("event_deltaEt", "", False, False, NormalizationType.to_lumi, 5,   0, 1, 1e-2, 10, "#DeltaE_{T}", y_label),
 
     Histogram("cutFlow", "", False, True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )
@@ -163,6 +173,7 @@ legends = {
 
 plotting_options = {
     SampleType.background: "hist",
+    # SampleType.background: "hist nostack",
     SampleType.signal: "hist nostack",
     SampleType.data: "nostack pe",
 }
