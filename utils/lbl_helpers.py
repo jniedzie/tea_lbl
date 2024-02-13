@@ -1,9 +1,12 @@
+import math
 import ROOT
+
+from Logger import info, warn, fatal
+
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
 from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity, n_mass_bins
 from lbl_paths import processes, merged_histograms_path
 from lbl_paths import acoplanarity_histogram_name, mass_histogram_name
-from Logger import info, warn, fatal
 
 
 input_files = {}
@@ -41,7 +44,8 @@ def load_histograms(skim):
         mass_hist_name = mass_histogram_name.format(n_mass_bins)
 
         input_aco_histograms[process] = input_files[process].Get(aco_hist_name)
-        input_mass_histograms[process] = input_files[process].Get(mass_hist_name)
+        input_mass_histograms[process] = input_files[process].Get(
+            mass_hist_name)
 
         if any([input_aco_histograms[process] is None,
                 type(input_aco_histograms[process]) is ROOT.TObject,
@@ -94,3 +98,21 @@ def get_cep_scale(skim):
     )
 
     return integral_data / integral_cep
+
+
+def get_alp_coupling(mass, cross_section):
+    slope = 0.498809
+    interstect = {
+        5.0: 1.3352627780449595e-05,
+        6.0: 1.459208443729578e-05,
+        9.0: 1.8432339658251058e-05,
+        11.0: 2.051773548082086e-05,
+        14.0: 2.4387325416686648e-05,
+        16.0: 2.643930742885861e-05,
+        22.0: 3.323868088097294e-05,
+        30.0: 4.4114845375054456e-05,
+        50.0: 7.817673899208805e-05,
+        90.0: 0.00019612635077675486,
+    }
+
+    return 10**(slope * math.log10(cross_section) + math.log10(interstect[mass]))
