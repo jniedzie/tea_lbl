@@ -220,10 +220,9 @@ nGenEvents = {
     "alps_90": 449000,
 }
 
-cep_scaling_min_acoplanarity = 0.02
+# cep_scaling_min_acoplanarity = 0.02
 # cep_scaling_min_acoplanarity = 0.018
-# cep_scaling_min_acoplanarity = 0.016
-
+cep_scaling_min_acoplanarity = 0.016
 
 #  significance & limits parameters
 
