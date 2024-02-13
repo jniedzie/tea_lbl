@@ -6,6 +6,12 @@ using namespace std;
 
 float LbLEvent::GetDeltaEt() {
   auto photons = GetCollection("goodPhoton");
+
+  if(photons->size() != 2) {
+    warn() << "Couldn't calculate deltaEt -- number of photons in the event != 2" << endl;
+    return -1;
+  }
+
   auto towers = GetCollection("CaloTower");
   
   auto photon1 = photons->at(0);
