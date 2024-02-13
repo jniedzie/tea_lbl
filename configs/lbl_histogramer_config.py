@@ -45,6 +45,7 @@ histParams = (
     ("dielectron", "pt", 100, 0, 1, ""),
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "acoplanarity", 1000, 0, 1, ""),
+    ("dielectron", "deltaPhi", 20, 0, 3.1415, ""),
     
     ("event", "deltaEt", 100, 0, 1, ""),
 )

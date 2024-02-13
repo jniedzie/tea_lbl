@@ -34,6 +34,7 @@ float LbLHistogramsFiller::GetWeight(const std::shared_ptr<Event> event) {
 }
 
 void LbLHistogramsFiller::Fill(const std::shared_ptr<Event> event) {
+  
   auto photons = event->GetCollection("goodPhoton");
   if (photons->size() == 2) {
     auto photon1 = photons->at(0);
@@ -57,7 +58,7 @@ void LbLHistogramsFiller::Fill(const std::shared_ptr<Event> event) {
     histogramsHandler->Fill("diphoton_acoplanarity600", acoplanarity, GetWeight(event));
 
     histogramsHandler->Fill("diphoton_seedTime", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
-    if(acoplanarity < 0.01) {
+    if (acoplanarity < 0.01) {
       histogramsHandler->Fill("diphoton_seedTimeSR", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
     }
   }
@@ -67,8 +68,8 @@ void LbLHistogramsFiller::Fill(const std::shared_ptr<Event> event) {
     auto electron1 = electrons->at(0);
     auto electron2 = electrons->at(1);
     TLorentzVector electron1vec, electron2vec;
-    electron1vec.SetPtEtaPhiM(electron1->Get("pt"), electron1->Get("eta"), electron1->Get("phi"), 0);
-    electron2vec.SetPtEtaPhiM(electron2->Get("pt"), electron2->Get("eta"), electron2->Get("phi"), 0);
+    electron1vec.SetPtEtaPhiM(electron1->Get("pt"), electron1->Get("eta"), electron1->Get("phi"), 0.000511);
+    electron2vec.SetPtEtaPhiM(electron2->Get("pt"), electron2->Get("eta"), electron2->Get("phi"), 0.000511);
 
     auto dielectron = electron1vec + electron2vec;
 
@@ -78,10 +79,27 @@ void LbLHistogramsFiller::Fill(const std::shared_ptr<Event> event) {
     histogramsHandler->Fill("dielectron_pt", dielectron.Pt(), GetWeight(event));
     histogramsHandler->Fill("dielectron_mass", dielectron.M(), GetWeight(event));
     histogramsHandler->Fill("dielectron_acoplanarity", acoplanarity, GetWeight(event));
+
+    TLorentzVector electron;
+    if((int)electron1->Get("charge") > 0) {
+      electron = electron1vec;
+    } else {
+      electron = electron2vec;
+    }
+
+    // Calculate delta phi 
+    float deltaPhi1 = fabs(dielectron.Phi() - electron.Phi());
+    
+    // bring delta phi between -pi and pi
+    if (deltaPhi1 > TMath::Pi()) deltaPhi1 = deltaPhi1 - 2. * TMath::Pi();
+    if (deltaPhi1 <= -TMath::Pi()) deltaPhi1 = deltaPhi1 + 2. * TMath::Pi();
+    
+    // // Take the absolute value
+    deltaPhi1 = fabs(deltaPhi1);
+    histogramsHandler->Fill("dielectron_deltaPhi", deltaPhi1, GetWeight(event));
   }
 
   auto lblEvent = asLbLEvent(event);
   float deltaEt = lblEvent->GetDeltaEt();
   histogramsHandler->Fill("event_deltaEt", deltaEt, GetWeight(event));
-
 }
