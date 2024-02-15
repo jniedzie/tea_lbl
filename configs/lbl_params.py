@@ -22,9 +22,9 @@ eventCuts = {
 
 # good object definitions
 photonCuts = {
-    "min_et": 2.5,
-    "max_swissCross": 0.95,
+    "min_et": 2.0,
     "max_absEta": 2.2,
+    "max_swissCross": 0.95,
     "max_SCEtaWidth_barrel": 0.0106,
     "max_SCEtaWidth_endcap": 0.0272,
     "max_hOverE_barrel": 0.04596,
@@ -151,6 +151,8 @@ electronTrackMatching = {
 #  scaling parameters
 
 luminosity = 1647.180726  # μb^-1, with ZDC
+luminosity_err = luminosity * 0.019  # 1.9% uncertainty
+
 # luminosity = 1609.910015010; // from brilcalc, 1/μb
 # luminosity = 1639.207543; // from Ruchi, 1/μb
 
@@ -174,13 +176,28 @@ crossSections = {
 }
 
 
+# photon ET > 2.0 GeV, diphoton pt < 1 GeV
+#                       NE       ChE      HFveto   L1EG     Reco+ID
+photon_scale_factor = 0.8497 * 0.9339 * 0.8696 * 1.0089 * (0.957*0.9612)**2
+electron_scale_factor = 0.8497 * 0.9339 * 0.8696 * 1.0089 * 0.943**2
+
+# photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * (0.8636847*0.9608480)**2
+
+
 # photon ET > 2.5 GeV, diphoton pt < 1 GeV
 #                       NE       ChE      HFveto   L1EG     Reco+ID
-photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.9771**2
-electron_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2
+# photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * (0.8233192*0.9621543)**2
+# photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * (0.9621543)**2
+# electron_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2
 
 
-# photon ET > 2.0 GeV, diphoton pt < 2 GeV
+# photon ET > 2.5 GeV, diphoton pt < 1 GeV, with Reco SFs bug
+#                       NE       ChE      HFveto   L1EG     Reco+ID
+# photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.9771**2
+# electron_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2
+
+
+# photon ET > 2.0 GeV, diphoton pt < 2 GeV, with Reco SFs bug
 #                       NE       ChE      HFveto   L1EG     Reco+ID
 # photon_scale_factor   = 0.85  *  0.93  *  0.866 *  1.008 *  1.037**2
 # electron_scale_factor = 0.85  *  0.93  *  0.866 *  1.008 *  0.976**2

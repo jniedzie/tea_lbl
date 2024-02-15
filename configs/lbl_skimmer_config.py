@@ -21,8 +21,8 @@ applyZDC = True
 applyEtDelta = False
 
 
-sample = "collisionData"
-# sample = "lbl"
+# sample = "collisionData"
+sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 
