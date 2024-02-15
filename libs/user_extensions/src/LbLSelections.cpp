@@ -18,13 +18,13 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   for (auto physicsObject : *towers) {
     auto tower = asCaloTower(physicsObject);
     if (tower->IsDead()) continue;
-    if (tower->IsHadronicEnergyAboveNoiseThreshold() /* && !tower->IsInHadronicCrack()*/) {
+    if (tower->IsHadronicEnergyAboveNoiseThreshold() && !tower->IsInHadronicCrack()) {
       nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
     } else {
       if (tower->IsEtaAboveLimit()) continue;
       if (tower->IsInHEM()) continue;
-      // if (tower->IsInElectromagneticCrack()) continue;
+      if (tower->IsInElectromagneticCrack()) continue;
       if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
       if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
       if (tower->IsElectromagneticEnergyAboveNoiseThreshold()) nPassingTowers++;
