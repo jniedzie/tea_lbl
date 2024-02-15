@@ -5,7 +5,9 @@ from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
 from lbl_helpers import get_cep_scale
 from lbl_paths import base_path, processes
 
-skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections_photonEt2p0"
+skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_qedSelections"
 
 

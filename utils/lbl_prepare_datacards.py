@@ -7,7 +7,11 @@ from Logger import info
 import ROOT
 import os
 
-skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections_photonEt2p0"
+# skim = "skimmed_allSelections_photonEt2p5"
+# skim = "skimmed_allSelections_swissCross0p99"
+skim = "skimmed_allSelections_hadCrack"
 
 output_path_aco = f"../combine/significance_histograms_{skim}"
 output_path_aco += f"_nBins{n_acoplanarity_bins}.root"
@@ -149,3 +153,17 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+# combineCards.py limits_histograms_2015alps_5_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_5_.txt > card_alps_5.txt
+# combineCards.py limits_histograms_2015alps_6_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_6_.txt > card_alps_6.txt
+# combineCards.py limits_histograms_2015alps_9_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_9_.txt > card_alps_9.txt
+# combineCards.py limits_histograms_2015alps_11_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_11_.txt > card_alps_11.txt
+# combineCards.py limits_histograms_2015alps_14_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_14_.txt > card_alps_14.txt
+# combineCards.py limits_histograms_2015alps_16_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_16_.txt > card_alps_16.txt
+# combineCards.py limits_histograms_2015alps_22_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_22_.txt > card_alps_22.txt
+# combineCards.py limits_histograms_2015alps_30_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_30_.txt > card_alps_30.txt
+# combineCards.py limits_histograms_2015alps_50_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_50_.txt > card_alps_50.txt
+# combineCards.py limits_histograms_2015alps_90_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_90_.txt > card_alps_90.txt

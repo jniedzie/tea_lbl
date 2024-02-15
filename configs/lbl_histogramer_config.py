@@ -13,18 +13,20 @@ sample = "collisionData"
 # sample = "qed"
 
 # skim = "initial"
-skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections_photonEt2p0"
+# skim = "skimmed_allSelections"
 # skim = "skimmed_qedSelections"
+skim = "skimmed_allSelections_hadCrack"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
-histogramsOutputFilePath = "./histograms_data.root"
+histogramsOutputFilePath = f"./histograms_{sample}.root"
 
 defaultHistParams = (
     # collection      variable          bins    xmin     xmax     dir
-    ("goodPhoton", "et", 100,    0,       200,     ""),
-    ("goodPhoton", "eta", 100,    -2.5,    2.5,     ""),
-    ("goodPhoton", "phi", 100,    -2.5,    2.5,     ""),
+    ("goodPhoton", "et" , 200,    0,       100,     ""),
+    ("goodPhoton", "eta", 12,    -2.2,    2.2,     ""),
+    ("goodPhoton", "phi", 12,    -3.14,    3.14,     ""),
     ("goodPhoton", "seedTime", 100,    -5,    5,     ""),
     ("electron", "PFChIso", 1000,    0,    10,     ""),
     ("electron", "PFPhoIso", 1000,    0,    10,     ""),
@@ -33,7 +35,9 @@ defaultHistParams = (
 )
 
 histParams = (
-    ("diphoton", "pt", 100, 0, 100, ""),
+    ("diphoton", "pt", 5, 0, 1, ""),
+    ("diphoton", "rapidity", 12, -2.2, 2.2, ""),
+    ("diphoton", "mass", 10, 0, 50, ""),
     ("diphoton", "mass200", 200, 0, 200, ""),
     ("diphoton", "mass100", 100, 0, 200, ""),
     ("diphoton", "acoplanarity200", 200, 0, 1, ""),
@@ -48,6 +52,10 @@ histParams = (
     ("dielectron", "deltaPhi", 20, 0, 3.1415, ""),
     
     ("event", "deltaEt", 100, 0, 1, ""),
+    
+    ("unfoldingPhoton", "pt", 5, 0, 1, ""),
+    ("unfoldingPhoton", "mass", 5, 5, 25, ""),
+    ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
 )
 
 histParams2D = (

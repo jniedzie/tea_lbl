@@ -8,7 +8,11 @@ from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
 from lbl_paths import base_path, processes
 
 # skim = "initial"
-skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections_photonEt2p0"
+# skim = "skimmed_allSelections_photonEt2p5"
+# skim = "skimmed_allSelections_swissCross0p99"
+skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_qedSelections"
 
 output_path = "../plots/first_test/"
@@ -125,7 +129,7 @@ legend_max_y = 0.90
 #     custom_stacks_order.append(process)
 #     alp_index += 1
 
-y_label = "# events (2018)"
+y_label = "# events"
 
 histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
@@ -141,9 +145,18 @@ histograms = (
     Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label),
 
     Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label),
+    
+    Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2, 0, 15, "y^{#gamma#gamma}", y_label),
+    Histogram("diphoton_mass"        , "", False , False, NormalizationType.to_lumi, 1,   0    , 50 , 0, 70, "m^{#gamma#gamma} (GeV)", y_label),
+    Histogram("diphoton_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1  , 0, 30, "p_{T}^{#gamma#gamma} (GeV)", y_label),
+
+    Histogram("goodPhoton_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2, 0, 30, "#eta^{#gamma}", y_label),
+    Histogram("goodPhoton_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 30, "#phi^{#gamma}", y_label),
+    Histogram("goodPhoton_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10 , 0, 50, "E_{T}^{#gamma} (GeV)", y_label),
 
     Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label),
     Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label),
+    
 
     Histogram("dielectron_acoplanarity", "", False, True, NormalizationType.to_lumi, 1,   0, 0.06, 1e-1, 1e5, "A_{#phi}^{ee}", y_label),
     Histogram("dielectron_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label),
@@ -179,5 +192,12 @@ plotting_options = {
 }
 
 canvas_size = (800, 600)
-show_ratio_plots = True
+show_ratio_plots = False
 ratio_limits = (0.0, 2.0)
+
+show_cms_labels = True
+extraText = "Preliminary"
+
+beam_label = " PbPb @ 5.02 TeV"
+lumi_unit = "nb"
+lumi_label_offset = -0.2

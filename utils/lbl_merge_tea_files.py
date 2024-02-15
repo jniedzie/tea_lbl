@@ -3,7 +3,11 @@ import os
 from lbl_paths import base_path, processes
 
 # skim = "initial"
-skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections"
+# skim = "skimmed_allSelections_photonEt2p0"
+# skim = "skimmed_allSelections_photonEt2p5"
+# skim = "skimmed_allSelections_swissCross0p99"
+skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_qedSelections"
 
 merge_histograms = True  # False for merging ntuples
