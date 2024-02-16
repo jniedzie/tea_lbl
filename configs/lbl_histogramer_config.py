@@ -7,20 +7,25 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-sample = "collisionData"
+# sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
-# sample = "qed"
+sample = "qed"
+# sample = "emptyBeams"
 
 # skim = "initial"
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections"
-# skim = "skimmed_qedSelections"
-skim = "skimmed_allSelections_hadCrack"
+skim = "skimmed_qedSelections"
+# skim = "skimmed_allSelections_hadCrack"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
-histogramsOutputFilePath = f"./histograms_{sample}.root"
+# inputFilePath = "./renamed_test.root"
+# inputFilePath = "./skimmed_test.root"
+print(f"{inputFilePath=}")
+
+histogramsOutputFilePath = f"./{skim}_{sample}_histograms.root"
 
 defaultHistParams = (
     # collection      variable          bins    xmin     xmax     dir
@@ -32,6 +37,10 @@ defaultHistParams = (
     ("electron", "PFPhoIso", 1000,    0,    10,     ""),
     ("electron", "PFNeuIso", 1000,    0,    10,     ""),
     # ("Event"       , "nGoodLeptons"  , 50,     0,       50,      ""  ),
+    
+    ("goodElectron", "pt" , 200,    0,       100,     ""),
+    ("goodElectron", "eta", 20,    -2.2,    2.2,     ""),
+    ("goodElectron", "phi", 20,    -3.14,    3.14,     ""),
 )
 
 histParams = (
@@ -48,6 +57,7 @@ histParams = (
 
     ("dielectron", "pt", 100, 0, 1, ""),
     ("dielectron", "mass", 200, 0, 200, ""),
+    ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
     ("dielectron", "acoplanarity", 1000, 0, 1, ""),
     ("dielectron", "deltaPhi", 20, 0, 3.1415, ""),
     
@@ -56,6 +66,22 @@ histParams = (
     ("unfoldingPhoton", "pt", 5, 0, 1, ""),
     ("unfoldingPhoton", "mass", 5, 5, 25, ""),
     ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
+    
+    ("caloTowerHE", "energyHad", 100, 0, 5, ""),
+    ("caloTowerHE", "energyTransverse", 100, 0, 5, ""),
+    ("caloTowerHE", "energy", 100, 0, 5, ""),
+    
+    ("goodCaloTowerHE", "energyHad", 100, 0, 5, ""),
+    ("goodCaloTowerHE", "energyTransverse", 100, 0, 5, ""),
+    ("goodCaloTowerHE", "energy", 100, 0, 5, ""),
+    
+    ("genPhoton", "et" , 200,    0,       10,     ""),
+    ("genPhoton", "energy" , 200,    0,       10,     ""),
+    
+    ("leadingGenPhoton", "energy" , 200,    0,       10,     ""),
+    ("leadingGenPhotonBarrel", "energy" , 200,    0,       10,     ""),
+    ("leadingGenPhotonBarrelEndcap", "energy" , 200,    0,       10,     ""),
+    
 )
 
 histParams2D = (

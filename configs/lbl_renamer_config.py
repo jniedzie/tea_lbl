@@ -6,8 +6,9 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 # sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
-# sample = "qed"
-sample = "alps_11"
+sample = "qed"
+# sample = "alps_11"
+# sample = "emptyBeams"
 
 inputFilePath = f"{base_path}/ntuples/{sample}/bad_names/ntuple_0.root"
 treeOutputFilePath = "./renamed_test.root"
@@ -24,7 +25,7 @@ branchesNames = {
   "mcEta"                 : ("genParticle_eta"            , "vector<float>"),
   "mcPhi"                 : ("genParticle_phi"            , "vector<float>"),
   "mcEt"                  : ("genParticle_et"             , "vector<float>"),
-  "mcPID"                 : ("genParticle_pid"            , "vector<float>"),
+  "mcPID"                 : ("genParticle_pid"            , "vector<int>"),
 
   "phoE"                  : ("photon_energy"              , "vector<float>"),
   "phoEt"                 : ("photon_et"                  , "vector<float>"),

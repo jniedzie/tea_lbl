@@ -190,6 +190,21 @@ def main():
     legend.AddEntry(exp_graph_2sigma, "Expected #pm 2 #sigma", "F")
     legend.Draw()
 
+    # draw "CMS" label on the top-left of the pad
+    label = ROOT.TLatex()
+    label.SetNDC()
+    label.SetTextFont(61)
+    label.SetTextSize(0.05)
+    label.DrawLatex(0.1, 0.92, "CMS Preliminary")
+    
+    # draw "1.6 fb^{-1} (PbPb @ 5.02 TeV)" label on the top-right of the pad
+    label_right = ROOT.TLatex()
+    label_right.SetNDC()
+    label_right.SetTextFont(52)
+    label_right.SetTextSize(0.04)
+    label_right.SetTextAlign(31)
+    label_right.DrawLatex(0.9, 0.92, "1.6 nb^{-1} (PbPb @ 5.02 TeV)")
+
     canvas.Update()
     canvas.SaveAs("../plots/limits_cross_section.pdf")
 

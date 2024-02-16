@@ -12,39 +12,43 @@ from lbl_paths import base_path, processes
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections_photonEt2p5"
 # skim = "skimmed_allSelections_swissCross0p99"
-skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack_noZDC"
 # skim = "skimmed_qedSelections"
+skim = "skimmed_qedSelections_noZDC"
 
-output_path = "../plots/first_test/"
+# output_path = "../plots/first_test/"
+# output_path = "../plots/qed_distrobutions/"
+output_path = "../plots/qed_distrobutions_noZDC/"
 
 samples = [
-    Sample(
-        name="lbl",
-        file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
-        type=SampleType.background,
-        cross_section=crossSections["lbl"]*scaleFactors["lbl"],
-        initial_weight_sum=nGenEvents["lbl"],
-        # line_color=ROOT.kOrange+1,
-        fill_color=ROOT.kOrange+1,
-        fill_alpha=1.0,
-        # fill_alpha=0.0,
-        legend_description="LbL",
-        # if you add a custom legend for this sample, it will override the default legend.
-        # custom_legend = Legend(0.5, 0.5, 0.7, 0.8, "f"),
-    ),
-    Sample(
-        name="cep",
-        file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
-        type=SampleType.background,
-        cross_section=get_cep_scale(skim),
-        initial_weight_sum=luminosity,
-        # line_color=ROOT.kAzure-4,
-        fill_color=ROOT.kAzure-4,
-        fill_alpha=1.0,
-        # fill_alpha=0.0,
-        legend_description="CEP",
-        # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
-    ),
+    # Sample(
+    #     name="lbl",
+    #     file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
+    #     type=SampleType.background,
+    #     cross_section=crossSections["lbl"]*scaleFactors["lbl"],
+    #     initial_weight_sum=nGenEvents["lbl"],
+    #     # line_color=ROOT.kOrange+1,
+    #     fill_color=ROOT.kOrange+1,
+    #     fill_alpha=1.0,
+    #     # fill_alpha=0.0,
+    #     legend_description="LbL",
+    #     # if you add a custom legend for this sample, it will override the default legend.
+    #     # custom_legend = Legend(0.5, 0.5, 0.7, 0.8, "f"),
+    # ),
+    # Sample(
+    #     name="cep",
+    #     file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
+    #     type=SampleType.background,
+    #     cross_section=get_cep_scale(skim),
+    #     initial_weight_sum=luminosity,
+    #     # line_color=ROOT.kAzure-4,
+    #     fill_color=ROOT.kAzure-4,
+    #     fill_alpha=1.0,
+    #     # fill_alpha=0.0,
+    #     legend_description="CEP",
+    #     # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
+    # ),
     Sample(
         name="qed",
         file_path=f"{base_path}/qed/merged_{skim}_histograms.root",
@@ -130,40 +134,44 @@ legend_max_y = 0.90
 #     alp_index += 1
 
 y_label = "# events"
+error = 0.20
 
 histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
-    Histogram("goodPhoton_seedTime", "", False, True, NormalizationType.to_one, 1,   -5, 5, -1, -1, "Photon seed time", y_label),
+
+    # photons
+    Histogram("goodPhoton_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 40, "#eta^{#gamma}", y_label, "", error),
+    Histogram("goodPhoton_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 40, "#phi^{#gamma}", y_label, "", error),
+    Histogram("goodPhoton_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 60, "E_{T}^{#gamma} (GeV)", y_label, "", error),
+    Histogram("goodPhoton_seedTime", "", False, True, NormalizationType.to_one, 1,   -5, 5, -1, -1, "Photon seed time", y_label, "", error),
+
+    Histogram("diphoton_acoplanarity200", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_acoplanarity300", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_acoplanarity400", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 20, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 30, "y^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 100, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphoton_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 40, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
     
+    # electrons
+    Histogram("goodElectron_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label),
+    Histogram("goodElectron_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 3000, "#phi^{e}", y_label),
+    Histogram("goodElectron_pt"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 6000, "p_{T}^{e} (GeV)", y_label),
     Histogram("electron_PFChIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFChIso", y_label),
     Histogram("electron_PFPhoIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFPhoIso", y_label),
     Histogram("electron_PFNeuIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFNeuIso", y_label),
-
-    Histogram("diphoton_acoplanarity200", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label),
-    Histogram("diphoton_acoplanarity300", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label),
-    Histogram("diphoton_acoplanarity400", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label),
-    Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label),
-
-    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label),
     
-    Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2, 0, 15, "y^{#gamma#gamma}", y_label),
-    Histogram("diphoton_mass"        , "", False , False, NormalizationType.to_lumi, 1,   0    , 50 , 0, 70, "m^{#gamma#gamma} (GeV)", y_label),
-    Histogram("diphoton_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1  , 0, 30, "p_{T}^{#gamma#gamma} (GeV)", y_label),
-
-    Histogram("goodPhoton_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2, 0, 30, "#eta^{#gamma}", y_label),
-    Histogram("goodPhoton_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 30, "#phi^{#gamma}", y_label),
-    Histogram("goodPhoton_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10 , 0, 50, "E_{T}^{#gamma} (GeV)", y_label),
-
-    Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label),
-    Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label),
-    
-
     Histogram("dielectron_acoplanarity", "", False, True, NormalizationType.to_lumi, 1,   0, 0.06, 1e-1, 1e5, "A_{#phi}^{ee}", y_label),
     Histogram("dielectron_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label),
     Histogram("dielectron_pt", "", False, True, NormalizationType.to_lumi, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label),
+    Histogram("dielectron_rapidity", "", False, True, NormalizationType.to_lumi, 1,   -2.2, 2.2, -1, -1, "y^{ee} (GeV)", y_label),
 
+    
+    # event
     Histogram("event_deltaEt", "", False, False, NormalizationType.to_lumi, 5,   0, 1, 1e-2, 10, "#DeltaE_{T}", y_label),
-
     Histogram("cutFlow", "", False, True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )
 
@@ -192,7 +200,7 @@ plotting_options = {
 }
 
 canvas_size = (800, 600)
-show_ratio_plots = False
+show_ratio_plots = True
 ratio_limits = (0.0, 2.0)
 
 show_cms_labels = True
@@ -200,4 +208,5 @@ extraText = "Preliminary"
 
 beam_label = " PbPb @ 5.02 TeV"
 lumi_unit = "nb"
-lumi_label_offset = -0.2
+# lumi_label_offset = -0.2
+lumi_label_offset = 0.0

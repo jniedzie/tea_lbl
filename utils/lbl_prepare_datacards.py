@@ -11,7 +11,8 @@ import os
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections_photonEt2p5"
 # skim = "skimmed_allSelections_swissCross0p99"
-skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack"
+skim = "skimmed_allSelections_hadCrack_noZDC"
 
 output_path_aco = f"../combine/significance_histograms_{skim}"
 output_path_aco += f"_nBins{n_acoplanarity_bins}.root"

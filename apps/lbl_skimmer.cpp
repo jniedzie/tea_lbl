@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
   if (applyTwoElectrons) {
     cutFlowManager->RegisterCut("twoGoodElectrons");
     cutFlowManager->RegisterCut("nPhotons");
+    cutFlowManager->RegisterCut("electronCharge");
     cutFlowManager->RegisterCut("nTracks");
     cutFlowManager->RegisterCut("dielectronMass");
     cutFlowManager->RegisterCut("dielectronPt");
