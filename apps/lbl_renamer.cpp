@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 
   vector<TTree*> trees;
 
-  vector<string> treeNames = {"ggHiNtuplizer/EventTree", "rechitanalyzerpp/zdcrechit", "l1object/L1UpgradeFlatTree"};
+  vector<string> treeNames = {"ggHiNtuplizer/EventTree", "rechitanalyzerpp/zdcrechit", "l1object/L1UpgradeFlatTree", "hltanalysis/HltTree"};
 
   for (auto treeName : treeNames) {
     auto tree = (TTree*)inputFile->Get(treeName.c_str());

@@ -5,12 +5,13 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 # sample = "collisionData"
 # sample = "lbl"
+sample = "lbl_noTrigger"
 # sample = "cep"
-sample = "qed"
+# sample = "qed"
 # sample = "alps_11"
 # sample = "emptyBeams"
 
-inputFilePath = f"{base_path}/ntuples/{sample}/bad_names/ntuple_0.root"
+inputFilePath = f"{base_path}/ntuples/{sample}/bad_names/ntuple_1.root"
 treeOutputFilePath = "./renamed_test.root"
 
 branchesNames = {
@@ -123,6 +124,9 @@ branchesNames = {
   "zside"                 : ("ZDC_zSide"                  , "ZDC_zSide[nZDC]/I"),
   "section"               : ("ZDC_section"                , "ZDC_section[nZDC]/I"),
   "channel"               : ("ZDC_channel"                , "ZDC_channel[nZDC]/I"),
+  
+  
+  "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v1": ("DoubleEG2"                , "DoubleEG2/I"),
 
   # "nCastorTower": ("nCastorTower", "vector<float>"),
   # "CastorTower_hadE": ("CastorTower_hadE", "vector<float>"),
