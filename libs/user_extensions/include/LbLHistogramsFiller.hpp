@@ -5,6 +5,7 @@
 #include "EventProcessor.hpp"
 #include "Helpers.hpp"
 #include "HistogramsHandler.hpp"
+#include "UserExtensionsHelpers.hpp"
 
 class LbLHistogramsFiller {
  public:
@@ -20,7 +21,9 @@ class LbLHistogramsFiller {
 
   float GetWeight(const std::shared_ptr<Event> event);
   float GetDielectronAcoplanarity(const std::shared_ptr<Event> event);
-  
+  float GetDielectronAcoplanarity(const std::shared_ptr<Electron> &electron1, const std::shared_ptr<Electron> &electron2);
+  float GetPhiModulation(const std::shared_ptr<Electron> &electron1, const std::shared_ptr<Electron> &electron2);
+
   void FillCaloHistograms(const std::shared_ptr<Event> event);
   void FillPhotonHistograms(const std::shared_ptr<Event> event);
   void FillGenLevelHistograms(const std::shared_ptr<Event> event);

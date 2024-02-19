@@ -15,9 +15,16 @@ Photon::Photon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(ph
   phi = Get("phi");
   absEta = fabs(eta);
 
-  etaSC = Get("SCEta");
-  phiSC = Get("SCPhi");
-  absEtaSC = fabs(etaSC);
+  try {
+    etaSC = Get("SCEta");
+    phiSC = Get("SCPhi");
+    absEtaSC = fabs(etaSC);
+  } catch (const std::exception &e) {
+    warn() << "No photon supercluster information found. Using regular eta and phi" << endl;
+    etaSC = eta;
+    phiSC = phi;
+    absEtaSC = absEta;
+  }
 
   detRegion = absEta < caloEtaEdges["maxEB"] ? "barrel" : "endcap";
 }

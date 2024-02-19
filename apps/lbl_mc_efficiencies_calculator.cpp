@@ -23,43 +23,6 @@ void CheckArgs(int argc, char **argv) {
   }
 }
 
-int GetParticlePid(const shared_ptr<PhysicsObject> particle) {
-  int particlePid = particle->Get("pid");
-  // this is a hack needed because pid was stored as float in the tree
-  // float *floatPtr = reinterpret_cast<float *>(&particlePid);
-  // float floatValue = *floatPtr;
-  // particlePid = round(floatValue);
-  return particlePid;
-}
-
-shared_ptr<PhysicsObjects> GetGenParticles(const shared_ptr<Event> event, int pid) {
-  auto mcParticles = event->GetCollection("genParticle");
-  auto genParticles = make_shared<PhysicsObjects>();
-
-  for (auto particle : *mcParticles) {
-    int particlePid = GetParticlePid(particle);
-    if (abs(particlePid) == pid) genParticles->push_back(particle);
-  }
-  return genParticles;
-}
-
-TLorentzVector GetFourMomentum(const shared_ptr<PhysicsObject> particle) {
-  float mass = 0;
-  int pid = GetParticlePid(particle);
-  if (abs(pid) == 11)
-    mass = 0.000511;
-  else if (abs(pid) == 22)
-    mass = 0;
-  else {
-    error() << "Particle with pid " << pid << " is not an electron or a photon" << endl;
-    exit(1);
-  }
-
-  TLorentzVector p4;
-  p4.SetPtEtaPhiM(particle->Get("et"), particle->Get("eta"), particle->Get("phi"), mass);
-  return p4;
-}
-
 float GetAcoplanarity(const TLorentzVector &vec1, const TLorentzVector &vec2) { return (1 - (fabs(vec1.DeltaPhi(vec2)) / TMath::Pi())); }
 
 bool GoodID(const shared_ptr<Photon> photon) {
@@ -191,16 +154,17 @@ int main(int argc, char **argv) {
     lblObjectsManager->InsertGoodElectronsCollection(event);
     lblObjectsManager->InsertGoodTracksCollection(event);
     lblObjectsManager->InsertGoodMuonsCollection(event);
+    lblObjectsManager->InsertGenPhotonsCollection(event);
+    lblObjectsManager->InsertGenElectronsCollection(event);
 
-    auto mcParticles = event->GetCollection("genParticle");
-    auto genPhotons = GetGenParticles(event, 22);
-    auto genElectrons = GetGenParticles(event, 11);
+    auto genPhotons = event->GetCollection("genPhoton");
+    auto genElectrons = event->GetCollection("genElectron");
     auto recoPhotons = event->GetCollection("photon");
 
     if (genPhotons->size() != 2) continue;
 
-    auto photon1 = GetFourMomentum(genPhotons->at(0));
-    auto photon2 = GetFourMomentum(genPhotons->at(1));
+    auto photon1 = asPhoton(genPhotons->at(0))->GetFourMomentum();
+    auto photon2 = asPhoton(genPhotons->at(1))->GetFourMomentum();
 
     // check acceptance
     if (!InAcceptance(photon1, photon2)) continue;

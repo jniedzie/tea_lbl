@@ -64,14 +64,18 @@ histParams = (
     ("goodElectronSR", "eta", 20,    -2.2,    2.2,     ""),
     ("goodElectronSR", "phi", 20,    -3.14,    3.14,     ""),
     
+    ("dielectron", "acoplanarity", 1000, 0, 1, ""),
     ("dielectron", "pt", 100, 0, 1, ""),
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
+    ("dielectron", "deltaPhi", 20, 0, 3.1415, ""),
+    
     ("dielectronSR", "pt", 100, 0, 1, ""),
     ("dielectronSR", "mass", 200, 0, 200, ""),
     ("dielectronSR", "rapidity", 100, -2.2, 2.2, ""),
-    ("dielectron", "acoplanarity", 1000, 0, 1, ""),
-    ("dielectron", "deltaPhi", 20, 0, 3.1415, ""),
+    ("dielectronSR", "deltaPhi", 20, 0, 3.1415, ""),
+    
+    ("genDielectron", "deltaPhi", 20, 0, 3.1415, ""),
 
     # calo
     ("caloTowerHE", "energyHad", 100, 0, 5, ""),

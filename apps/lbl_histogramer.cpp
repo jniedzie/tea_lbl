@@ -47,6 +47,9 @@ int main(int argc, char **argv) {
     lblObjectsManager->InsertGoodPhotonsCollection(event);
     lblObjectsManager->InsertGoodElectronsCollection(event);
 
+    lblObjectsManager->InsertGenPhotonsCollection(event);
+    lblObjectsManager->InsertGenElectronsCollection(event);
+  
     cutFlowManager->UpdateCutFlow("initial");
     histogramsFiller->FillDefaultVariables(event);
     lblHistogramsFiller->Fill(event);

@@ -25,9 +25,21 @@ class Electron {
   bool PassesDeltaEtaAtVertex();
   bool PassesIsolationCuts();
 
+  int GetCharge() {
+    try {
+      return Get("charge");
+    } catch (const std::exception& e) {
+      return (int)Get("pid") > 0 ? 1 : -1;
+    }
+  }
+
   TLorentzVector GetFourMomentum() {
     TLorentzVector fourMomentum;
-    fourMomentum.SetPtEtaPhiM(Get("pt"), Get("eta"), Get("phi"), 0.000511);
+    try {
+      fourMomentum.SetPtEtaPhiM(Get("pt"), eta, phi, 0.000511);
+    } catch (const std::exception& e) {
+      fourMomentum.SetPtEtaPhiM(Get("et"), eta, phi, 0.000511);
+    }
     return fourMomentum;
   }
 

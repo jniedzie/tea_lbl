@@ -5,7 +5,7 @@
 using namespace std;
 
 Electron::Electron(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(physicsObject_) {
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
   config.GetMap("electronCuts", electronCuts);
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
@@ -14,9 +14,16 @@ Electron::Electron(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObjec
   phi = Get("phi");
   absEta = fabs(eta);
 
-  etaSC = Get("SCEta");
-  phiSC = Get("SCPhi");
-  absEtaSC = fabs(etaSC);
+  try {
+    etaSC = Get("SCEta");
+    phiSC = Get("SCPhi");
+    absEtaSC = fabs(etaSC);
+  } catch (const std::exception& e) {
+    warn() << "No SC eta/phi found for electron. Using regular eta/phi instead." << endl;
+    etaSC = eta;
+    phiSC = phi;
+    absEtaSC = absEta;
+  }
 
   detRegion = absEta < caloEtaEdges["maxEB"] ? "barrel" : "endcap";
 }

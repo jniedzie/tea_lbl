@@ -106,3 +106,37 @@ void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event) {
 
   event->AddCollection("goodMuon", goodMuons);
 }
+
+void LbLObjectsManager::InsertGenPhotonsCollection(shared_ptr<Event> event) {
+  auto genParticles = event->GetCollection("genParticle");
+  auto genPhotons = GetGenParticles(event, 22);
+  event->AddCollection("genPhoton", genPhotons);
+}
+
+void LbLObjectsManager::InsertGenElectronsCollection(shared_ptr<Event> event) {
+  auto genParticles = event->GetCollection("genParticle");
+  auto genPhotons = GetGenParticles(event, 11);
+  event->AddCollection("genElectron", genPhotons);
+}
+
+shared_ptr<PhysicsObjects> LbLObjectsManager::GetGenParticles(const shared_ptr<Event> event, int pid) {
+  auto mcParticles = event->GetCollection("genParticle");
+  auto genParticles = make_shared<PhysicsObjects>();
+
+  for (auto particle : *mcParticles) {
+    int particlePid = GetParticlePid(particle);
+    if (abs(particlePid) == pid) genParticles->push_back(particle);
+  }
+  return genParticles;
+}
+
+int LbLObjectsManager::GetParticlePid(const shared_ptr<PhysicsObject> particle) {
+  int particlePid = particle->Get("pid");
+  
+  // this is a hack needed because pid was stored as float in the tree
+  float *floatPtr = reinterpret_cast<float *>(&particlePid);
+  float floatValue = *floatPtr;
+  particlePid = round(floatValue);
+  
+  return particlePid;
+}
