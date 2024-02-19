@@ -79,7 +79,17 @@ def scale_non_cep_histograms():
         input_mass_histograms[process].Scale(scale)
 
 
+cep_scale = -1
+cep_scale_err = -1
+
+
 def get_cep_scale(skim):
+    global cep_scale
+    global cep_scale_err
+    
+    if cep_scale > 0:
+        return cep_scale, cep_scale_err
+
     load_histograms(skim)
     scale_non_cep_histograms()
 
@@ -96,8 +106,18 @@ def get_cep_scale(skim):
         input_aco_histograms["cep"].FindBin(cep_scaling_min_acoplanarity),
         input_aco_histograms["cep"].GetNbinsX()
     )
+    
+    cep_scale = integral_data / integral_cep
 
-    return integral_data / integral_cep
+    integral_data_err = integral_data**0.5
+    integral_cep_err = integral_cep**0.5
+    
+    cep_scale_err = cep_scale * (
+        (integral_data_err/integral_data)**2 +
+        (integral_cep_err/integral_cep)**2
+    )**0.5
+
+    return cep_scale, cep_scale_err
 
 
 def get_alp_coupling(mass, cross_section):

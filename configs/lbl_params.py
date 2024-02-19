@@ -2,14 +2,14 @@
 eventCuts = {
     "max_ZDCenergyPerSide": 10000.0,
 
-    "min_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
-    "max_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
+    "min_Nphotons": 0,  # 2 for LbL analysis, 0 for QED analysis
+    "max_Nphotons": 0,  # 2 for LbL analysis, 0 for QED analysis
 
     "min_diphotonMass": 5.0,  # only used in LbL analysis
     "max_diphotonPt": 1.0,  # only used in LbL analysis
 
-    "min_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
-    "max_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
+    "min_Nelectrons": 2,  # 0 for LbL analysis, 2 for QED analysis
+    "max_Nelectrons": 2,  # 0 for LbL analysis, 2 for QED analysis
 
     "min_dielectronMass": 5.0,  # only used in QED analysis
     "max_dielectronPt": 1.0,  # only used in QED analysis
@@ -161,7 +161,7 @@ reference_alp_cross_section = 10e-3  # μb
 crossSections = {
     "lbl": 2.59,  # μb
     "qed": 8827.220,  # μb
-    "cep": -1,  # we scale it to data
+    "cep": 5.8e-3,  # we scale it to data
 
     "alps_5": reference_alp_cross_section,
     "alps_6": reference_alp_cross_section,
@@ -181,32 +181,50 @@ crossSections = {
 photon_scale_factor = 0.8497 * 0.9339 * 0.8696 * 1.0089 * (0.957*0.9612)**2
 electron_scale_factor = 0.8497 * 0.9339 * 0.8696 * 1.0089 * 0.943**2
 
-# photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * (0.8636847*0.9608480)**2
+scale_factors = {
+    "nee": 0.8497,
+    "che": 0.9339,
+    "l1hf": 0.8696,
+    "l1eg": 1.0089,
+    "photonReco": 0.957,
+    "photonID": 0.9612,
+    "electronRecoID": 0.943,
+}
+
+scale_factor_errors = {
+    "nee": 0.0089,
+    "che": 0.0093,
+    "l1hf": 0.081,
+    "l1eg": 0.002,
+    "photonReco": 0.0433,
+    "photonID": 0.0976,
+    "electronRecoID": 0.0085,
+}
 
 
-# photon ET > 2.5 GeV, diphoton pt < 1 GeV
-#                       NE       ChE      HFveto   L1EG     Reco+ID
-# photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * (0.8233192*0.9621543)**2
-# photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * (0.9621543)**2
-# electron_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2
+def get_scale_factor_error(photon=True):
+    value = 1
+    error = 0
 
+    to_skip = "electron" if photon else "photon"
 
-# photon ET > 2.5 GeV, diphoton pt < 1 GeV, with Reco SFs bug
-#                       NE       ChE      HFveto   L1EG     Reco+ID
-# photon_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.9771**2
-# electron_scale_factor = 0.8477 * 0.9322 * 0.8643 * 1.0006 * 0.952**2
+    for variable in scale_factors:
+        if to_skip in variable:
+            continue
 
+        error += (scale_factor_errors[variable] / scale_factors[variable])**2
+        value *= scale_factors[variable]
 
-# photon ET > 2.0 GeV, diphoton pt < 2 GeV, with Reco SFs bug
-#                       NE       ChE      HFveto   L1EG     Reco+ID
-# photon_scale_factor   = 0.85  *  0.93  *  0.866 *  1.008 *  1.037**2
-# electron_scale_factor = 0.85  *  0.93  *  0.866 *  1.008 *  0.976**2
+    sf_error = value * error**0.5
+
+    return sf_error
 
 
 scaleFactors = {
     "lbl": photon_scale_factor,
-    "qed": electron_scale_factor,
-    "cep": -1,  # we scale it to data
+    "qed": photon_scale_factor,  # for LbL analysis
+    # "qed": electron_scale_factor, # for QED analysis
+    "cep": photon_scale_factor,  # we scale it to data
 
     "alps_5": photon_scale_factor,
     "alps_6": photon_scale_factor,
@@ -223,7 +241,7 @@ scaleFactors = {
 nGenEvents = {
     "lbl": 466000,
     "qed": 59260000,
-    "cep": -1,  # we scale it to data
+    "cep": 668000,  # we scale it to data
 
     "alps_5": 754000,
     "alps_6": 729000,

@@ -1,6 +1,8 @@
 from lbl_helpers import load_histograms, get_cep_scale
 from lbl_helpers import input_aco_histograms
 from lbl_params import luminosity, luminosity_err, photon_scale_factor
+from lbl_params import crossSections, scaleFactors, nGenEvents
+from lbl_params import get_scale_factor_error, luminosity_err
 from ROOT import sqrt
 # skim = "skimmed_allSelections"
 # skim = "skimmed_allSelections_photonEt2p5"
@@ -8,16 +10,22 @@ from ROOT import sqrt
 # skim = "skimmed_allSelections_swissCross0p99"
 skim = "skimmed_allSelections_hadCrack"
 
+
 def get_cross_section(n_events, n_events_err):
-    
-    Eff =  0.13637176050044683
-    Eff_Error = 0.008228099665106424
-    
+
+    Eff = 0.1352
+    Eff_Error = 0.0030
+
+
     correction_factor = photon_scale_factor * Eff
-    print(f"{correction_factor=}")
-    # correction_factor = 0.08033586859838121
-    correction_factor_err = 0.015651991297853243
     
+    sf_error = get_scale_factor_error(photon=True)
+    correction_factor_err = correction_factor * (sf_error/photon_scale_factor)**2 + (Eff_Error/Eff)**2
+    
+    print(f"Correction factor: {correction_factor:.4f} +/- {correction_factor_err:.4f}")
+    # correction_factor = 0.08033586859838121
+    # correction_factor_err = 0.015651991297853243
+
     cross_section = n_events / \
         (correction_factor * luminosity/1000.)
     cross_section_syst = cross_section * \
@@ -25,8 +33,36 @@ def get_cross_section(n_events, n_events_err):
              ** 2 + (luminosity_err/luminosity)**2)
     cross_section_stat = n_events_err / \
         (correction_factor * luminosity/1000.)
-        
+
     return cross_section, cross_section_stat, cross_section_syst
+
+
+def get_cep_norm():
+    cep_normalization, cep_normalization_err = get_cep_scale(skim)
+
+    print(f"{cep_normalization=:.5f} +/- {cep_normalization_err:.5f}")
+
+    scale_factor = scaleFactors['cep']
+    n_events = nGenEvents['cep']
+    cross_section = crossSections['cep']
+
+    value = cep_normalization / cross_section/scale_factor*n_events/luminosity
+
+    scale_factor_error = get_scale_factor_error(photon=True)
+    n_event_err = n_events**0.5
+
+    print(f"SF: {scale_factor:.2f} +/- {scale_factor_error:.2f}")
+    print(f"N events: {n_events:.2f} +/- {n_event_err:.2f}")
+    print(f"Cross section: {cross_section:.2f}")
+    print(f"Luminosity: {luminosity:.2f} +/- {luminosity_err:.2f}")
+
+    error = value * ((cep_normalization_err/cep_normalization)**2 +
+                     (scale_factor_error/scale_factor)**2 +
+                     (n_event_err/n_events)**2 +
+                     (luminosity_err/luminosity)**2)**0.5
+
+    return value, error
+
 
 def main():
     print("\n\n============================================================")
@@ -36,7 +72,8 @@ def main():
     print(f"lbl: {n_passing_lbl:.0f}")
     print("============================================================\n\n")
 
-    cep_scale = get_cep_scale(skim)
+    cep_scale, _ = get_cep_scale(skim)
+    print(f"{cep_scale=}")
     input_aco_histograms["cep"].Scale(cep_scale)
 
     integrals = {}
@@ -83,9 +120,10 @@ def main():
     print(f"Observed naive significance: {observed_significance:.2f}")
     print("============================================================\n\n")
 
-   
-    cross_section, cross_section_stat, cross_section_syst = get_cross_section(data_minus_background, data_minus_background_err)
-    cross_section_mc, cross_section_mc_stat, cross_section_mc_syst = get_cross_section(integrals["lbl"], integral_errors["lbl"])
+    cross_section, cross_section_stat, cross_section_syst = get_cross_section(
+        data_minus_background, data_minus_background_err)
+    cross_section_mc, cross_section_mc_stat, cross_section_mc_syst = get_cross_section(
+        integrals["lbl"], integral_errors["lbl"])
 
     print("\n\n============================================================")
     print(
@@ -93,6 +131,9 @@ def main():
     print(
         f"Expected cross-section: {cross_section_mc:.0f} +/- {cross_section_mc_stat:.0f} (stat) +/- {cross_section_mc_syst:.0f} (syst) nb")
     print("============================================================\n\n")
+
+    cep_norm, cep_norm_err = get_cep_norm()
+    print(f"\n\n{cep_norm} +/- {cep_norm_err}\n\n")
 
 
 if __name__ == "__main__":
