@@ -4,19 +4,21 @@ processes = (
     "collisionData",
 
     "lbl",
-    "qed",
     "cep",
+    "qed",
 
-    "alps_5",
-    "alps_6",
-    "alps_9",
-    "alps_11",
-    "alps_14",
-    "alps_16",
-    "alps_22",
-    "alps_30",
-    "alps_50",
-    "alps_90",
+    # "alps_5",
+    # "alps_6",
+    # "alps_9",
+    # "alps_11",
+    # "alps_14",
+    # "alps_16",
+    # "alps_22",
+    # "alps_30",
+    # "alps_50",
+    # "alps_90",
+    
+    # "emptyBeams",
 )
 
 acoplanarity_histogram_name = "diphoton_acoplanarity{}"

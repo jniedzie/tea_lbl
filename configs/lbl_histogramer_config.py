@@ -29,21 +29,25 @@ histogramsOutputFilePath = f"./{skim}_{sample}_histograms.root"
 
 defaultHistParams = (
     # collection      variable          bins    xmin     xmax     dir
-    ("goodPhoton", "et" , 200,    0,       100,     ""),
+    ("goodPhoton", "et", 200,    0,       100,     ""),
     ("goodPhoton", "eta", 12,    -2.2,    2.2,     ""),
     ("goodPhoton", "phi", 12,    -3.14,    3.14,     ""),
     ("goodPhoton", "seedTime", 100,    -5,    5,     ""),
+
+    ("goodElectron", "pt", 200,    0,       100,     ""),
+    ("goodElectron", "eta", 20,    -2.2,    2.2,     ""),
+    ("goodElectron", "phi", 20,    -3.14,    3.14,     ""),
     ("electron", "PFChIso", 1000,    0,    10,     ""),
     ("electron", "PFPhoIso", 1000,    0,    10,     ""),
     ("electron", "PFNeuIso", 1000,    0,    10,     ""),
-    # ("Event"       , "nGoodLeptons"  , 50,     0,       50,      ""  ),
-    
-    ("goodElectron", "pt" , 200,    0,       100,     ""),
-    ("goodElectron", "eta", 20,    -2.2,    2.2,     ""),
-    ("goodElectron", "phi", 20,    -3.14,    3.14,     ""),
 )
 
 histParams = (
+    # photons
+    ("unfoldingPhoton", "pt", 5, 0, 1, ""),
+    ("unfoldingPhoton", "mass", 5, 5, 25, ""),
+    ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
+
     ("diphoton", "pt", 5, 0, 1, ""),
     ("diphoton", "rapidity", 12, -2.2, 2.2, ""),
     ("diphoton", "mass", 10, 0, 50, ""),
@@ -55,33 +59,38 @@ histParams = (
     ("diphoton", "acoplanarity500", 500, 0, 1, ""),
     ("diphoton", "acoplanarity600", 600, 0, 1, ""),
 
+    # electrons
+    ("goodElectronSR", "pt", 200,    0,       100,     ""),
+    ("goodElectronSR", "eta", 20,    -2.2,    2.2,     ""),
+    ("goodElectronSR", "phi", 20,    -3.14,    3.14,     ""),
+    
     ("dielectron", "pt", 100, 0, 1, ""),
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
+    ("dielectronSR", "pt", 100, 0, 1, ""),
+    ("dielectronSR", "mass", 200, 0, 200, ""),
+    ("dielectronSR", "rapidity", 100, -2.2, 2.2, ""),
     ("dielectron", "acoplanarity", 1000, 0, 1, ""),
     ("dielectron", "deltaPhi", 20, 0, 3.1415, ""),
-    
-    ("event", "deltaEt", 100, 0, 1, ""),
-    
-    ("unfoldingPhoton", "pt", 5, 0, 1, ""),
-    ("unfoldingPhoton", "mass", 5, 5, 25, ""),
-    ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
-    
+
+    # calo
     ("caloTowerHE", "energyHad", 100, 0, 5, ""),
     ("caloTowerHE", "energyTransverse", 100, 0, 5, ""),
     ("caloTowerHE", "energy", 100, 0, 5, ""),
-    
     ("goodCaloTowerHE", "energyHad", 100, 0, 5, ""),
     ("goodCaloTowerHE", "energyTransverse", 100, 0, 5, ""),
     ("goodCaloTowerHE", "energy", 100, 0, 5, ""),
-    
-    ("genPhoton", "et" , 200,    0,       10,     ""),
-    ("genPhoton", "energy" , 200,    0,       10,     ""),
-    
-    ("leadingGenPhoton", "energy" , 200,    0,       10,     ""),
-    ("leadingGenPhotonBarrel", "energy" , 200,    0,       10,     ""),
-    ("leadingGenPhotonBarrelEndcap", "energy" , 200,    0,       10,     ""),
-    
+
+    # gen-level
+    ("genPhoton", "et", 200,    0,       10,     ""),
+    ("genPhoton", "energy", 200,    0,       10,     ""),
+
+    ("leadingGenPhoton", "energy", 200,    0,       10,     ""),
+    ("leadingGenPhotonBarrel", "energy", 200,    0,       10,     ""),
+    ("leadingGenPhotonBarrelEndcap", "energy", 200,    0,       10,     ""),
+
+    # event
+    ("event", "deltaEt", 100, 0, 1, ""),
 )
 
 histParams2D = (

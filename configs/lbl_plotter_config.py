@@ -5,6 +5,7 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from lbl_helpers import get_cep_scale
 from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
+from lbl_params import get_scale_factor_error, luminosity_err
 from lbl_paths import base_path, processes
 
 # skim = "initial"
@@ -12,43 +13,50 @@ from lbl_paths import base_path, processes
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections_photonEt2p5"
 # skim = "skimmed_allSelections_swissCross0p99"
-# skim = "skimmed_allSelections_hadCrack"
+skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_allSelections_hadCrack_noZDC"
 # skim = "skimmed_qedSelections"
-skim = "skimmed_qedSelections_noZDC"
+# skim = "skimmed_qedSelections_noZDC"
 
-# output_path = "../plots/first_test/"
+output_path = "../plots/first_test/"
 # output_path = "../plots/qed_distrobutions/"
-output_path = "../plots/qed_distrobutions_noZDC/"
+# output_path = "../plots/qed_distrobutions_noZDC/"
+
+
+
 
 samples = [
-    # Sample(
-    #     name="lbl",
-    #     file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
-    #     type=SampleType.background,
-    #     cross_section=crossSections["lbl"]*scaleFactors["lbl"],
-    #     initial_weight_sum=nGenEvents["lbl"],
-    #     # line_color=ROOT.kOrange+1,
-    #     fill_color=ROOT.kOrange+1,
-    #     fill_alpha=1.0,
-    #     # fill_alpha=0.0,
-    #     legend_description="LbL",
-    #     # if you add a custom legend for this sample, it will override the default legend.
-    #     # custom_legend = Legend(0.5, 0.5, 0.7, 0.8, "f"),
-    # ),
-    # Sample(
-    #     name="cep",
-    #     file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
-    #     type=SampleType.background,
-    #     cross_section=get_cep_scale(skim),
-    #     initial_weight_sum=luminosity,
-    #     # line_color=ROOT.kAzure-4,
-    #     fill_color=ROOT.kAzure-4,
-    #     fill_alpha=1.0,
-    #     # fill_alpha=0.0,
-    #     legend_description="CEP",
-    #     # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
-    # ),
+    Sample(
+        name="lbl",
+        file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
+        type=SampleType.background,
+        cross_section=crossSections["lbl"]*scaleFactors["lbl"],
+        initial_weight_sum=nGenEvents["lbl"],
+        # line_color=ROOT.kOrange+1,
+        fill_color=ROOT.kOrange+1,
+        fill_alpha=1.0,
+        # fill_alpha=0.0,
+        legend_description="LbL",
+        # if you add a custom legend for this sample, it will override the default legend.
+        # custom_legend = Legend(0.5, 0.5, 0.7, 0.8, "f"),
+    ),
+    Sample(
+        name="cep",
+        file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
+        type=SampleType.background,
+        # cross_section=get_cep_scale(skim),
+        # initial_weight_sum=luminosity,
+        
+        cross_section=crossSections["cep"]*scaleFactors["cep"]*179.7778874019975,
+        initial_weight_sum=nGenEvents["cep"],
+        
+        # line_color=ROOT.kAzure-4,
+        fill_color=ROOT.kAzure-4,
+        fill_alpha=1.0,
+        # fill_alpha=0.0,
+        legend_description="CEP",
+        # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
+    ),
     Sample(
         name="qed",
         file_path=f"{base_path}/qed/merged_{skim}_histograms.root",
@@ -160,6 +168,9 @@ histograms = (
     Histogram("goodElectron_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label),
     Histogram("goodElectron_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 3000, "#phi^{e}", y_label),
     Histogram("goodElectron_pt"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 6000, "p_{T}^{e} (GeV)", y_label),
+    Histogram("goodElectronSR_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label),
+    Histogram("goodElectronSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 3000, "#phi^{e}", y_label),
+    Histogram("goodElectronSR_pt"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 6000, "p_{T}^{e} (GeV)", y_label),
     Histogram("electron_PFChIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFChIso", y_label),
     Histogram("electron_PFPhoIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFPhoIso", y_label),
     Histogram("electron_PFNeuIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFNeuIso", y_label),
@@ -168,6 +179,9 @@ histograms = (
     Histogram("dielectron_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label),
     Histogram("dielectron_pt", "", False, True, NormalizationType.to_lumi, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label),
     Histogram("dielectron_rapidity", "", False, True, NormalizationType.to_lumi, 1,   -2.2, 2.2, -1, -1, "y^{ee} (GeV)", y_label),
+    Histogram("dielectronSR_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label),
+    Histogram("dielectronSR_pt", "", False, True, NormalizationType.to_lumi, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label),
+    Histogram("dielectronSR_rapidity", "", False, True, NormalizationType.to_lumi, 1,   -2.2, 2.2, -1, -1, "y^{ee} (GeV)", y_label),
 
     
     # event
