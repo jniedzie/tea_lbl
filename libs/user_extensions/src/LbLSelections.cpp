@@ -33,7 +33,7 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   }
   if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
 
-  cutFlowManager->UpdateCutFlow("neutralExclusivity");
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("neutralExclusivity");
 
   return true;
 }
@@ -116,15 +116,15 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
 bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   int nElectrons = event->GetCollection("goodElectron")->size();
   if (nElectrons > eventCuts.at("max_Nelectrons")) return false;
-  cutFlowManager->UpdateCutFlow("nElectrons");
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nElectrons");
 
   int nTracks = event->GetCollection("goodTrack")->size();
   if (nTracks > eventCuts.at("max_Ntracks")) return false;
-  cutFlowManager->UpdateCutFlow("nTracks");
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
 
   int nMuons = event->GetCollection("goodMuon")->size();
   if (nMuons > eventCuts.at("max_Nmuons")) return false;
-  cutFlowManager->UpdateCutFlow("nMuons");
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nMuons");
 
   return true;
 }

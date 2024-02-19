@@ -25,6 +25,12 @@ class Electron {
   bool PassesDeltaEtaAtVertex();
   bool PassesIsolationCuts();
 
+  TLorentzVector GetFourMomentum() {
+    TLorentzVector fourMomentum;
+    fourMomentum.SetPtEtaPhiM(Get("pt"), Get("eta"), Get("phi"), 0.000511);
+    return fourMomentum;
+  }
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
 

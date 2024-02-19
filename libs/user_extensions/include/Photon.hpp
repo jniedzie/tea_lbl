@@ -37,6 +37,12 @@ class Photon {
     return false;
   }
 
+  TLorentzVector GetFourMomentum() {
+    TLorentzVector fourMomentum;
+    fourMomentum.SetPtEtaPhiM(Get("et"), eta, phi, 0);
+    return fourMomentum;
+  }
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
 

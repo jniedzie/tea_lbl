@@ -10,7 +10,7 @@ def main():
     #     if "alp" not in process:
     #         continue
 
-    process = "qed"
+    process = "qed_noTrigger"
 
     path = f"{base_path}/{process}/bad_names/*.root"
     print("Renaming files in: ", path)
