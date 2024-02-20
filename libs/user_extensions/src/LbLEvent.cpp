@@ -55,3 +55,21 @@ float LbLEvent::GetDeltaEt() {
   float maxDelta = max(deltaEt1, deltaEt2);
   return maxDelta;
 }
+
+float LbLEvent::GetCosThetaStar()
+{
+  auto photons = GetCollection("goodPhoton");
+
+  if(photons->size() != 2) {
+    warn() << "Couldn't calculate cosThetaStar -- number of photons in the event != 2" << endl;
+    return -1;
+  }
+
+  TLorentzVector photon1 = asPhoton(photons->at(0))->GetFourMomentum();
+  TLorentzVector photon2 = asPhoton(photons->at(1))->GetFourMomentum();
+  auto diphoton = photon1 + photon2;
+
+  float costhetastarCS = 2.*(diphoton.E()*photon1.Pz()-diphoton.Pz()*photon1.E())/(diphoton.M()*diphoton.Mt());
+  return costhetastarCS;
+
+}

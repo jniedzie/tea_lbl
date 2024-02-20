@@ -14,6 +14,7 @@ class LbLEvent {
   void AddExtraCollections() { event->AddExtraCollections(); }
 
   float GetDeltaEt();
+  float GetCosThetaStar();
 
  private:
   std::shared_ptr<Event> event;

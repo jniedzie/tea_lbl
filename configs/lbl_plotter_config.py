@@ -18,7 +18,7 @@ skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
 
-output_path = "../plots/first_test/"
+output_path = "../plots/lbl_distributions/"
 # output_path = "../plots/qed_distrobutions/"
 # output_path = "../plots/qed_distrobutions_noZDC/"
 
@@ -186,6 +186,7 @@ histograms = (
     
     # event
     Histogram("event_deltaEt", "", False, False, NormalizationType.to_lumi, 5,   0, 1, 1e-2, 10, "#DeltaE_{T}", y_label),
+    Histogram("event_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 1, "cos #theta^{*}", y_label),
     Histogram("cutFlow", "", False, True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )
 
@@ -214,7 +215,7 @@ plotting_options = {
 }
 
 canvas_size = (800, 600)
-show_ratio_plots = True
+show_ratio_plots = False
 ratio_limits = (0.0, 2.0)
 
 show_cms_labels = True
@@ -222,5 +223,5 @@ extraText = "Preliminary"
 
 beam_label = " PbPb @ 5.02 TeV"
 lumi_unit = "nb"
-# lumi_label_offset = -0.2
-lumi_label_offset = 0.0
+lumi_label_offset = -0.2
+# lumi_label_offset = 0.0

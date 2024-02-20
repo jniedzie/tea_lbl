@@ -190,11 +190,12 @@ float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron
   TLorentzVector eleDiff = electron - positron;
 
   // Calculate delta phi
+  // float deltaPhi = dielectron.Phi() - electron.Phi();
   float deltaPhi = fabs(dielectron.Phi() - electron.Phi());
   // float deltaPhi = fabs(dielectron.Phi() - eleDiff.Phi());
   
   if (deltaPhi > TMath::Pi()) deltaPhi = 2. * TMath::Pi() - deltaPhi;
-
+  
   // bring delta phi between -pi and pi
   // if (deltaPhi > TMath::Pi()) deltaPhi = deltaPhi - 2. * TMath::Pi();
   // if (deltaPhi <= -TMath::Pi()) deltaPhi = deltaPhi + 2. * TMath::Pi();
@@ -243,6 +244,9 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
   auto lblEvent = asLbLEvent(event);
   float deltaEt = lblEvent->GetDeltaEt();
   histogramsHandler->Fill("event_deltaEt", deltaEt, GetWeight(event));
+
+  float cosThetaStar = lblEvent->GetCosThetaStar();
+  histogramsHandler->Fill("event_cosThetaStar", cosThetaStar, GetWeight(event));
 }
 
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {

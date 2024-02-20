@@ -6,12 +6,12 @@ printEveryNevents = 1000
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 # for LbL analysis:
-applyTwoPhotons = False
-applyDiphotonPt = False
-applyChargedExclusivity = False
+applyTwoPhotons = True
+applyDiphotonPt = True
+applyChargedExclusivity = True
 
 # for QED analysis:
-applyTwoElectrons = True
+applyTwoElectrons = False
 
 # for both analyses:
 applyNeutralExclusivity = True
@@ -22,16 +22,17 @@ applyEtDelta = False
 
 
 # sample = "collisionData"
-# sample = "lbl"
+sample = "lbl"
 # sample = "cep"
-sample = "qed"
+# sample = "qed"
 
 # skim = "skimmed_allSelections"
-skim = "skimmed_qedSelections"
+# skim = "skimmed_qedSelections"
+skim = "skimmed_allSelections_hadCrack"
 
-# inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
+inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
 # inputFilePath = f"{base_path}/ntuples/{sample}/skimmed_allSelections/ntuple_0.root"
-inputFilePath = "./renamed_test.root"
+# inputFilePath = "./renamed_test.root"
 # treeOutputFilePath = inputFilePath.replace("initial", skim)
 treeOutputFilePath = "./skimmed_test.root"
 
