@@ -134,9 +134,9 @@ int LbLObjectsManager::GetParticlePid(const shared_ptr<PhysicsObject> particle) 
   int particlePid = particle->Get("pid");
   
   // this is a hack needed because pid was stored as float in the tree
-  float *floatPtr = reinterpret_cast<float *>(&particlePid);
-  float floatValue = *floatPtr;
-  particlePid = round(floatValue);
+  // float *floatPtr = reinterpret_cast<float *>(&particlePid);
+  // float floatValue = *floatPtr;
+  // particlePid = round(floatValue);
   
   return particlePid;
 }

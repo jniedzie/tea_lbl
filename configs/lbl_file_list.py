@@ -1,12 +1,12 @@
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 samples = (
-    # "collisionData",
-    # "lbl",
+    "collisionData",
+    "lbl",
     # "lbl_noTrigger",
-    # "cep",
-    # "qed",
-    "qed_noTrigger",
+    "cep",
+    "qed",
+    # "qed_noTrigger",
 
     # "alps_5",
     # "alps_6",
@@ -32,25 +32,21 @@ sample_path = ""
 # skim = "skimmed_allSelections_swissCross0p99"
 # skim = "skimmed_allSelections_deltaEt"
 # skim = "skimmed_allSelections_deltaEt0p65"
-# skim = "skimmed_allSelections_hadCrack"
+skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_allSelections_hadCrack_noZDC"
 
 
-skim = "skimmed_qedSelections"
+# skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
 
 # for renaming
-input_directory = f"{base_path}/ntuples/{sample_path}/bad_names/"
-output_dir = f"{base_path}/ntuples/{sample_path}/initial/"
+# input_directory = f"{base_path}/ntuples/{sample_path}/bad_names/"
+# output_dir = f"{base_path}/ntuples/{sample_path}/initial/"
 
 # for skimming
 # input_directory = f"{base_path}/ntuples/{sample_path}/initial/"
 # output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"
 
-# for skimming (deltaEt cut)
-# input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
-# output_dir = f"{base_path}/ntuples/{sample_path}/{skim}_deltaEt0p65/"
-
 # for histogramming
-# input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
-# output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"
+input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
+output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"

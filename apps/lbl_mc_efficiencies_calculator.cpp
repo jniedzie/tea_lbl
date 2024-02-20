@@ -14,6 +14,8 @@
 
 using namespace std;
 
+bool runForPhotons = false;
+
 void CheckArgs(int argc, char **argv) {
   if (argc != 2 && argc != 4) {
     fatal() << "Usage: " << argv[0] << " config_path" << endl;
@@ -30,6 +32,14 @@ bool GoodID(const shared_ptr<Photon> photon) {
   if (!photon->PassesHoverE()) return false;
   if (!photon->PassesSeedTimeCuts()) return false;
   if (!photon->PassesSwissCross()) return false;
+  return true;
+}
+
+bool GoodID(const shared_ptr<Electron> electron) {
+  if (!electron->PassesMissingHitsCuts()) return false;
+  if (!electron->PassesHoverE()) return false;
+  if (!electron->PassesDeltaEtaAtVertex()) return false;
+  if (!electron->PassesIsolationCuts()) return false;
   return true;
 }
 
@@ -61,25 +71,33 @@ bool InAcceptance(const TLorentzVector &vec1, const TLorentzVector &vec2) {
   return true;
 }
 
-pair<shared_ptr<Photon>, shared_ptr<Photon>> GetMatchedRecoPhotons(TLorentzVector &photon1, TLorentzVector &photon2,
-                                                                   shared_ptr<PhysicsObjects> recoPhotons) {
-  shared_ptr<Photon> recoPhoton1 = nullptr;
-  shared_ptr<Photon> recoPhoton2 = nullptr;
+pair<shared_ptr<PhysicsObject>, shared_ptr<PhysicsObject>> GetMatchedRecoParticles(TLorentzVector &particle1, TLorentzVector &particle2,
+                                                                                   shared_ptr<PhysicsObjects> recoParticles,
+                                                                                   bool isPhoton = true) {
+  shared_ptr<PhysicsObject> recoParticle1 = nullptr;
+  shared_ptr<PhysicsObject> recoParticle2 = nullptr;
 
   float deltaRcut = 0.5;
 
-  for (auto physicsObject : *recoPhotons) {
-    auto recoPhoton = asPhoton(physicsObject);
-    if (!GoodReco(recoPhoton)) continue;
+  for (auto physicsObject : *recoParticles) {
+    TLorentzVector recoVec;
 
-    if (photon1.DeltaR(recoPhoton->GetFourMomentum()) < deltaRcut) {
-      recoPhoton1 = recoPhoton;
+    if (isPhoton) {
+      if (!GoodReco(asPhoton(physicsObject))) continue;
+      recoVec = asPhoton(physicsObject)->GetFourMomentum();
+    } else {
+      if (!GoodReco(asElectron(physicsObject))) continue;
+      recoVec = asElectron(physicsObject)->GetFourMomentum();
     }
-    if (photon2.DeltaR(recoPhoton->GetFourMomentum()) < deltaRcut) {
-      recoPhoton2 = recoPhoton;
+
+    if (particle1.DeltaR(recoVec) < deltaRcut) {
+      recoParticle1 = physicsObject;
+    }
+    if (particle2.DeltaR(recoVec) < deltaRcut) {
+      recoParticle2 = physicsObject;
     }
   }
-  return {recoPhoton1, recoPhoton2};
+  return {recoParticle1, recoParticle2};
 }
 
 int main(int argc, char **argv) {
@@ -157,27 +175,47 @@ int main(int argc, char **argv) {
     lblObjectsManager->InsertGenPhotonsCollection(event);
     lblObjectsManager->InsertGenElectronsCollection(event);
 
-    auto genPhotons = event->GetCollection("genPhoton");
-    auto genElectrons = event->GetCollection("genElectron");
-    auto recoPhotons = event->GetCollection("photon");
+    auto genParticles = event->GetCollection(runForPhotons ? "genPhoton" : "genElectron");
+    auto recoParticles = event->GetCollection(runForPhotons ? "photon" : "electron");
 
-    if (genPhotons->size() != 2) continue;
-
-    auto photon1 = asPhoton(genPhotons->at(0))->GetFourMomentum();
-    auto photon2 = asPhoton(genPhotons->at(1))->GetFourMomentum();
+    if (genParticles->size() != 2) continue;
 
     // check acceptance
-    if (!InAcceptance(photon1, photon2)) continue;
+
+    TLorentzVector genParticle1, genParticle2;
+
+    if (runForPhotons) {
+      genParticle1 = asPhoton(genParticles->at(0))->GetFourMomentum();
+      genParticle2 = asPhoton(genParticles->at(1))->GetFourMomentum();
+    } else {
+      genParticle1 = asElectron(genParticles->at(0))->GetFourMomentum();
+      genParticle2 = asElectron(genParticles->at(1))->GetFourMomentum();
+    }
+    if (!InAcceptance(genParticle1, genParticle2)) continue;
     n_acc++;
 
     // check reco
-    auto [recoPhoton1, recoPhoton2] = GetMatchedRecoPhotons(photon1, photon2, recoPhotons);
-    if (!recoPhoton1 || !recoPhoton2) continue;
-    if (!InAcceptance(recoPhoton1->GetFourMomentum(), recoPhoton2->GetFourMomentum())) continue;
+    auto [recoObj1, recoObj2] = GetMatchedRecoParticles(genParticle1, genParticle2, recoParticles, runForPhotons);
+    if(!recoObj1 || !recoObj2) continue;
+    
+    TLorentzVector recoParticle1, recoParticle2;
+    if (runForPhotons) {
+      recoParticle1 = asPhoton(recoParticles->at(0))->GetFourMomentum();
+      recoParticle2 = asPhoton(recoParticles->at(1))->GetFourMomentum();
+    } else {
+      recoParticle1 = asElectron(recoParticles->at(0))->GetFourMomentum();
+      recoParticle2 = asElectron(recoParticles->at(1))->GetFourMomentum();
+    }
+    
+    if (!InAcceptance(recoParticle1, recoParticle2)) continue;
     n_reco++;
 
     // check id
-    if (!GoodID(recoPhoton1) || !GoodID(recoPhoton2)) continue;
+    if(runForPhotons){
+      if (!GoodID(asPhoton(recoObj1)) || !GoodID(asPhoton(recoObj2))) continue;
+    } else {
+      if (!GoodID(asElectron(recoObj1)) || !GoodID(asElectron(recoObj2))) continue;
+    }
     n_id++;
 
     // check trigger
@@ -185,7 +223,12 @@ int main(int argc, char **argv) {
     n_trig++;
 
     // check charged exclusivity
-    if (!lblSelections->PassesChargedExclusivity(event)) continue;
+    if(runForPhotons){
+      if (!lblSelections->PassesChargedExclusivity(event)) continue;
+    }
+    else{
+      if(!lblSelections->PassesDielectronChargedExclusivity(event)) continue;
+    }
     n_che++;
 
     // check neutral exclusivity

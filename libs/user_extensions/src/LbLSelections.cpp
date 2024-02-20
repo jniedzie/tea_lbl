@@ -77,25 +77,7 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
   cutFlowManager->UpdateCutFlow("electronCharge");
 
   // check charge exclusivity
-  auto tracks = event->GetCollection("goodTrack");
-  // if (tracks->size() > eventCuts.at("max_Ntracks")) return false;
-
-  int nNonOverlappingTracks = 0;
-  for (auto physicsObject : *tracks) {
-    auto track = asTrack(physicsObject);
-    if (!track->OverlapsWithOtherObjects(electrons)) nNonOverlappingTracks++;
-  }
-  if (nNonOverlappingTracks > eventCuts.at("max_Ntracks")) return false;
-  cutFlowManager->UpdateCutFlow("nTracks");
-
-  // auto photons = event->GetCollection("goodPhoton");
-  // int nNonOverlappingPhotons = 0;
-  // for (auto physicsObject : *photons) {
-  //   auto photon = asPhoton(physicsObject);
-  //   if (!photon->OverlapsWithOtherObjects(electrons)) nNonOverlappingPhotons++;
-  // }
-  // if (nNonOverlappingPhotons > eventCuts.at("max_Nphotons")) return false;
-  // cutFlowManager->UpdateCutFlow("nPhotons");
+  if(!PassesDielectronChargedExclusivity(event, cutFlowManager)) return false;
 
   TLorentzVector electron1vec, electron2vec;
   electron1vec.SetPtEtaPhiM(electron1->Get("pt"), electron1->Get("eta"), electron1->Get("phi"), 0);
@@ -109,6 +91,30 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
   // check dielectron pt
   if (dielectron.Pt() > eventCuts.at("max_dielectronPt")) return false;
   cutFlowManager->UpdateCutFlow("dielectronPt");
+
+  return true;
+}
+
+bool LbLSelections::PassesDielectronChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  auto electrons = event->GetCollection("goodElectron");
+  auto tracks = event->GetCollection("goodTrack");
+  
+  int nNonOverlappingTracks = 0;
+  for (auto physicsObject : *tracks) {
+    auto track = asTrack(physicsObject);
+    if (!track->OverlapsWithOtherObjects(electrons)) nNonOverlappingTracks++;
+  }
+  if (nNonOverlappingTracks > eventCuts.at("max_Ntracks")) return false;
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
+
+  // auto photons = event->GetCollection("goodPhoton");
+  // int nNonOverlappingPhotons = 0;
+  // for (auto physicsObject : *photons) {
+  //   auto photon = asPhoton(physicsObject);
+  //   if (!photon->OverlapsWithOtherObjects(electrons)) nNonOverlappingPhotons++;
+  // }
+  // if (nNonOverlappingPhotons > eventCuts.at("max_Nphotons")) return false;
+  // cutFlowManager->UpdateCutFlow("nPhotons");
 
   return true;
 }

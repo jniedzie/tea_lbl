@@ -20,7 +20,7 @@ def main():
         print(f"Analyzing file: {input_path}")
 
         if process == "cep":
-            scale = get_cep_scale(skim)
+            scale, _ = get_cep_scale(skim)
         elif process == "collisionData":
             scale = 1
         else:

@@ -16,13 +16,14 @@ def get_cross_section(n_events, n_events_err):
     Eff = 0.1352
     Eff_Error = 0.0030
 
-
     correction_factor = photon_scale_factor * Eff
-    
+
     sf_error = get_scale_factor_error(photon=True)
-    correction_factor_err = correction_factor * (sf_error/photon_scale_factor)**2 + (Eff_Error/Eff)**2
-    
-    print(f"Correction factor: {correction_factor:.4f} +/- {correction_factor_err:.4f}")
+    correction_factor_err = correction_factor * \
+        (sf_error/photon_scale_factor)**2 + (Eff_Error/Eff)**2
+
+    print(
+        f"Correction factor: {correction_factor:.4f} +/- {correction_factor_err:.4f}")
     # correction_factor = 0.08033586859838121
     # correction_factor_err = 0.015651991297853243
 

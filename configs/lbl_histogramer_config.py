@@ -9,15 +9,15 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 # sample = "collisionData"
 # sample = "lbl"
-# sample = "cep"
-sample = "qed"
+sample = "cep"
+# sample = "qed"
 # sample = "emptyBeams"
 
 # skim = "initial"
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections"
-skim = "skimmed_qedSelections"
-# skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_qedSelections"
+skim = "skimmed_allSelections_hadCrack"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
@@ -68,14 +68,14 @@ histParams = (
     ("dielectron", "pt", 100, 0, 1, ""),
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
-    ("dielectron", "deltaPhi", 20, 0, 3.1415, ""),
+    ("dielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
     
     ("dielectronSR", "pt", 100, 0, 1, ""),
     ("dielectronSR", "mass", 200, 0, 200, ""),
     ("dielectronSR", "rapidity", 100, -2.2, 2.2, ""),
-    ("dielectronSR", "deltaPhi", 20, 0, 3.1415, ""),
+    ("dielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
     
-    ("genDielectron", "deltaPhi", 20, 0, 3.1415, ""),
+    ("genDielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
 
     # calo
     ("caloTowerHE", "energyHad", 100, 0, 5, ""),
@@ -95,6 +95,7 @@ histParams = (
 
     # event
     ("event", "deltaEt", 100, 0, 1, ""),
+    ("event", "cosThetaStar", 10, 0, 1, ""),
 )
 
 histParams2D = (
