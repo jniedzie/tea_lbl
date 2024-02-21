@@ -2,14 +2,14 @@
 eventCuts = {
     "max_ZDCenergyPerSide": 10000.0,
 
-    "min_Nphotons": 0,  # 2 for LbL analysis, 0 for QED analysis
-    "max_Nphotons": 0,  # 2 for LbL analysis, 0 for QED analysis
+    "min_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
+    "max_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
 
     "min_diphotonMass": 5.0,  # only used in LbL analysis
     "max_diphotonPt": 1.0,  # only used in LbL analysis
 
-    "min_Nelectrons": 2,  # 0 for LbL analysis, 2 for QED analysis
-    "max_Nelectrons": 2,  # 0 for LbL analysis, 2 for QED analysis
+    "min_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
+    "max_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
 
     "min_dielectronMass": 5.0,  # only used in QED analysis
     "max_dielectronPt": 1.0,  # only used in QED analysis
@@ -202,11 +202,12 @@ scale_factor_errors = {
 }
 
 
-def get_scale_factor_error(photon=True):
+def get_scale_factor(photon=True):
     value = 1
     error = 0
 
     to_skip = "electron" if photon else "photon"
+    squared = "photon" if photon else "electron"
 
     for variable in scale_factors:
         if to_skip in variable:
@@ -214,29 +215,33 @@ def get_scale_factor_error(photon=True):
 
         error += (scale_factor_errors[variable] / scale_factors[variable])**2
         value *= scale_factors[variable]
+        
+        if squared in variable:
+            error += (scale_factor_errors[variable] / scale_factors[variable])**2
+            value *= scale_factors[variable]
 
-    sf_error = value * error**0.5
+    sf_error = value * error**(1/2)
 
-    return sf_error
+    return value, sf_error
 
 
-scaleFactors = {
-    "lbl": photon_scale_factor,
-    "qed": photon_scale_factor,  # for LbL analysis
-    # "qed": electron_scale_factor, # for QED analysis
-    "cep": photon_scale_factor,  # we scale it to data
+# scaleFactors = {
+#     "lbl": photon_scale_factor,
+#     "qed": photon_scale_factor,  # for LbL analysis
+#     # "qed": electron_scale_factor, # for QED analysis
+#     "cep": photon_scale_factor,  # we scale it to data
 
-    "alps_5": photon_scale_factor,
-    "alps_6": photon_scale_factor,
-    "alps_9": photon_scale_factor,
-    "alps_11": photon_scale_factor,
-    "alps_14": photon_scale_factor,
-    "alps_16": photon_scale_factor,
-    "alps_22": photon_scale_factor,
-    "alps_30": photon_scale_factor,
-    "alps_50": photon_scale_factor,
-    "alps_90": photon_scale_factor,
-}
+#     "alps_5": photon_scale_factor,
+#     "alps_6": photon_scale_factor,
+#     "alps_9": photon_scale_factor,
+#     "alps_11": photon_scale_factor,
+#     "alps_14": photon_scale_factor,
+#     "alps_16": photon_scale_factor,
+#     "alps_22": photon_scale_factor,
+#     "alps_30": photon_scale_factor,
+#     "alps_50": photon_scale_factor,
+#     "alps_90": photon_scale_factor,
+# }
 
 nGenEvents = {
     "lbl": 466000,

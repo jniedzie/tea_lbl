@@ -3,7 +3,7 @@ import ROOT
 
 from Logger import info, warn, fatal
 
-from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
+from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor
 from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity, n_mass_bins
 from lbl_paths import processes, merged_histograms_path
 from lbl_paths import acoplanarity_histogram_name, mass_histogram_name
@@ -65,6 +65,9 @@ def scale_non_cep_histograms():
         return
 
     print("Scaling qed and lbl histograms...")
+    
+    photonScaleFactor = get_scale_factor(photon=True)[0]
+    
     for process in processes:
         if process == "cep" or process == "collisionData":
             continue
@@ -72,7 +75,7 @@ def scale_non_cep_histograms():
         if process not in input_aco_histograms:
             continue
 
-        scale = luminosity*crossSections[process]*scaleFactors[process]
+        scale = luminosity*crossSections[process]*photonScaleFactor
         scale /= nGenEvents[process]
 
         input_aco_histograms[process].Scale(scale)
@@ -93,7 +96,11 @@ def get_cep_scale(skim):
     load_histograms(skim)
     scale_non_cep_histograms()
 
-    hist_data_no_background = input_aco_histograms["collisionData"].Clone()
+    try:
+        hist_data_no_background = input_aco_histograms["collisionData"].Clone()
+    except KeyError:
+        fatal("collisionData histogram not found in input files. Did you forget to create/merge histograms?")
+        exit()
     hist_data_no_background.Add(input_aco_histograms["lbl"], -1)
     hist_data_no_background.Add(input_aco_histograms["qed"], -1)
 

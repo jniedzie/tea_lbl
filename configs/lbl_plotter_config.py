@@ -4,8 +4,7 @@ from Legend import Legend
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from lbl_helpers import get_cep_scale
-from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
-from lbl_params import get_scale_factor_error, luminosity_err
+from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor
 from lbl_paths import base_path, processes
 
 # skim = "initial"
@@ -13,24 +12,26 @@ from lbl_paths import base_path, processes
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections_photonEt2p5"
 # skim = "skimmed_allSelections_swissCross0p99"
-skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_allSelections_hadCrack_noZDC"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
+skim = "skimmed_lblSelections_final"
 
 output_path = "../plots/lbl_distributions/"
+# output_path = "../plots/lbl_distributions_noZDC/"
 # output_path = "../plots/qed_distrobutions/"
 # output_path = "../plots/qed_distrobutions_noZDC/"
 
 
-
+do_photons = True
 
 samples = [
     Sample(
         name="lbl",
         file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
         type=SampleType.background,
-        cross_section=crossSections["lbl"]*scaleFactors["lbl"],
+        cross_section=crossSections["lbl"]*get_scale_factor(do_photons)[0],
         initial_weight_sum=nGenEvents["lbl"],
         # line_color=ROOT.kOrange+1,
         fill_color=ROOT.kOrange+1,
@@ -44,11 +45,11 @@ samples = [
         name="cep",
         file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
         type=SampleType.background,
-        # cross_section=get_cep_scale(skim),
-        # initial_weight_sum=luminosity,
+        cross_section=get_cep_scale(skim)[0],
+        initial_weight_sum=luminosity,
         
-        cross_section=crossSections["cep"]*scaleFactors["cep"]*179.7778874019975,
-        initial_weight_sum=nGenEvents["cep"],
+        # cross_section=crossSections["cep"]*get_scale_factor(do_photons)[0]*179.7778874019975,
+        # initial_weight_sum=nGenEvents["cep"],
         
         # line_color=ROOT.kAzure-4,
         fill_color=ROOT.kAzure-4,
@@ -61,7 +62,7 @@ samples = [
         name="qed",
         file_path=f"{base_path}/qed/merged_{skim}_histograms.root",
         type=SampleType.background,
-        cross_section=crossSections["qed"]*scaleFactors["qed"],
+        cross_section=crossSections["qed"]*get_scale_factor(do_photons)[0],
         initial_weight_sum=nGenEvents["qed"],
         line_style=ROOT.kSolid,
         # line_color=ROOT.kRed,
@@ -148,21 +149,29 @@ histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
 
     # photons
-    Histogram("goodPhoton_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 40, "#eta^{#gamma}", y_label, "", error),
-    Histogram("goodPhoton_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 40, "#phi^{#gamma}", y_label, "", error),
-    Histogram("goodPhoton_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 60, "E_{T}^{#gamma} (GeV)", y_label, "", error),
+    Histogram("goodPhoton_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 30, "#eta^{#gamma}", y_label, "", error),
+    Histogram("goodPhoton_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 30, "#phi^{#gamma}", y_label, "", error),
+    Histogram("goodPhoton_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 50, "E_{T}^{#gamma} (GeV)", y_label, "", error),
     Histogram("goodPhoton_seedTime", "", False, True, NormalizationType.to_one, 1,   -5, 5, -1, -1, "Photon seed time", y_label, "", error),
+
+    Histogram("goodPhotonSR_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "#eta^{#gamma}", y_label, "", error),
+    Histogram("goodPhotonSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 15, "#phi^{#gamma}", y_label, "", error),
+    Histogram("goodPhotonSR_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 20, "E_{T}^{#gamma} (GeV)", y_label, "", error),
 
     Histogram("diphoton_acoplanarity200", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
     Histogram("diphoton_acoplanarity300", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
     Histogram("diphoton_acoplanarity400", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
     Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 20, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 30, "y^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphoton_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 100, "m^{#gamma#gamma} (GeV)", y_label, "", error),
-    Histogram("diphoton_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 40, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "y^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 70, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphoton_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 30, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", error),
     Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
     Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    
+    Histogram("diphotonSR_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 8, "y^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphotonSR_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 30, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphotonSR_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 15, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", error),
     
     # electrons
     Histogram("goodElectron_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label),
@@ -187,6 +196,9 @@ histograms = (
     # event
     Histogram("event_deltaEt", "", False, False, NormalizationType.to_lumi, 5,   0, 1, 1e-2, 10, "#DeltaE_{T}", y_label),
     Histogram("event_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 10, "cos #theta*", y_label),
+    Histogram("eventSR10_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 10, "cos #theta*", y_label),
+    Histogram("eventSR5_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
+    Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
     Histogram("cutFlow", "", False, True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )
 

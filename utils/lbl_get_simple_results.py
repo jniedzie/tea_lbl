@@ -1,39 +1,39 @@
 from lbl_helpers import load_histograms, get_cep_scale
 from lbl_helpers import input_aco_histograms
-from lbl_params import luminosity, luminosity_err, photon_scale_factor
-from lbl_params import crossSections, scaleFactors, nGenEvents
-from lbl_params import get_scale_factor_error, luminosity_err
-from ROOT import sqrt
+from lbl_params import luminosity, luminosity_err, get_scale_factor
+from lbl_params import crossSections, nGenEvents, luminosity_err
+
 # skim = "skimmed_allSelections"
 # skim = "skimmed_allSelections_photonEt2p5"
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections_swissCross0p99"
-skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack_noZDC"
+skim = "skimmed_lblSelections_final"
 
 
-def get_cross_section(n_events, n_events_err):
+def get_cross_section(n_events, n_events_err, photon=True):
 
-    Eff = 0.1352
-    Eff_Error = 0.0030
+    if photon:
+        Eff = 0.1352
+        Eff_Error = 0.0030
+    else:
+        Eff = 0.0717
+        Eff_Error = 0.000782
 
-    correction_factor = photon_scale_factor * Eff
-
-    sf_error = get_scale_factor_error(photon=True)
-    correction_factor_err = correction_factor * \
-        (sf_error/photon_scale_factor)**2 + (Eff_Error/Eff)**2
+    scale_factor, sf_error = get_scale_factor(photon=photon)
+    
+    correction_factor = scale_factor * Eff
+    correction_factor_err = correction_factor * ((sf_error/scale_factor)**2 + (Eff_Error/Eff)**2)**0.5
 
     print(
         f"Correction factor: {correction_factor:.4f} +/- {correction_factor_err:.4f}")
-    # correction_factor = 0.08033586859838121
-    # correction_factor_err = 0.015651991297853243
 
-    cross_section = n_events / \
-        (correction_factor * luminosity/1000.)
-    cross_section_syst = cross_section * \
-        sqrt((correction_factor_err/correction_factor)
-             ** 2 + (luminosity_err/luminosity)**2)
-    cross_section_stat = n_events_err / \
-        (correction_factor * luminosity/1000.)
+    cross_section = n_events / (correction_factor * luminosity/1000.)
+
+    cross_section_syst = cross_section * ((correction_factor_err/correction_factor)**2 + (luminosity_err/luminosity)**2)**0.5
+
+    cross_section_stat = n_events_err / (correction_factor * luminosity/1000.)
 
     return cross_section, cross_section_stat, cross_section_syst
 
@@ -43,13 +43,11 @@ def get_cep_norm():
 
     print(f"{cep_normalization=:.5f} +/- {cep_normalization_err:.5f}")
 
-    scale_factor = scaleFactors['cep']
+    scale_factor, scale_factor_error = get_scale_factor(photon=True)
     n_events = nGenEvents['cep']
     cross_section = crossSections['cep']
 
     value = cep_normalization / cross_section/scale_factor*n_events/luminosity
-
-    scale_factor_error = get_scale_factor_error(photon=True)
     n_event_err = n_events**0.5
 
     print(f"SF: {scale_factor:.2f} +/- {scale_factor_error:.2f}")
@@ -128,13 +126,26 @@ def main():
 
     print("\n\n============================================================")
     print(
-        f"Measured cross-section: {cross_section:.0f} +/- {cross_section_stat:.0f} (stat) +/- {cross_section_syst:.0f} (syst) nb")
+        f"Measured LbL cross-section: {cross_section:.0f} +/- {cross_section_stat:.0f} (stat) +/- {cross_section_syst:.0f} (syst) nb")
     print(
-        f"Expected cross-section: {cross_section_mc:.0f} +/- {cross_section_mc_stat:.0f} (stat) +/- {cross_section_mc_syst:.0f} (syst) nb")
+        f"Expected LbL cross-section: {cross_section_mc:.0f} +/- {cross_section_mc_stat:.0f} (stat) +/- {cross_section_mc_syst:.0f} (syst) nb")
     print("============================================================\n\n")
 
     cep_norm, cep_norm_err = get_cep_norm()
     print(f"\n\n{cep_norm} +/- {cep_norm_err}\n\n")
+    
+    # n_qed_data = 16068  # with ZDC cut
+    n_qed_data = 20161  # no ZDC cut
+    n_qed_data_err = n_qed_data**0.5
+    cross_section_qed, cross_section_qed_stat, cross_section_qed_syst = get_cross_section(n_qed_data, n_qed_data_err, photon=False)
+    
+    print("\n\n============================================================")
+    print(
+        f"Measured QED cross-section: {cross_section_qed:.0f} +/- {cross_section_qed_stat:.0f} (stat) +/- {cross_section_qed_syst:.0f} (syst) nb")
+    # print(
+        # f"Expected QED cross-section: {cross_section_mc:.0f} +/- {cross_section_mc_stat:.0f} (stat) +/- {cross_section_mc_syst:.0f} (syst) nb")
+    print("============================================================\n\n")
+    
 
 
 if __name__ == "__main__":
