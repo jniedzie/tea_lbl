@@ -186,7 +186,7 @@ histograms = (
     
     # event
     Histogram("event_deltaEt", "", False, False, NormalizationType.to_lumi, 5,   0, 1, 1e-2, 10, "#DeltaE_{T}", y_label),
-    Histogram("event_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 1, "cos #theta^{*}", y_label),
+    Histogram("event_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 10, "cos #theta*", y_label),
     Histogram("cutFlow", "", False, True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )
 
