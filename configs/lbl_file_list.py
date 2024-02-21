@@ -3,21 +3,22 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 samples = (
     "collisionData",
     "lbl",
-    # "lbl_noTrigger",
     "cep",
     "qed",
+    
+    # "lbl_noTrigger",
     # "qed_noTrigger",
 
-    # "alps_5",
-    # "alps_6",
-    # "alps_9",
-    # "alps_11",
-    # "alps_14",
-    # "alps_16",
-    # "alps_22",
-    # "alps_30",
-    # "alps_50",
-    # "alps_90",
+    "alps_5",
+    "alps_6",
+    "alps_9",
+    "alps_11",
+    "alps_14",
+    "alps_16",
+    "alps_22",
+    "alps_30",
+    "alps_50",
+    "alps_90",
 
     # "emptyBeams",
 )
@@ -32,8 +33,9 @@ sample_path = ""
 # skim = "skimmed_allSelections_swissCross0p99"
 # skim = "skimmed_allSelections_deltaEt"
 # skim = "skimmed_allSelections_deltaEt0p65"
-skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_allSelections_hadCrack_noZDC"
+skim = "skimmed_lblSelections_final"
 
 
 # skim = "skimmed_qedSelections"

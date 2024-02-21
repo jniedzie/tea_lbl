@@ -7,9 +7,9 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-# sample = "collisionData"
+sample = "collisionData"
 # sample = "lbl"
-sample = "cep"
+# sample = "cep"
 # sample = "qed"
 # sample = "emptyBeams"
 
@@ -17,7 +17,8 @@ sample = "cep"
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections"
 # skim = "skimmed_qedSelections"
-skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack"
+skim = "skimmed_lblSelections_final"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
@@ -48,6 +49,10 @@ histParams = (
     ("unfoldingPhoton", "mass", 5, 5, 25, ""),
     ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
 
+    ("goodPhotonSR", "et", 200,    0,       100,     ""),
+    ("goodPhotonSR", "eta", 12,    -2.2,    2.2,     ""),
+    ("goodPhotonSR", "phi", 12,    -3.14,    3.14,     ""),
+
     ("diphoton", "pt", 5, 0, 1, ""),
     ("diphoton", "rapidity", 12, -2.2, 2.2, ""),
     ("diphoton", "mass", 10, 0, 50, ""),
@@ -58,6 +63,10 @@ histParams = (
     ("diphoton", "acoplanarity400", 400, 0, 1, ""),
     ("diphoton", "acoplanarity500", 500, 0, 1, ""),
     ("diphoton", "acoplanarity600", 600, 0, 1, ""),
+
+    ("diphotonSR", "pt", 5, 0, 1, ""),
+    ("diphotonSR", "rapidity", 12, -2.2, 2.2, ""),
+    ("diphotonSR", "mass", 10, 0, 50, ""),
 
     # electrons
     ("goodElectronSR", "pt", 200,    0,       100,     ""),
@@ -96,6 +105,9 @@ histParams = (
     # event
     ("event", "deltaEt", 100, 0, 1, ""),
     ("event", "cosThetaStar", 10, 0, 1, ""),
+    ("eventSR10", "cosThetaStar", 10, 0, 1, ""),
+    ("eventSR5", "cosThetaStar", 5, 0, 1, ""),
+    ("eventSR3", "cosThetaStar", 3, 0, 1, ""),
 )
 
 histParams2D = (

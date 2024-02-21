@@ -7,9 +7,10 @@ from lbl_paths import base_path, processes
 
 # skim = "skimmed_allSelections"
 # skim = "skimmed_allSelections_photonEt2p0"
-skim = "skimmed_allSelections_hadCrack"
+# skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
+skim = "skimmed_lblSelections_final"
 
 
 def main():

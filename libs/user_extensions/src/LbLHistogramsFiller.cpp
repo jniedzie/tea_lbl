@@ -95,6 +95,17 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
   histogramsHandler->Fill("diphoton_seedTime", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
 
   if (acoplanarity < 0.01) {
+    histogramsHandler->Fill("diphotonSR_pt", diphoton.Pt(), GetWeight(event));
+    histogramsHandler->Fill("diphotonSR_mass", diphoton.M(), GetWeight(event));
+    histogramsHandler->Fill("diphotonSR_rapidity", diphoton.Rapidity(), GetWeight(event));
+
+    histogramsHandler->Fill("goodPhotonSR_et", photon1->Get("et"), GetWeight(event));
+    histogramsHandler->Fill("goodPhotonSR_eta", photon1->Get("eta"), GetWeight(event));
+    histogramsHandler->Fill("goodPhotonSR_phi", photon1->Get("phi"), GetWeight(event));
+    histogramsHandler->Fill("goodPhotonSR_et", photon2->Get("et"), GetWeight(event));
+    histogramsHandler->Fill("goodPhotonSR_eta", photon2->Get("eta"), GetWeight(event));
+    histogramsHandler->Fill("goodPhotonSR_phi", photon2->Get("phi"), GetWeight(event));
+
     histogramsHandler->Fill("diphoton_seedTimeSR", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
     histogramsHandler->Fill("unfoldingPhoton_pt", diphoton.Pt(), GetWeight(event));
     histogramsHandler->Fill("unfoldingPhoton_mass", diphoton.M(), GetWeight(event));
@@ -103,7 +114,6 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
 }
 
 void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) {
-  
   float leadingPhotonEnergy = 99999;
   float leadingPhotonEnergyBarrel = 99999;
   float leadingPhotonEnergyBarrelEndcap = 99999;
@@ -117,12 +127,12 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
 
   for (auto physObject : *photons) {
     auto photon = asPhoton(physObject)->GetFourMomentum();
-    
+
     if (fabs(photon.Eta()) > 5.2) continue;
     if (GetDielectronAcoplanarity(event) > 0.01) continue;
 
     bool overlapsWithElectron = false;
-    
+
     for (auto electron : *electrons) {
       if (photon.DeltaR(asElectron(electron)->GetFourMomentum()) < 0.1) {
         overlapsWithElectron = true;
@@ -154,11 +164,10 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
     histogramsHandler->Fill("leadingGenPhotonBarrelEndcap_energy", leadingPhotonEnergyBarrelEndcap, GetWeight(event));
   }
 
-  if(electrons->size() == 2){
+  if (electrons->size() == 2) {
     float deltaPhi = GetPhiModulation(asElectron(electrons->at(0)), asElectron(electrons->at(1)));
     histogramsHandler->Fill("genDielectron_deltaPhi", deltaPhi, GetWeight(event));
   }
-  
 }
 
 float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Event> event) {
@@ -168,7 +177,6 @@ float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Event> eve
 }
 
 float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2) {
-  
   auto electron1vec = electron1->GetFourMomentum();
   auto electron2vec = electron2->GetFourMomentum();
   double deltaPhi = electron1vec.DeltaPhi(electron2vec);
@@ -176,7 +184,7 @@ float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Electron> 
   return acoplanarity;
 }
 
-float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2){
+float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2) {
   TLorentzVector electron, positron;
   if (electron1->GetCharge() > 0) {
     positron = electron1->GetFourMomentum();
@@ -193,9 +201,9 @@ float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron
   // float deltaPhi = dielectron.Phi() - electron.Phi();
   float deltaPhi = fabs(dielectron.Phi() - electron.Phi());
   // float deltaPhi = fabs(dielectron.Phi() - eleDiff.Phi());
-  
+
   if (deltaPhi > TMath::Pi()) deltaPhi = 2. * TMath::Pi() - deltaPhi;
-  
+
   // bring delta phi between -pi and pi
   // if (deltaPhi > TMath::Pi()) deltaPhi = deltaPhi - 2. * TMath::Pi();
   // if (deltaPhi <= -TMath::Pi()) deltaPhi = deltaPhi + 2. * TMath::Pi();
@@ -205,7 +213,6 @@ float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron
 
   return deltaPhi;
 }
-
 
 void LbLHistogramsFiller::FillElectronHistograms(const shared_ptr<Event> event) {
   auto electrons = event->GetCollection("goodElectron");
@@ -247,6 +254,17 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
 
   float cosThetaStar = lblEvent->GetCosThetaStar();
   histogramsHandler->Fill("event_cosThetaStar", cosThetaStar, GetWeight(event));
+
+  auto photons = event->GetCollection("goodPhoton");
+  if (photons->size() != 2) return;
+  double deltaPhi = asPhoton(photons->at(0))->GetFourMomentum().DeltaPhi(asPhoton(photons->at(1))->GetFourMomentum());
+  double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
+
+  if (acoplanarity < 0.01) {
+    histogramsHandler->Fill("eventSR3_cosThetaStar", cosThetaStar, GetWeight(event));
+    histogramsHandler->Fill("eventSR5_cosThetaStar", cosThetaStar, GetWeight(event));
+    histogramsHandler->Fill("eventSR10_cosThetaStar", cosThetaStar, GetWeight(event));
+  }
 }
 
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
