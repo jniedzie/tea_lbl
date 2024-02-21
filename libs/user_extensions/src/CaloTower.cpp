@@ -35,21 +35,20 @@ bool CaloTower::IsDead() {
   return find(deadEtasForDetector.begin(), deadEtasForDetector.end(), iEta) != deadEtasForDetector.end();
 }
 
-bool CaloTower::IsInHadronicCrack(){
-  return (absEta > detectorParams["crackHadron_start"] && absEta < detectorParams["crackHadron_end"]);
+bool CaloTower::IsInHadronicCrack() {
+  return (absEta >= detectorParams["crackHadron_start"] && absEta <= detectorParams["crackHadron_end"]);
 }
 
-bool CaloTower::IsInElectromagneticCrack(){
-  return (absEta > detectorParams["crack_start"] && absEta < detectorParams["crack_end"]);
-}
+bool CaloTower::IsInElectromagneticCrack() { return (absEta >= detectorParams["crack_start"] && absEta <= detectorParams["crack_end"]); }
 
 string CaloTower::GetHadronicSubdetectorName() {
   if (eta > -caloEtaEdges["maxHF"] && eta < -caloEtaEdges["minHF"]) return "HFm";
   if (eta > caloEtaEdges["minHF"] && eta < caloEtaEdges["maxHF"]) return "HFp";
   if (absEta < caloEtaEdges["maxHB"]) return "HB";
   if (absEta > caloEtaEdges["minHE"] && absEta < caloEtaEdges["maxHE"]) return "HE";
+  if (IsInHadronicCrack()) return "HadronicCrack";
 
-  error() << "ERROR - could not determine calo tower had sub-det!" << endl;
+  error() << "ERROR - could not determine calo tower had sub-det! Eta: " << eta << endl;
   return "";
 }
 
@@ -58,6 +57,7 @@ string CaloTower::GetElectromagneticSubdetectorName() {
   if (eta > caloEtaEdges["minHF"] && eta < caloEtaEdges["maxHF"]) return "HFp";
   if (absEta < caloEtaEdges["maxEB"]) return "EB";
   if (absEta > caloEtaEdges["minEE"] && absEta < caloEtaEdges["maxEE"]) return "EE";
+  if (IsInElectromagneticCrack()) return "ElectromagneticCrack";
 
   error() << "ERROR - could not determine calo tower EM sub-det!" << endl;
   return "";
@@ -92,9 +92,11 @@ bool CaloTower::OverlapsWithOtherObjects(shared_ptr<PhysicsObjects> otherObjects
 bool CaloTower::IsEtaAboveLimit() { return absEta > detectorParams["caloTower_etaMax"]; }
 
 bool CaloTower::IsHadronicEnergyAboveNoiseThreshold() {
+  if (hadronicSubdetector == "HadronicCrack") return false;
   return (float)Get(caloNoiseVariables[hadronicSubdetector]) > caloNoiseThresholds[hadronicSubdetector];
 }
 
 bool CaloTower::IsElectromagneticEnergyAboveNoiseThreshold() {
+  if (electromagneticSubdetector == "ElectromagneticCrack") return false;
   return (float)Get(caloNoiseVariables[electromagneticSubdetector]) > caloNoiseThresholds[electromagneticSubdetector];
 }
