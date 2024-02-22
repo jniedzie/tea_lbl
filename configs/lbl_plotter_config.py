@@ -19,6 +19,7 @@ from lbl_paths import base_path, processes
 skim = "skimmed_lblSelections_final"
 
 output_path = "../plots/lbl_distributions/"
+# output_path = "../plots/lbl_distributions_withAlps/"
 # output_path = "../plots/lbl_distributions_noZDC/"
 # output_path = "../plots/qed_distrobutions/"
 # output_path = "../plots/qed_distrobutions_noZDC/"
@@ -110,7 +111,7 @@ legend_height = 0.05
 legend_max_y = 0.90
 
 
-# alp_scale = 2.0
+# alp_scale = 1.0
 # alp_index = 0
 # for process in processes:
 #     if "alps" not in process:
@@ -127,7 +128,7 @@ legend_max_y = 0.90
 #             name=process,
 #             file_path=f"{base_path}/{process}/merged_{skim}_histograms.root",
 #             type=SampleType.signal,
-#             cross_section=crossSections[process]*scaleFactors[process]*alp_scale,
+#             cross_section=crossSections[process]*get_scale_factor(photon=True)[0]*alp_scale,
 #             initial_weight_sum=nGenEvents[process],
 #             line_color=alp_colors[alp_index],
 #             line_style=ROOT.kSolid,
@@ -162,7 +163,9 @@ histograms = (
     Histogram("diphoton_acoplanarity300", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
     Histogram("diphoton_acoplanarity400", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
     Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    
+    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    
     Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "y^{#gamma#gamma}", y_label, "", error),
     Histogram("diphoton_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 70, "m^{#gamma#gamma} (GeV)", y_label, "", error),
     Histogram("diphoton_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 30, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", error),
@@ -170,7 +173,9 @@ histograms = (
     Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
     
     Histogram("diphotonSR_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 8, "y^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphotonSR_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 30, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphotonSR_mass"           , "", False , True, NormalizationType.to_lumi, 1,   0    , 30   , 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphotonSR_mass100"        , "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphotonSR_mass200"        , "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 10, "m^{#gamma#gamma} (GeV)", y_label, "", error),
     Histogram("diphotonSR_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 15, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", error),
     
     # electrons
@@ -198,6 +203,7 @@ histograms = (
     Histogram("event_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 10, "cos #theta*", y_label),
     Histogram("eventSR10_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 10, "cos #theta*", y_label),
     Histogram("eventSR5_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
+    Histogram("eventSR4_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
     Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
     Histogram("cutFlow", "", False, True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )

@@ -67,6 +67,8 @@ histParams = (
     ("diphotonSR", "pt", 5, 0, 1, ""),
     ("diphotonSR", "rapidity", 12, -2.2, 2.2, ""),
     ("diphotonSR", "mass", 10, 0, 50, ""),
+    ("diphotonSR", "mass200", 200, 0, 200, ""),
+    ("diphotonSR", "mass100", 100, 0, 200, ""),
 
     # electrons
     ("goodElectronSR", "pt", 200,    0,       100,     ""),
@@ -107,6 +109,7 @@ histParams = (
     ("event", "cosThetaStar", 10, 0, 1, ""),
     ("eventSR10", "cosThetaStar", 10, 0, 1, ""),
     ("eventSR5", "cosThetaStar", 5, 0, 1, ""),
+    ("eventSR4", "cosThetaStar", 4, 0, 1, ""),
     ("eventSR3", "cosThetaStar", 3, 0, 1, ""),
 )
 

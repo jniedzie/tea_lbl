@@ -97,7 +97,10 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
   if (acoplanarity < 0.01) {
     histogramsHandler->Fill("diphotonSR_pt", diphoton.Pt(), GetWeight(event));
     histogramsHandler->Fill("diphotonSR_mass", diphoton.M(), GetWeight(event));
+    histogramsHandler->Fill("diphotonSR_mass100", diphoton.M(), GetWeight(event));
+    histogramsHandler->Fill("diphotonSR_mass200", diphoton.M(), GetWeight(event));
     histogramsHandler->Fill("diphotonSR_rapidity", diphoton.Rapidity(), GetWeight(event));
+    
 
     histogramsHandler->Fill("goodPhotonSR_et", photon1->Get("et"), GetWeight(event));
     histogramsHandler->Fill("goodPhotonSR_eta", photon1->Get("eta"), GetWeight(event));
@@ -262,6 +265,7 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
 
   if (acoplanarity < 0.01) {
     histogramsHandler->Fill("eventSR3_cosThetaStar", cosThetaStar, GetWeight(event));
+    histogramsHandler->Fill("eventSR4_cosThetaStar", cosThetaStar, GetWeight(event));
     histogramsHandler->Fill("eventSR5_cosThetaStar", cosThetaStar, GetWeight(event));
     histogramsHandler->Fill("eventSR10_cosThetaStar", cosThetaStar, GetWeight(event));
   }
