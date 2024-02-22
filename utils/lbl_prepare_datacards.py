@@ -1,18 +1,13 @@
 from lbl_helpers import load_histograms, get_cep_scale, input_mass_histograms
 from lbl_helpers import input_aco_histograms, scale_non_cep_histograms
 from lbl_params import n_acoplanarity_bins, uncertainty_on_zero, n_mass_bins
-from lbl_params import systematic_uncertainty, alp_mc_uncertainty
+from lbl_params import systematic_uncertainty_lbl, alp_mc_uncertainty
 from lbl_paths import processes
 from Logger import info
 import ROOT
 import os
 
-# skim = "skimmed_allSelections"
-# skim = "skimmed_allSelections_photonEt2p0"
-# skim = "skimmed_allSelections_photonEt2p5"
-# skim = "skimmed_allSelections_swissCross0p99"
-# skim = "skimmed_allSelections_hadCrack"
-skim = "skimmed_allSelections_hadCrack_noZDC"
+skim = "skimmed_lblSelections_final"
 
 output_path_aco = f"../combine/significance_histograms_{skim}"
 output_path_aco += f"_nBins{n_acoplanarity_bins}.root"
@@ -44,7 +39,7 @@ def save_output_histograms():
             continue
 
         if process == "cep":
-            scale = get_cep_scale(skim)
+            scale, _ = get_cep_scale(skim)
             print(f"CEP {scale=}")
             input_aco_histograms[process].Scale(scale)
             input_mass_histograms[process].Scale(scale)
@@ -98,12 +93,12 @@ def add_datacard_rates(file, rates, alp_name=""):
 def add_datacard_nuisances(file, do_alp=False):
     if do_alp:
         file += "bck_syst     lnN    -  "
-        file += f"{systematic_uncertainty}  {systematic_uncertainty}"
-        file += f"  {systematic_uncertainty}\n"
+        file += f"{systematic_uncertainty_lbl}  {systematic_uncertainty_lbl}"
+        file += f"  {systematic_uncertainty_lbl}\n"
         file += f"alp_mc     lnN  {alp_mc_uncertainty}  -  -  -\n"
     else:
         file += "bck_syst     lnN    -  "
-        file += f"{systematic_uncertainty}  {systematic_uncertainty}\n"
+        file += f"{systematic_uncertainty_lbl}  {systematic_uncertainty_lbl}\n"
 
     file += "bin1   autoMCStats  10\n"
     return file
@@ -158,13 +153,13 @@ if __name__ == "__main__":
 
 
 
-# combineCards.py limits_histograms_2015alps_5_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_5_.txt > card_alps_5.txt
-# combineCards.py limits_histograms_2015alps_6_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_6_.txt > card_alps_6.txt
-# combineCards.py limits_histograms_2015alps_9_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_9_.txt > card_alps_9.txt
-# combineCards.py limits_histograms_2015alps_11_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_11_.txt > card_alps_11.txt
-# combineCards.py limits_histograms_2015alps_14_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_14_.txt > card_alps_14.txt
-# combineCards.py limits_histograms_2015alps_16_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_16_.txt > card_alps_16.txt
-# combineCards.py limits_histograms_2015alps_22_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_22_.txt > card_alps_22.txt
-# combineCards.py limits_histograms_2015alps_30_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_30_.txt > card_alps_30.txt
-# combineCards.py limits_histograms_2015alps_50_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_50_.txt > card_alps_50.txt
-# combineCards.py limits_histograms_2015alps_90_.txt limits_histograms_skimmed_allSelections_hadCrack_nBins200alps_90_.txt > card_alps_90.txt
+# combineCards.py limits_histograms_2015alps_5_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_5_.txt > card_alps_5.txt
+# combineCards.py limits_histograms_2015alps_6_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_6_.txt > card_alps_6.txt
+# combineCards.py limits_histograms_2015alps_9_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_9_.txt > card_alps_9.txt
+# combineCards.py limits_histograms_2015alps_11_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_11_.txt > card_alps_11.txt
+# combineCards.py limits_histograms_2015alps_14_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_14_.txt > card_alps_14.txt
+# combineCards.py limits_histograms_2015alps_16_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_16_.txt > card_alps_16.txt
+# combineCards.py limits_histograms_2015alps_22_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_22_.txt > card_alps_22.txt
+# combineCards.py limits_histograms_2015alps_30_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_30_.txt > card_alps_30.txt
+# combineCards.py limits_histograms_2015alps_50_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_50_.txt > card_alps_50.txt
+# combineCards.py limits_histograms_2015alps_90_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_90_.txt > card_alps_90.txt

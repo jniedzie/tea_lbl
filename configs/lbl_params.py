@@ -151,7 +151,7 @@ electronTrackMatching = {
 #  scaling parameters
 
 luminosity = 1647.180726  # μb^-1, with ZDC
-luminosity_err = luminosity * 0.019  # 1.9% uncertainty
+luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 
 # luminosity = 1609.910015010; // from brilcalc, 1/μb
 # luminosity = 1639.207543; // from Ruchi, 1/μb
@@ -177,28 +177,24 @@ crossSections = {
 
 
 # photon ET > 2.0 GeV, diphoton pt < 1 GeV
-#                       NE       ChE      HFveto   L1EG     Reco+ID
-photon_scale_factor = 0.8497 * 0.9339 * 0.8696 * 1.0089 * (0.957*0.9612)**2
-electron_scale_factor = 0.8497 * 0.9339 * 0.8696 * 1.0089 * 0.943**2
-
 scale_factors = {
-    "nee": 0.8497,
-    "che": 0.9339,
-    "l1hf": 0.8696,
-    "l1eg": 1.0089,
     "photonReco": 0.957,
-    "photonID": 0.9612,
+    "photonID": 0.984,
     "electronRecoID": 0.943,
+    "l1eg": 1.0089,
+    "l1hf": 0.8716,
+    "che": 0.9252,
+    "nee": 0.8487,
 }
 
 scale_factor_errors = {
-    "nee": 0.0089,
-    "che": 0.0093,
-    "l1hf": 0.081,
-    "l1eg": 0.002,
     "photonReco": 0.0433,
-    "photonID": 0.0976,
+    "photonID": 0.0345,
     "electronRecoID": 0.0085,
+    "l1eg": 0.002,
+    "l1hf": 0.054,
+    "che": 0.0087,
+    "nee": 0.0085,
 }
 
 
@@ -215,33 +211,16 @@ def get_scale_factor(photon=True):
 
         error += (scale_factor_errors[variable] / scale_factors[variable])**2
         value *= scale_factors[variable]
-        
+
         if squared in variable:
-            error += (scale_factor_errors[variable] / scale_factors[variable])**2
+            error += (scale_factor_errors[variable] /
+                      scale_factors[variable])**2
             value *= scale_factors[variable]
 
     sf_error = value * error**(1/2)
 
     return value, sf_error
 
-
-# scaleFactors = {
-#     "lbl": photon_scale_factor,
-#     "qed": photon_scale_factor,  # for LbL analysis
-#     # "qed": electron_scale_factor, # for QED analysis
-#     "cep": photon_scale_factor,  # we scale it to data
-
-#     "alps_5": photon_scale_factor,
-#     "alps_6": photon_scale_factor,
-#     "alps_9": photon_scale_factor,
-#     "alps_11": photon_scale_factor,
-#     "alps_14": photon_scale_factor,
-#     "alps_16": photon_scale_factor,
-#     "alps_22": photon_scale_factor,
-#     "alps_30": photon_scale_factor,
-#     "alps_50": photon_scale_factor,
-#     "alps_90": photon_scale_factor,
-# }
 
 nGenEvents = {
     "lbl": 466000,
@@ -260,17 +239,15 @@ nGenEvents = {
     "alps_90": 449000,
 }
 
-# cep_scaling_min_acoplanarity = 0.02
-# cep_scaling_min_acoplanarity = 0.018
 cep_scaling_min_acoplanarity = 0.016
 
 #  significance & limits parameters
-
 n_acoplanarity_bins = 500
 n_mass_bins = 200
 
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
 
-systematic_uncertainty = 1.26
+systematic_uncertainty_qed = 1.068
+systematic_uncertainty_lbl = 1.24
 alp_mc_uncertainty = 1.03

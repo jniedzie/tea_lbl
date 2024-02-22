@@ -1,11 +1,11 @@
 import ROOT
-from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
+from lbl_params import luminosity, crossSections, get_scale_factor, nGenEvents
 from lbl_helpers import get_cep_scale
 from lbl_paths import merged_histograms_path
 
 
 samples = ["collisionData", "lbl", "cep", "qed"]
-skim = "skimmed_allSelections_hadCrack"
+skim = "skimmed_lblSelections_final"
 
 
 def main():
@@ -14,6 +14,8 @@ def main():
     hists_mass = {}
     hists_pt = {}
     hists_rap = {}
+
+    photon_sf, _ = get_scale_factor(photon=True)
 
     for sample in samples:
         files[sample] = ROOT.TFile.Open(merged_histograms_path.format(sample, skim))
@@ -26,15 +28,15 @@ def main():
             pass
         elif sample == "lbl" or sample == "qed":
             hists_mass[sample].Scale(
-                luminosity*crossSections[sample]*scaleFactors[sample]/nGenEvents[sample])
+                luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_pt[sample].Scale(
-                luminosity*crossSections[sample]*scaleFactors[sample]/nGenEvents[sample])
+                luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_rap[sample].Scale(
-                luminosity*crossSections[sample]*scaleFactors[sample]/nGenEvents[sample])
+                luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
         elif sample == "cep":
-            hists_mass[sample].Scale(get_cep_scale(skim))
-            hists_pt[sample].Scale(get_cep_scale(skim))
-            hists_rap[sample].Scale(get_cep_scale(skim))
+            hists_mass[sample].Scale(get_cep_scale(skim)[0])
+            hists_pt[sample].Scale(get_cep_scale(skim)[0])
+            hists_rap[sample].Scale(get_cep_scale(skim)[0])
             
         output_file = ROOT.TFile(f"unfoldingHistograms_{sample}.root", "recreate")
         output_file.cd()

@@ -73,11 +73,13 @@ def scale_non_cep_histograms():
             continue
 
         if process not in input_aco_histograms:
+            warn(f"Skipping scaling of process {process} because it was not found in the input files.")
             continue
 
         scale = luminosity*crossSections[process]*photonScaleFactor
         scale /= nGenEvents[process]
 
+        info(f"Scaling {process} by {scale:.6f}")
         input_aco_histograms[process].Scale(scale)
         input_mass_histograms[process].Scale(scale)
 

@@ -1,13 +1,10 @@
 import ROOT
 from collections import OrderedDict
 
-from lbl_params import luminosity, crossSections, scaleFactors, nGenEvents
+from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor
 from lbl_helpers import get_cep_scale
 from lbl_paths import base_path, processes
 
-# skim = "skimmed_allSelections"
-# skim = "skimmed_allSelections_photonEt2p0"
-# skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
 skim = "skimmed_lblSelections_final"
@@ -15,6 +12,8 @@ skim = "skimmed_lblSelections_final"
 
 def main():
     ROOT.gROOT.SetBatch(True)
+
+    photon_sf, _ = get_scale_factor(photon=True)
 
     for process in processes:
         input_path = f"{base_path}/{process}/merged_{skim}.root"
@@ -25,7 +24,7 @@ def main():
         elif process == "collisionData":
             scale = 1
         else:
-            scale = luminosity*crossSections[process]*scaleFactors[process]
+            scale = luminosity*crossSections[process]*photon_sf
             scale /= nGenEvents[process]
 
         file = ROOT.TFile(input_path, "READ")
