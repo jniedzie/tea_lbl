@@ -3,15 +3,14 @@ import os
 from lbl_paths import base_path, processes
 
 # skim = "initial"
-# skim = "skimmed_allSelections"
-# skim = "skimmed_allSelections_photonEt2p0"
-# skim = "skimmed_allSelections_photonEt2p5"
-# skim = "skimmed_allSelections_swissCross0p99"
-# skim = "skimmed_allSelections_hadCrack"
-# skim = "skimmed_allSelections_hadCrack_noZDC"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
-skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final_andZDC"
+# skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC2n"
+# skim = "skimmed_lblSelections_final_noZDC"
+skim = "skimmed_lblSelections_onlyNee"
 
 merge_histograms = True  # False for merging ntuples
 

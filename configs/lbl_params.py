@@ -1,6 +1,8 @@
 # event cuts
 eventCuts = {
     "max_ZDCenergyPerSide": 10000.0,
+    # "max_ZDCenergyPerSide": 7000.0,
+    # "max_ZDCenergyPerSide": 4000.0,
 
     "min_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
     "max_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
@@ -158,9 +160,18 @@ luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 
 reference_alp_cross_section = 10e-3  # μb
 
+# QED needs to be scaled up, depending on the ZDC cut
+# qed_scaling = 1.0  # 4n OR
+# qed_scaling = 2.3  # 2n AND
+# qed_scaling = 2.4  # 3n AND
+qed_scaling = 2.5  # 4n AND
+
+# LbL may be scaled up due to NLO corrections
+lbl_scaling = 1.05
+
 crossSections = {
-    "lbl": 2.59,  # μb
-    "qed": 8827.220,  # μb
+    "lbl": 2.59 * lbl_scaling,  # μb
+    "qed": 8827.220 * qed_scaling,  # μb
     "cep": 5.8e-3,  # we scale it to data
 
     "alps_5": reference_alp_cross_section,
@@ -242,7 +253,8 @@ nGenEvents = {
 cep_scaling_min_acoplanarity = 0.016
 
 #  significance & limits parameters
-n_acoplanarity_bins = 500
+# n_acoplanarity_bins = 500
+n_acoplanarity_bins = 400
 n_mass_bins = 200
 
 uncertainty_on_zero = 1.84  # 95% CL

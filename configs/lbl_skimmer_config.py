@@ -26,9 +26,8 @@ sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 
-# skim = "skimmed_allSelections"
+# skim = "skimmed_lblSelections"
 # skim = "skimmed_qedSelections"
-skim = "skimmed_allSelections_hadCrack"
 
 inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
 # inputFilePath = f"{base_path}/ntuples/{sample}/skimmed_allSelections/ntuple_0.root"

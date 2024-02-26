@@ -1,5 +1,5 @@
-from lbl_helpers import load_histograms, get_cep_scale, input_mass_histograms
-from lbl_helpers import input_aco_histograms, scale_non_cep_histograms
+from lbl_helpers import load_histograms, get_cep_scale, input_mass_histograms, add_uncertainties_on_zero
+from lbl_helpers import input_aco_histograms, scale_non_cep_histograms, limit_histogram
 from lbl_params import n_acoplanarity_bins, uncertainty_on_zero, n_mass_bins
 from lbl_params import systematic_uncertainty_lbl, alp_mc_uncertainty
 from lbl_paths import processes
@@ -7,7 +7,9 @@ from Logger import info
 import ROOT
 import os
 
-skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final_andZDC2n"
+skim = "skimmed_lblSelections_final_andZDC"
 
 output_path_aco = f"../combine/significance_histograms_{skim}"
 output_path_aco += f"_nBins{n_acoplanarity_bins}.root"
@@ -16,13 +18,44 @@ output_path_mass = f"../combine/limits_histograms_{skim}"
 output_path_mass += f"_nBins{n_mass_bins}.root"
 
 
-def add_uncertainties_on_zero(histogram):
-    for i in range(1, histogram.GetNbinsX()):
-        if histogram.GetBinContent(i) != 0:
-            continue
-        histogram.SetBinError(i, uncertainty_on_zero)
+def sample_from_fit(hist):
+    # set seed based on time
+    ROOT.gRandom.SetSeed(0)
 
-    return histogram
+    # transition_point = 0.025
+    transition_point = 0.026
+    formula = f"[p0]*(x<={transition_point})+(exp([p1]+[p2]*x))*(x>{transition_point})"
+    # formula = f"[p0]*(x<={transition_point})+([p0]*exp([p2]*(x-{transition_point})))*(x>{transition_point})"
+
+    fit = ROOT.TF1("fit", formula, 0, 0.1)
+    fit.SetParameters(7, 3, -31)
+
+    hist.Fit(fit, "WW")
+
+    # create a new histogram with the same binning as hist
+    new_hist = hist.Clone()
+    new_hist.Reset()
+
+    new_hist.FillRandom("fit", 500)
+
+    new_hist.Scale(hist.Integral()/new_hist.Integral())
+
+    canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
+    hist.SetMarkerColor(ROOT.kRed)
+    hist.SetMarkerStyle(20)
+    hist.SetLineColor(ROOT.kRed)
+    hist.Draw("PE")
+    
+    hist.GetXaxis().SetRangeUser(0, 0.2)
+    
+    new_hist.SetMarkerColor(ROOT.kBlack)
+    new_hist.SetMarkerStyle(20)
+    new_hist.SetLineColor(ROOT.kBlack)
+    new_hist.Draw("PEsame")
+    
+    canvas.SaveAs("../plots/qed_fit.pdf")
+
+    return new_hist
 
 
 def save_output_histograms():
@@ -44,7 +77,8 @@ def save_output_histograms():
             input_aco_histograms[process].Scale(scale)
             input_mass_histograms[process].Scale(scale)
 
-        input_aco_histograms[process] = add_uncertainties_on_zero(input_aco_histograms[process])
+        input_aco_histograms[process] = add_uncertainties_on_zero(
+            input_aco_histograms[process])
         # input_mass_histograms[process] = add_uncertainties_on_zero(input_mass_histograms[process])
 
         name = process if process != "collisionData" else "data_obs"
@@ -52,10 +86,13 @@ def save_output_histograms():
         input_aco_histograms[process].SetName(name)
         input_mass_histograms[process].SetName(name)
 
+        hist = limit_histogram(input_aco_histograms[process], 0.1)
+
         print(f"saving {name}")
 
         output_file_aco.cd()
-        input_aco_histograms[process].Write()
+        # input_aco_histograms[process].Write()
+        hist.Write()
 
         output_file_mass.cd()
         input_mass_histograms[process].Write()
@@ -109,7 +146,9 @@ def save_datacard():
     for process in processes:
         if process not in input_aco_histograms:
             continue
-        rates[process] = input_aco_histograms[process].Integral()
+        hist = limit_histogram(input_aco_histograms[process], 0.1)
+
+        rates[process] = hist.Integral()
 
     output_file = ""
     output_file = add_datacard_header(output_file, rates["collisionData"])
@@ -132,16 +171,22 @@ def save_datacard():
             continue
 
         output_file = ""
-        output_file = add_datacard_header(output_file, rates["collisionData"], process)
+        output_file = add_datacard_header(
+            output_file, rates["collisionData"], process)
         output_file = add_datacard_rates(output_file, rates, process)
         output_file = add_datacard_nuisances(output_file, True)
-        outfile = open(output_path_mass.replace(".root", f"{process}_.txt"), "w")
+        outfile = open(output_path_mass.replace(
+            ".root", f"{process}_.txt"), "w")
         outfile.write(output_file)
 
 
 def main():
     info(f"Storing datacard/root file in: {output_path_aco}")
     load_histograms(skim)
+    
+    # replace the QED histogram with sampling from a fit
+    input_aco_histograms["qed"] = sample_from_fit(input_aco_histograms["qed"])
+    
     save_output_histograms()
 
     save_datacard()
@@ -149,8 +194,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
 
 
 # combineCards.py limits_histograms_2015alps_5_.txt limits_histograms_skimmed_lblSelections_final_nBins200alps_5_.txt > card_alps_5.txt

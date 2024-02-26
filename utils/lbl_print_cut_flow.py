@@ -7,7 +7,11 @@ from lbl_paths import base_path, processes
 
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
-skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final_andZDC"
+# skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC2n"
+skim = "skimmed_lblSelections_onlyNee"
 
 
 def main():

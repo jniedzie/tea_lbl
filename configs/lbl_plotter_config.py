@@ -4,23 +4,25 @@ from Legend import Legend
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from lbl_helpers import get_cep_scale
-from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor
+from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, systematic_uncertainty_qed
 from lbl_paths import base_path, processes
 
 # skim = "initial"
-# skim = "skimmed_allSelections"
-# skim = "skimmed_allSelections_photonEt2p0"
-# skim = "skimmed_allSelections_photonEt2p5"
-# skim = "skimmed_allSelections_swissCross0p99"
-# skim = "skimmed_allSelections_hadCrack"
-# skim = "skimmed_allSelections_hadCrack_noZDC"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
-skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final"
+skim = "skimmed_lblSelections_final_andZDC"
+# skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC2n"
+# skim = "skimmed_lblSelections_final_noZDC"
 
-output_path = "../plots/lbl_distributions/"
+# output_path = "../plots/lbl_distributions/"
+output_path = "../plots/lbl_distributions_andZDC/"
+# output_path = "../plots/lbl_distributions_andZDC3n/"
+# output_path = "../plots/lbl_distributions_andZDC2n/"
 # output_path = "../plots/lbl_distributions_withAlps/"
 # output_path = "../plots/lbl_distributions_noZDC/"
+
 # output_path = "../plots/qed_distrobutions/"
 # output_path = "../plots/qed_distrobutions_noZDC/"
 
@@ -84,7 +86,7 @@ samples = [
         marker_color=ROOT.kBlack,
         fill_alpha=0.0,
         legend_description="data",
-        custom_legend=Legend(0.7, 0.85, 0.80, 0.90, "pl"),
+        custom_legend=Legend(0.6, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrow#gamma#gamma+XnYn (X,Y<4)"),
     ),
 ]
 
@@ -103,12 +105,12 @@ alp_colors = (
     ROOT.kRed,
 )
 
-legend_width = 0.10
+legend_width = 0.20
 legend_min_x = 0.40
 legend_max_x = 0.80
 
 legend_height = 0.05
-legend_max_y = 0.90
+legend_max_y = 0.85
 
 
 # alp_scale = 1.0
@@ -144,58 +146,62 @@ legend_max_y = 0.90
 #     alp_index += 1
 
 y_label = "# events"
-error = 0.20
+lbl_error = 0.20
+qed_error = systematic_uncertainty_qed - 1
+
+y_scale = 1.0
+# y_scale = 1.2  # for ZDC
 
 histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
 
     # photons
-    Histogram("goodPhoton_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 30, "#eta^{#gamma}", y_label, "", error),
-    Histogram("goodPhoton_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 30, "#phi^{#gamma}", y_label, "", error),
-    Histogram("goodPhoton_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 50, "E_{T}^{#gamma} (GeV)", y_label, "", error),
-    Histogram("goodPhoton_seedTime", "", False, True, NormalizationType.to_one, 1,   -5, 5, -1, -1, "Photon seed time", y_label, "", error),
+    Histogram("goodPhoton_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 30, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhoton_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 30, "#phi^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhoton_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 50, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("goodPhoton_seedTime", "", False, True, NormalizationType.to_one, 1,   -5, 5, -1, -1, "Photon seed time", y_label, "", lbl_error),
 
-    Histogram("goodPhotonSR_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "#eta^{#gamma}", y_label, "", error),
-    Histogram("goodPhotonSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 15, "#phi^{#gamma}", y_label, "", error),
-    Histogram("goodPhotonSR_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 20, "E_{T}^{#gamma} (GeV)", y_label, "", error),
+    Histogram("goodPhotonSR_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, y_scale*15, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhotonSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, y_scale*15, "#phi^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhotonSR_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, y_scale*20, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
 
-    Histogram("diphoton_acoplanarity200", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphoton_acoplanarity300", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphoton_acoplanarity400", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_acoplanarity200", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity300", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity400", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     
-    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", error),
+    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     
-    Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "y^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphoton_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 70, "m^{#gamma#gamma} (GeV)", y_label, "", error),
-    Histogram("diphoton_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 30, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", error),
-    Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
-    Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "y^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 70, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphoton_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 30, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     
-    Histogram("diphotonSR_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 8, "y^{#gamma#gamma}", y_label, "", error),
-    Histogram("diphotonSR_mass"           , "", False , True, NormalizationType.to_lumi, 1,   0    , 30   , 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", y_label, "", error),
-    Histogram("diphotonSR_mass100"        , "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", error),
-    Histogram("diphotonSR_mass200"        , "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 10, "m^{#gamma#gamma} (GeV)", y_label, "", error),
-    Histogram("diphotonSR_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 15, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", error),
+    Histogram("diphotonSR_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 8, "y^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphotonSR_mass"           , "", False , True, NormalizationType.to_lumi, 1,   0    , 30   , 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphotonSR_mass100"        , "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphotonSR_mass200"        , "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 10, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphotonSR_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 15, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     
     # electrons
-    Histogram("goodElectron_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label),
-    Histogram("goodElectron_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 3000, "#phi^{e}", y_label),
-    Histogram("goodElectron_pt"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 6000, "p_{T}^{e} (GeV)", y_label),
-    Histogram("goodElectronSR_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label),
-    Histogram("goodElectronSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 3000, "#phi^{e}", y_label),
-    Histogram("goodElectronSR_pt"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 6000, "p_{T}^{e} (GeV)", y_label),
-    Histogram("electron_PFChIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFChIso", y_label),
-    Histogram("electron_PFPhoIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFPhoIso", y_label),
-    Histogram("electron_PFNeuIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFNeuIso", y_label),
+    Histogram("goodElectron_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label, "", qed_error),
+    Histogram("goodElectron_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 3000, "#phi^{e}", y_label, "", qed_error),
+    Histogram("goodElectron_pt"           , "", False , True, NormalizationType.to_lumi, 1,   0    , 10   , 0, 6000, "p_{T}^{e} (GeV)", y_label, "", qed_error),
+    Histogram("goodElectronSR_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label, "", qed_error),
+    Histogram("goodElectronSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 3000, "#phi^{e}", y_label, "", qed_error),
+    Histogram("goodElectronSR_pt"           , "", False , True, NormalizationType.to_lumi, 10,   0    , 50   , 1e-1, 6000, "p_{T}^{e} (GeV)", y_label, "", qed_error),
+    Histogram("electron_PFChIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFChIso", y_label, "", qed_error),
+    Histogram("electron_PFPhoIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFPhoIso", y_label, "", qed_error),
+    Histogram("electron_PFNeuIso", "", False, True, NormalizationType.to_one, 1,   0, 0.1, 1e-10, 1e0, "Electron PFNeuIso", y_label, "", qed_error),
     
-    Histogram("dielectron_acoplanarity", "", False, True, NormalizationType.to_lumi, 1,   0, 0.06, 1e-1, 1e5, "A_{#phi}^{ee}", y_label),
-    Histogram("dielectron_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label),
-    Histogram("dielectron_pt", "", False, True, NormalizationType.to_lumi, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label),
-    Histogram("dielectron_rapidity", "", False, True, NormalizationType.to_lumi, 1,   -2.2, 2.2, -1, -1, "y^{ee} (GeV)", y_label),
-    Histogram("dielectronSR_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label),
-    Histogram("dielectronSR_pt", "", False, True, NormalizationType.to_lumi, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label),
-    Histogram("dielectronSR_rapidity", "", False, True, NormalizationType.to_lumi, 1,   -2.2, 2.2, -1, -1, "y^{ee} (GeV)", y_label),
+    Histogram("dielectron_acoplanarity", "", False, True, NormalizationType.to_lumi, 1,   0, 0.06, 1e-1, 1e5, "A_{#phi}^{ee}", y_label, "", qed_error),
+    Histogram("dielectron_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label, "", qed_error),
+    Histogram("dielectron_pt", "", False, True, NormalizationType.to_lumi, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label, "", qed_error),
+    Histogram("dielectron_rapidity", "", False, True, NormalizationType.to_lumi, 1,   -2.2, 2.2, -1, -1, "y^{ee} (GeV)", y_label, "", qed_error),
+    Histogram("dielectronSR_mass", "", False, True, NormalizationType.to_lumi, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label, "", qed_error),
+    Histogram("dielectronSR_pt", "", False, True, NormalizationType.to_lumi, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label, "", qed_error),
+    Histogram("dielectronSR_rapidity", "", False, True, NormalizationType.to_lumi, 1,   -2.2, 2.2, -1, -1, "y^{ee} (GeV)", y_label, "", qed_error),
 
     
     # event
@@ -221,7 +227,7 @@ n_background = len([s for s in samples if s.type ==
 # here default legends per sample type are defined. If you want to override them, specify custom_legend in the sample
 legends = {
     SampleType.signal: Legend(legend_min_x, legend_max_y - n_signal*legend_height, legend_min_x+legend_width, legend_max_y, "l"),
-    SampleType.data: Legend(legend_max_x-legend_width, legend_max_y - legend_height, legend_max_x, legend_max_y-legend_height, "pl"),
+    SampleType.data: Legend(legend_max_x-legend_width, legend_max_y - 2*legend_height, legend_max_x, legend_max_y-legend_height, "pl", title="#gamma#gamma"),
     SampleType.background: Legend(legend_max_x-legend_width, legend_max_y - (n_background+1)*legend_height, legend_max_x, legend_max_y-legend_height, "f"),
 }
 

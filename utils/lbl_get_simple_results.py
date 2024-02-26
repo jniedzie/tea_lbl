@@ -3,7 +3,9 @@ from lbl_helpers import input_aco_histograms
 from lbl_params import luminosity, luminosity_err, get_scale_factor
 from lbl_params import crossSections, nGenEvents, luminosity_err
 
-skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final"
+skim = "skimmed_lblSelections_final_andZDC2n"
+# skim = "skimmed_lblSelections_final_noZDC"
 
 
 def get_cross_section(n_events, n_events_err):
@@ -86,13 +88,11 @@ def main():
         print(f"{process}: {integral:.3f} +- {integral_errors[process]:.3f}")
     print("============================================================\n\n")
 
-    total_background = integrals["cep"]+integrals["qed"]
-    total_background_err = (
-        integral_errors["cep"]**2+integral_errors["qed"]**2)**(1/2)
+    total_background = integrals["cep"] + integrals["qed"]
+    total_background_err = (integral_errors["cep"]**2+integral_errors["qed"]**2)**(1/2)
 
     data_minus_background = integrals["collisionData"]-total_background
-    data_minus_background_err = (
-        integral_errors["collisionData"]**2+total_background_err**2)**(1/2)
+    data_minus_background_err = (integral_errors["collisionData"]**2+(total_background*0.18)**2)**(1/2)
 
     print("\n\n============================================================")
     print(
@@ -112,10 +112,9 @@ def main():
     print(f"Observed naive significance: {observed_significance:.2f}")
     print("============================================================\n\n")
 
-    cross_section, cross_section_stat, cross_section_syst = get_cross_section(
-        data_minus_background, data_minus_background_err)
-    cross_section_mc, cross_section_mc_stat, cross_section_mc_syst = get_cross_section(
-        integrals["lbl"], integral_errors["lbl"])
+    
+    cross_section, cross_section_stat, cross_section_syst = get_cross_section(data_minus_background, data_minus_background_err)
+    cross_section_mc, cross_section_mc_stat, cross_section_mc_syst = get_cross_section(integrals["lbl"], integral_errors["lbl"])
 
     print("\n\n============================================================")
     print(

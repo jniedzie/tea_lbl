@@ -113,6 +113,8 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
     histogramsHandler->Fill("unfoldingPhoton_pt", diphoton.Pt(), GetWeight(event));
     histogramsHandler->Fill("unfoldingPhoton_mass", diphoton.M(), GetWeight(event));
     histogramsHandler->Fill("unfoldingPhoton_absRap", fabs(diphoton.Rapidity()), GetWeight(event));
+    histogramsHandler->Fill("unfoldingPhoton_rap3", diphoton.Rapidity(), GetWeight(event));
+    histogramsHandler->Fill("unfoldingPhoton_rap4", diphoton.Rapidity(), GetWeight(event));
   }
 }
 
@@ -168,8 +170,8 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
   }
 
   if (electrons->size() == 2) {
-    float deltaPhi = GetPhiModulation(asElectron(electrons->at(0)), asElectron(electrons->at(1)));
-    histogramsHandler->Fill("genDielectron_deltaPhi", deltaPhi, GetWeight(event));
+    auto [deltaPhi, mod] = GetPhiModulation(asElectron(electrons->at(0)), asElectron(electrons->at(1)));
+    histogramsHandler->Fill("genDielectron_deltaPhi", deltaPhi, mod*GetWeight(event));
   }
 }
 
@@ -187,7 +189,7 @@ float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Electron> 
   return acoplanarity;
 }
 
-float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2) {
+pair<float, float> LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2) {
   TLorentzVector electron, positron;
   if (electron1->GetCharge() > 0) {
     positron = electron1->GetFourMomentum();
@@ -207,6 +209,7 @@ float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron
 
   if (deltaPhi > TMath::Pi()) deltaPhi = 2. * TMath::Pi() - deltaPhi;
 
+
   // bring delta phi between -pi and pi
   // if (deltaPhi > TMath::Pi()) deltaPhi = deltaPhi - 2. * TMath::Pi();
   // if (deltaPhi <= -TMath::Pi()) deltaPhi = deltaPhi + 2. * TMath::Pi();
@@ -214,7 +217,12 @@ float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron
   // // // Take the absolute value
   // deltaPhi = fabs(deltaPhi);
 
-  return deltaPhi;
+  // float mag = 1/fabs(deltaPhi/TMath::Pi()-0.5);
+  float mag = 1;
+
+  // info() << "deltaPhi: " << deltaPhi << " mag: " << mag << endl;
+
+  return {deltaPhi, mag};
 }
 
 void LbLHistogramsFiller::FillElectronHistograms(const shared_ptr<Event> event) {
@@ -225,20 +233,20 @@ void LbLHistogramsFiller::FillElectronHistograms(const shared_ptr<Event> event) 
   auto electron1 = asElectron(electrons->at(0));
   auto electron2 = asElectron(electrons->at(1));
   float acoplanarity = GetDielectronAcoplanarity(electron1, electron2);
-  float deltaPhi = GetPhiModulation(electron1, electron2);
+  auto [deltaPhi, mag] = GetPhiModulation(electron1, electron2);
   TLorentzVector dielectron = electron1->GetFourMomentum() + electron2->GetFourMomentum();
 
   histogramsHandler->Fill("dielectron_pt", dielectron.Pt(), GetWeight(event));
   histogramsHandler->Fill("dielectron_mass", dielectron.M(), GetWeight(event));
   histogramsHandler->Fill("dielectron_rapidity", dielectron.Rapidity(), GetWeight(event));
   histogramsHandler->Fill("dielectron_acoplanarity", acoplanarity, GetWeight(event));
-  histogramsHandler->Fill("dielectron_deltaPhi", deltaPhi, GetWeight(event));
+  histogramsHandler->Fill("dielectron_deltaPhi", deltaPhi, mag*GetWeight(event));
 
-  if (acoplanarity < 0.01) {
+  if (acoplanarity > 0.01) {
     histogramsHandler->Fill("dielectronSR_pt", dielectron.Pt(), GetWeight(event));
     histogramsHandler->Fill("dielectronSR_mass", dielectron.M(), GetWeight(event));
     histogramsHandler->Fill("dielectronSR_rapidity", dielectron.Rapidity(), GetWeight(event));
-    histogramsHandler->Fill("dielectronSR_deltaPhi", deltaPhi, GetWeight(event));
+    histogramsHandler->Fill("dielectronSR_deltaPhi", deltaPhi, mag*GetWeight(event));
 
     histogramsHandler->Fill("goodElectronSR_pt", electron1->Get("pt"), GetWeight(event));
     histogramsHandler->Fill("goodElectronSR_eta", electron1->Get("eta"), GetWeight(event));

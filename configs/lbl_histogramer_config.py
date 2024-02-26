@@ -7,18 +7,18 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-sample = "collisionData"
-# sample = "lbl"
+# sample = "collisionData"
+sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 # sample = "emptyBeams"
 
-# skim = "initial"
+skim = "initial"
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_allSelections_hadCrack"
-skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
@@ -26,7 +26,7 @@ inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
 # inputFilePath = "./skimmed_test.root"
 print(f"{inputFilePath=}")
 
-histogramsOutputFilePath = f"./{skim}_{sample}_histograms.root"
+histogramsOutputFilePath = f"../{skim}_{sample}_histograms.root"
 
 defaultHistParams = (
     # collection      variable          bins    xmin     xmax     dir
@@ -41,6 +41,29 @@ defaultHistParams = (
     ("electron", "PFChIso", 1000,    0,    10,     ""),
     ("electron", "PFPhoIso", 1000,    0,    10,     ""),
     ("electron", "PFNeuIso", 1000,    0,    10,     ""),
+
+    ("convertedPhoton", "et", 200,    0,       100,     ""),
+    ("convertedPhoton", "eta", 100,    -2.2,    2.2,     ""),
+    ("convertedPhoton", "phi", 100,    -3.14,    3.14,     ""),
+
+    ("unconvertedPhoton", "et", 200,    0,       100,     ""),
+    ("unconvertedPhoton", "eta", 100,    -2.2,    2.2,     ""),
+    ("unconvertedPhoton", "phi", 100,    -3.14,    3.14,     ""),
+
+    ("conversionElectron", "pt", 200,    0,       50,     ""),
+    ("conversionElectron", "eta", 100,    -2.2,    2.2,     ""),
+    ("conversionElectron", "phi", 100,    -3.14,    3.14,     ""),
+    ("conversionElectron", "nMissHits", 20,    0,    20,     ""),
+    ("conversionElectron", "hOverE", 100,    0,    0.5,     ""),
+    ("conversionElectron", "deltaEtaAtVertex", 100,    0,    0.5,     ""),
+    
+    ("unconversionElectron", "pt", 200,    0,       50,     ""),
+    ("unconversionElectron", "eta", 100,    -2.2,    2.2,     ""),
+    ("unconversionElectron", "phi", 100,    -3.14,    3.14,     ""),
+    ("unconversionElectron", "nMissHits", 20,    0,    20,     ""),
+    ("unconversionElectron", "hOverE", 100,    0,    0.5,     ""),
+    ("unconversionElectron", "deltaEtaAtVertex", 100,    0,    0.5,     ""),
+
 )
 
 histParams = (
@@ -48,6 +71,8 @@ histParams = (
     ("unfoldingPhoton", "pt", 5, 0, 1, ""),
     ("unfoldingPhoton", "mass", 5, 5, 25, ""),
     ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
+    ("unfoldingPhoton", "rap3", 3, -2.2, 2.2, ""),
+    ("unfoldingPhoton", "rap4", 4, -2.2, 2.2, ""),
 
     ("goodPhotonSR", "et", 200,    0,       100,     ""),
     ("goodPhotonSR", "eta", 12,    -2.2,    2.2,     ""),
@@ -74,18 +99,18 @@ histParams = (
     ("goodElectronSR", "pt", 200,    0,       100,     ""),
     ("goodElectronSR", "eta", 20,    -2.2,    2.2,     ""),
     ("goodElectronSR", "phi", 20,    -3.14,    3.14,     ""),
-    
+
     ("dielectron", "acoplanarity", 1000, 0, 1, ""),
     ("dielectron", "pt", 100, 0, 1, ""),
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
     ("dielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
-    
+
     ("dielectronSR", "pt", 100, 0, 1, ""),
     ("dielectronSR", "mass", 200, 0, 200, ""),
     ("dielectronSR", "rapidity", 100, -2.2, 2.2, ""),
     ("dielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
-    
+
     ("genDielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
 
     # calo
@@ -140,4 +165,23 @@ visualizationParams = {
     "towerFillStyle": 1001,
     "backgroundColor": ROOT.kWhite,
     "canvasSize": 8.0,
+}
+
+extraEventCollections = {
+    "convertedPhoton": {
+        "inputCollections": ("photon",),
+        "hasConversionTracks": True,
+    },
+    "unconvertedPhoton": {
+        "inputCollections": ("photon",),
+        "hasConversionTracks": False,
+    },
+    "conversionElectron": {
+        "inputCollections": ("electron",),
+        "conversionVeto": False,
+    },
+    "unconversionElectron": {
+        "inputCollections": ("electron",),
+        "conversionVeto": True,
+    },
 }

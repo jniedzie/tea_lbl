@@ -3,7 +3,7 @@ import ROOT
 
 from Logger import info, warn, fatal
 
-from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor
+from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, uncertainty_on_zero
 from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity, n_mass_bins
 from lbl_paths import processes, merged_histograms_path
 from lbl_paths import acoplanarity_histogram_name, mass_histogram_name
@@ -51,7 +51,7 @@ def load_histograms(skim):
                 type(input_aco_histograms[process]) is ROOT.TObject,
                 input_mass_histograms[process] is None,
                 type(input_mass_histograms[process]) is ROOT.TObject]):
-            fatal(f"Some histograms not found in file: {file_path}")
+            fatal(f"Some histograms for CEP normalization not found in file: {file_path}")
             exit()
 
     unsilence_root()
@@ -145,3 +145,25 @@ def get_alp_coupling(mass, cross_section):
     }
 
     return 10**(slope * math.log10(cross_section) + math.log10(interstect[mass]))
+
+
+def limit_histogram(hist, max_x):
+    # create a copy of the histogram, but cut at max_x. Keep bin width and min_x the same
+    min_x = hist.GetXaxis().GetXmin()
+    bin_width = hist.GetXaxis().GetBinWidth(1)
+    n_bins = int(max_x / bin_width)
+    new_hist = ROOT.TH1F(hist.GetName(), hist.GetTitle(), n_bins, min_x, max_x)
+    for i in range(1, n_bins + 1):
+        new_hist.SetBinContent(i, hist.GetBinContent(i))
+        new_hist.SetBinError(i, hist.GetBinError(i))
+    return new_hist
+
+
+def add_uncertainties_on_zero(histogram):
+    for i in range(1, histogram.GetNbinsX()):
+        if histogram.GetBinContent(i) != 0:
+            continue
+        histogram.SetBinError(i, uncertainty_on_zero)
+
+    return histogram
+

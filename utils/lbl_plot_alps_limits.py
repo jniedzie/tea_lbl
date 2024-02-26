@@ -191,14 +191,27 @@ def main():
     canvas.SetLogx()
     canvas.SetLogy()
 
+
     exp_graph_2sigma.Draw("A3")
     exp_graph_1sigma.Draw("3same")
     exp_graph.Draw("Lsame")
     obs_graph.Draw("Lsame")
 
+    exp_graph_2sigma.GetXaxis().SetTitleSize(0.05)
+    exp_graph_2sigma.GetYaxis().SetTitleSize(0.05)
+    exp_graph_2sigma.GetXaxis().SetLabelSize(0.04)
+    exp_graph_2sigma.GetYaxis().SetLabelSize(0.04)
+    exp_graph_2sigma.GetXaxis().SetTitleOffset(1.1)
+    exp_graph_2sigma.GetYaxis().SetTitleOffset(1.1)
+    
+    ROOT.gPad.SetLeftMargin(0.15)
+    ROOT.gPad.SetBottomMargin(0.15)
+
     exp_graph_2sigma.GetXaxis().SetTitle("m_{a} [GeV]")
     exp_graph_2sigma.GetYaxis().SetTitle(
         "#sigma_{pp #rightarrow a #rightarrow #gamma #gamma} [nb]")
+
+    exp_graph_2sigma.GetXaxis().SetMoreLogLabels()
 
     # set x and y axes limits
     exp_graph_2sigma.GetXaxis().SetLimits(5, 100)
