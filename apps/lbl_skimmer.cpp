@@ -73,7 +73,11 @@ int main(int argc, char **argv) {
   if (applyDiphotonPt) {
     cutFlowManager->RegisterCut("diphotonPt");
   }
-  if (applyZDC) cutFlowManager->RegisterCut("ZDC");
+  if (applyZDC) {
+    cutFlowManager->RegisterCut("ZDC+");
+    cutFlowManager->RegisterCut("ZDC-");
+    cutFlowManager->RegisterCut("ZDC");
+  }
   if (applyEtDelta) cutFlowManager->RegisterCut("etDelta");
 
   vector<string> eventsTreeNames;

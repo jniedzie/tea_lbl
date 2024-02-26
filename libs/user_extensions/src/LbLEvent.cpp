@@ -73,3 +73,13 @@ float LbLEvent::GetCosThetaStar()
   return costhetastarCS;
 
 }
+
+float LbLEvent::GetDiphotonAcoplanarity() {
+    auto photons = event->GetCollection("goodPhoton");
+    if(photons->size() != 2) return -1;
+
+    double deltaPhi = asPhoton(photons->at(0))->GetFourMomentum().DeltaPhi(asPhoton(photons->at(1))->GetFourMomentum());
+    double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
+
+    return acoplanarity;
+  }

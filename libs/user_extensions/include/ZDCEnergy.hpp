@@ -19,6 +19,10 @@ class ZDCEnergy {
   float GetEnergy() { return Get("energy");}
   int GetSide() { return Get("zSide");}
 
+  float GetSaturation() { return Get("saturation");}
+  int GetSection() { return Get("section");}
+  int GetChannel() { return Get("channel");}
+
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
 };

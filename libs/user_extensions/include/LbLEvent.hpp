@@ -15,6 +15,7 @@ class LbLEvent {
 
   float GetDeltaEt();
   float GetCosThetaStar();
+  float GetDiphotonAcoplanarity();
 
  private:
   std::shared_ptr<Event> event;

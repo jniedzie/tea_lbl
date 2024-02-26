@@ -175,7 +175,10 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
     }
   }
 
-  if (totalEnergyPlus > eventCuts.at("max_ZDCenergyPerSide") || totalEnergyMinus > eventCuts.at("max_ZDCenergyPerSide")) return false;
+  if ( totalEnergyPlus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC+");
+  if ( totalEnergyMinus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC-");
+
+  if (totalEnergyPlus > eventCuts.at("max_ZDCenergyPerSide") && totalEnergyMinus > eventCuts.at("max_ZDCenergyPerSide")) return false;
   cutFlowManager->UpdateCutFlow("ZDC");
 
   return true;
