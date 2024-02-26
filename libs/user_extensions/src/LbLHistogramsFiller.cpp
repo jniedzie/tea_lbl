@@ -86,11 +86,17 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
   histogramsHandler->Fill("diphoton_mass200", diphoton.M(), GetWeight(event));
   histogramsHandler->Fill("diphoton_mass", diphoton.M(), GetWeight(event));
   histogramsHandler->Fill("diphoton_rapidity", diphoton.Rapidity(), GetWeight(event));
-  histogramsHandler->Fill("diphoton_acoplanarity200", acoplanarity, GetWeight(event));
-  histogramsHandler->Fill("diphoton_acoplanarity300", acoplanarity, GetWeight(event));
-  histogramsHandler->Fill("diphoton_acoplanarity400", acoplanarity, GetWeight(event));
-  histogramsHandler->Fill("diphoton_acoplanarity500", acoplanarity, GetWeight(event));
-  histogramsHandler->Fill("diphoton_acoplanarity600", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity20", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity25", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity30", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity35", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity40", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity45", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity50", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity55", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity60", acoplanarity, GetWeight(event));
+
+  histogramsHandler->Fill("diphoton_acoplanarity1", acoplanarity, GetWeight(event));
 
   histogramsHandler->Fill("diphoton_seedTime", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
 
