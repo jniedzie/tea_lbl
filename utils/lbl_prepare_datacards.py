@@ -8,8 +8,9 @@ import ROOT
 import os
 
 # skim = "skimmed_lblSelections_final"
-# skim = "skimmed_lblSelections_final_andZDC2n"
-skim = "skimmed_lblSelections_final_andZDC"
+# skim = "skimmed_lblSelections_final_andZDC"
+# skim = "skimmed_lblSelections_final_andZDC3n"
+skim = "skimmed_lblSelections_final_andZDC2n"
 
 output_path_aco = f"../combine/significance_histograms_{skim}"
 output_path_aco += f"_nBins{n_acoplanarity_bins}.root"
@@ -17,36 +18,37 @@ output_path_aco += f"_nBins{n_acoplanarity_bins}.root"
 output_path_mass = f"../combine/limits_histograms_{skim}"
 output_path_mass += f"_nBins{n_mass_bins}.root"
 
+max_aco = 0.1
+n_events_sampling = 500
+transition_point = 0.026
 
 def sample_from_fit(hist):
-    # set seed based on time
     ROOT.gRandom.SetSeed(0)
-
-    # transition_point = 0.025
-    transition_point = 0.026
+    
     formula = f"[p0]*(x<={transition_point})+(exp([p1]+[p2]*x))*(x>{transition_point})"
     # formula = f"[p0]*(x<={transition_point})+([p0]*exp([p2]*(x-{transition_point})))*(x>{transition_point})"
-
-    fit = ROOT.TF1("fit", formula, 0, 0.1)
+    fit = ROOT.TF1("fit", formula, 0, max_aco)
     fit.SetParameters(7, 3, -31)
-
     hist.Fit(fit, "WW")
 
-    # create a new histogram with the same binning as hist
     new_hist = hist.Clone()
     new_hist.Reset()
-
-    new_hist.FillRandom("fit", 500)
-
+    new_hist.FillRandom("fit", n_events_sampling)
+    
+    for i in range(1, new_hist.GetNbinsX()+1):
+        new_hist.SetBinContent(i, new_hist.GetBinContent(i)/new_hist.GetBinWidth(i))
+        new_hist.SetBinError(i, new_hist.GetBinError(i)/new_hist.GetBinWidth(i))
+    
     new_hist.Scale(hist.Integral()/new_hist.Integral())
 
     canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
     hist.SetMarkerColor(ROOT.kRed)
     hist.SetMarkerStyle(20)
     hist.SetLineColor(ROOT.kRed)
-    hist.Draw("PE")
+    hist.Draw("PE") 
     
     hist.GetXaxis().SetRangeUser(0, 0.2)
+    hist.GetYaxis().SetRangeUser(0, 10)
     
     new_hist.SetMarkerColor(ROOT.kBlack)
     new_hist.SetMarkerStyle(20)
@@ -86,13 +88,13 @@ def save_output_histograms():
         input_aco_histograms[process].SetName(name)
         input_mass_histograms[process].SetName(name)
 
-        hist = limit_histogram(input_aco_histograms[process], 0.1)
+        # hist = limit_histogram(input_aco_histograms[process], max_aco)
 
         print(f"saving {name}")
 
         output_file_aco.cd()
-        # input_aco_histograms[process].Write()
-        hist.Write()
+        input_aco_histograms[process].Write()
+        # hist.Write()
 
         output_file_mass.cd()
         input_mass_histograms[process].Write()
@@ -146,9 +148,9 @@ def save_datacard():
     for process in processes:
         if process not in input_aco_histograms:
             continue
-        hist = limit_histogram(input_aco_histograms[process], 0.1)
-
-        rates[process] = hist.Integral()
+        # hist = limit_histogram(input_aco_histograms[process], max_aco)
+        # rates[process] = hist.Integral()
+        rates[process] = input_aco_histograms[process].Integral()
 
     output_file = ""
     output_file = add_datacard_header(output_file, rates["collisionData"])
@@ -180,14 +182,29 @@ def save_datacard():
         outfile.write(output_file)
 
 
+# def get_data_background_chi2():
+#     data = input_aco_histograms["collisionData"]
+#     backgrounds = [input_aco_histograms["qed"], input_aco_histograms["lbl"], input_aco_histograms["cep"]]
+#     chi2 = 0
+#     for i in range(1, data.GetNbinsX()+1):
+#         data_bin = data.GetBinContent(i)
+#         background_bin = backgrounds[0].GetBinContent(i) + backgrounds[1].GetBinContent(i) + backgrounds[2].GetBinContent(i)    
+        
+#         if data_bin != 0:
+#             chi2 += (data_bin - background_bin)**2 / data_bin
+#     return chi2
+
 def main():
     info(f"Storing datacard/root file in: {output_path_aco}")
     load_histograms(skim)
     
     # replace the QED histogram with sampling from a fit
-    input_aco_histograms["qed"] = sample_from_fit(input_aco_histograms["qed"])
+    # input_aco_histograms["qed"] = sample_from_fit(input_aco_histograms["qed"])
     
     save_output_histograms()
+    
+    # chi2 = get_data_background_chi2()
+    # print(f"{chi2=}")
 
     save_datacard()
 
