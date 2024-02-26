@@ -3,8 +3,8 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 samples = (
     "collisionData",
     "lbl",
-    # "cep",
-    # "qed",
+    "cep",
+    "qed",
     
     # "lbl_noTrigger",
     # "qed_noTrigger",
@@ -29,9 +29,9 @@ sample_path = ""
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC"
 # skim = "skimmed_lblSelections_final_andZDC3n"
-# skim = "skimmed_lblSelections_final_andZDC2n"
+skim = "skimmed_lblSelections_final_andZDC2n"
 # skim = "skimmed_lblSelections_final_noZDC"
-skim = "skimmed_lblSelections_onlyNee"
+# skim = "skimmed_lblSelections_onlyNee"
 
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
@@ -41,9 +41,9 @@ skim = "skimmed_lblSelections_onlyNee"
 # output_dir = f"{base_path}/ntuples/{sample_path}/initial/"
 
 # for skimming
-# input_directory = f"{base_path}/ntuples/{sample_path}/initial/"
-# output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"
+input_directory = f"{base_path}/ntuples/{sample_path}/initial/"
+output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"
 
 # for histogramming
-input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
-output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"
+# input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
+# output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"

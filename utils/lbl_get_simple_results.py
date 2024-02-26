@@ -4,7 +4,8 @@ from lbl_params import luminosity, luminosity_err, get_scale_factor
 from lbl_params import crossSections, nGenEvents, luminosity_err
 
 # skim = "skimmed_lblSelections_final"
-skim = "skimmed_lblSelections_final_andZDC2n"
+# skim = "skimmed_lblSelections_final_andZDC2n"
+skim = "skimmed_lblSelections_final_andZDC3n"
 # skim = "skimmed_lblSelections_final_noZDC"
 
 
