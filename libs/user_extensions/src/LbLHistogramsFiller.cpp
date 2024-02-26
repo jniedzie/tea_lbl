@@ -96,7 +96,20 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
   histogramsHandler->Fill("diphoton_acoplanarity55", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity60", acoplanarity, GetWeight(event));
 
-  histogramsHandler->Fill("diphoton_acoplanarity1", acoplanarity, GetWeight(event));
+  auto hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity1");
+  float binWidth1 = hist->GetBinWidth(1);
+  float binWidth = hist->GetBinWidth(hist->GetXaxis()->FindFixBin(acoplanarity));
+  histogramsHandler->Fill("diphoton_acoplanarity1", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+
+  hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity2");
+  binWidth1 = hist->GetBinWidth(1);
+  binWidth = hist->GetBinWidth(hist->GetXaxis()->FindFixBin(acoplanarity));
+  histogramsHandler->Fill("diphoton_acoplanarity2", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+
+  hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity3");
+  binWidth1 = hist->GetBinWidth(1);
+  binWidth = hist->GetBinWidth(hist->GetXaxis()->FindFixBin(acoplanarity));
+  histogramsHandler->Fill("diphoton_acoplanarity3", acoplanarity, GetWeight(event)*binWidth1/binWidth);
 
   histogramsHandler->Fill("diphoton_seedTime", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
 

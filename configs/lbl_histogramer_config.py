@@ -7,8 +7,8 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-# sample = "collisionData"
-sample = "lbl"
+sample = "collisionData"
+# sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 # sample = "emptyBeams"
@@ -18,7 +18,8 @@ sample = "lbl"
 # skim = "skimmed_allSelections"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_allSelections_hadCrack"
-skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final"
+skim = "skimmed_lblSelections_final_andZDC3n"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
@@ -83,15 +84,15 @@ histParams = (
     ("diphoton", "mass", 10, 0, 50, ""),
     ("diphoton", "mass200", 200, 0, 200, ""),
     ("diphoton", "mass100", 100, 0, 200, ""),
-    ("diphoton", "acoplanarity20", 20, 0, 1, ""),
-    ("diphoton", "acoplanarity25", 25, 0, 1, ""),
-    ("diphoton", "acoplanarity30", 30, 0, 1, ""),
-    ("diphoton", "acoplanarity35", 35, 0, 1, ""),
-    ("diphoton", "acoplanarity40", 40, 0, 1, ""),
-    ("diphoton", "acoplanarity45", 45, 0, 1, ""),
-    ("diphoton", "acoplanarity50", 50, 0, 1, ""),
-    ("diphoton", "acoplanarity55", 55, 0, 1, ""),
-    ("diphoton", "acoplanarity60", 60, 0, 1, ""),
+    ("diphoton", "acoplanarity20", 20, 0, 0.1, ""),
+    ("diphoton", "acoplanarity25", 25, 0, 0.1, ""),
+    ("diphoton", "acoplanarity30", 30, 0, 0.1, ""),
+    ("diphoton", "acoplanarity35", 35, 0, 0.1, ""),
+    ("diphoton", "acoplanarity40", 40, 0, 0.1, ""),
+    ("diphoton", "acoplanarity45", 45, 0, 0.1, ""),
+    ("diphoton", "acoplanarity50", 50, 0, 0.1, ""),
+    ("diphoton", "acoplanarity55", 55, 0, 0.1, ""),
+    ("diphoton", "acoplanarity60", 60, 0, 0.1, ""),
 
     ("diphotonSR", "pt", 5, 0, 1, ""),
     ("diphotonSR", "rapidity", 12, -2.2, 2.2, ""),
@@ -142,16 +143,17 @@ histParams = (
     ("eventSR3", "cosThetaStar", 3, 0, 1, ""),
 )
 
-aco_binning = []
-
-# fill aco_binning with 5 numbers from 0 to 0.01, then 5 numbers from 0.01 to 0.1
-aco_binning.extend([0.002 * i for i in range(5)])
-aco_binning.extend([0.01 + 0.01 * i for i in range(10)])
-
-print(f"{aco_binning=}")
-
 irregularHistParams = (
-    ("diphoton", "acoplanarity1", aco_binning, ""),
+    ("diphoton", "acoplanarity1", 
+     [0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1],
+     ""),
+    ("diphoton", "acoplanarity2", 
+     [0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.018, 0.026, 0.034, 0.042, 0.050, 0.075, 0.1],
+     ""),
+    
+    ("diphoton", "acoplanarity3", 
+     [0.0, 0.002, 0.004, 0.01, 0.025, 0.04, 0.055, 0.07, 0.1],
+     ""),
 )
 
 histParams2D = (

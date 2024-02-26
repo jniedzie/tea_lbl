@@ -11,14 +11,14 @@ from lbl_paths import base_path, processes
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_qedSelections_noZDC"
 # skim = "skimmed_lblSelections_final"
-skim = "skimmed_lblSelections_final_andZDC"
-# skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC"
+skim = "skimmed_lblSelections_final_andZDC3n"
 # skim = "skimmed_lblSelections_final_andZDC2n"
 # skim = "skimmed_lblSelections_final_noZDC"
 
 # output_path = "../plots/lbl_distributions/"
-output_path = "../plots/lbl_distributions_andZDC/"
-# output_path = "../plots/lbl_distributions_andZDC3n/"
+# output_path = "../plots/lbl_distributions_andZDC/"
+output_path = "../plots/lbl_distributions_andZDC3n/"
 # output_path = "../plots/lbl_distributions_andZDC2n/"
 # output_path = "../plots/lbl_distributions_withAlps/"
 # output_path = "../plots/lbl_distributions_noZDC/"
@@ -165,12 +165,15 @@ histograms = (
     Histogram("goodPhotonSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, y_scale*15, "#phi^{#gamma}", y_label, "", lbl_error),
     Histogram("goodPhotonSR_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, y_scale*20, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
 
-    Histogram("diphoton_acoplanarity200", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
-    Histogram("diphoton_acoplanarity300", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
-    Histogram("diphoton_acoplanarity400", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
-    Histogram("diphoton_acoplanarity600", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity20", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity30", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity40", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity60", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     
-    Histogram("diphoton_acoplanarity500", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity50", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity1", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity2", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity3", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     
     Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "y^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 70, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
