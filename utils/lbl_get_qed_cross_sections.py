@@ -2,12 +2,17 @@ from lbl_params import luminosity, luminosity_err, get_scale_factor
 
 import ROOT
 
-events_ZDC = 19809  # with ZDC cut
+events_ZDC = 19689  # with ZDC cut
 events_noZDC = 20161  # no ZDC cut
 
 Eff = 0.0717
 Eff_Error = 0.000782
 
+input_path = "../utils/output_ZDC.root"
+
+xnxn_input_path = "../utils/output_new.root"
+# xnxn_input_path = "../utils/output_ZDC0.9scaled.root"
+# xnxn_input_path = "../utils/output_ZDC1.1scaled.root"
 
 def get_cross_section(n_events, n_events_err):
     scale_factor, sf_error = get_scale_factor(photon=False)
@@ -83,28 +88,183 @@ def get_xnxn_cross_section_histogram(input_hist, name):
 
     bin_labels = {
         1: "0n0n",
-        2: "0nXn",
+        2: "0nXn_0n0n",
         3: "0n1n",
-        4: "1nXn",
+        4: "1nXn_0n1n",
         5: "1n1n",
-        6: "XnXn",
+        6: "Inclusive",
     }
+
+    data_error = 0.03
+
+    events = {}
 
     for i in range(1, 7):
         index = bin_mapping[i]
-        # index = i
-        
+        label = bin_labels[index]
+
         n_events = input_hist.GetBinContent(index)
+        
+        print(f"{label}: {n_events:.0f}")
+        
         n_events_err = input_hist.GetBinError(index)
         value, stat, syst = get_cross_section(n_events, n_events_err)
 
         print(
-            f"{bin_labels[index]} &  ${value/1000:.1f} \pm {stat/1000:.1f}~(stat) \pm {syst/1000:.1f}~(syst) \mu b$ \\\\")
+            f"{label} &  ${value/1000:.3f} \pm {stat/1000:.1f}~(stat) \pm {syst/1000:.1f}~(syst) \mu b$ \\\\")
 
-        err = (stat**2 + syst**2)**0.5
+        # err = (stat**2 + syst**2)**0.5
+        err = data_error * value
         output_hist.SetBinContent(i, value)
         output_hist.SetBinError(i, err)
-        output_hist.GetXaxis().SetBinLabel(i, bin_labels[index])
+        output_hist.GetXaxis().SetBinLabel(i, label)
+
+        events[label] = [n_events, n_events_err]
+
+    events["0nXn"] = (events["0nXn_0n0n"][0] - events["0n0n"][0],
+                      (events["0nXn_0n0n"][1]**2 + events["0n0n"][1]**2)**0.5)
+
+    events["1nXn"] = (events["1nXn_0n1n"][0] - events["0n1n"][0],
+                      (events["1nXn_0n1n"][1]**2 + events["0n1n"][1]**2)**0.5)
+
+    events["XnXn"] = (events["Inclusive"][0] -
+                      events["0nXn_0n0n"][0], events["0nXn_0n0n"][1])
+
+    superchic_ratios = {
+        "0n0n": (0.766, 0.0096),
+        "0n1n": (2 * 0.032, 2 * 0.00039),
+        "1n1n": (0.0045, 0.00006),
+        "0nXn": (2 * 0.093, 2 * 0.0011),
+        "XnXn": (0.0485, 0.00061),
+    }
+
+    # old, read directly from plots
+    # starlight_ratios = {
+    #     "0n0n": (0.62, 0.01),
+    #     "1n1n": (0.01, 0.01),
+    #     "0nXn": (0.32, 0.01),
+    #     "XnXn": (0.06, 0.01),
+    # }
+
+    # new, from Oliver
+    starlight_ratios = {
+        "0n0n": (0.745, 0.01),
+        "1n1n": (0.0037, 0.001),
+        "0nXn": (0.191, 0.01),
+        "XnXn": (0.059, 0.005),
+    }
+
+    nice_labels = {
+        "0nXn_0n0n": "0nXn + Xn0n + 0n0n",
+        "1nXn_0n1n": "1nXn + Xn1n + 0n1n + 1n0n",
+        "0n1n": "0n1n + 1n0n",
+        "0nXn": "0nXn + Xn0n",
+        "1nXn": "1nXn + Xn1n",
+    }
+
+    # sort events by first value, decreasing
+    events = dict(
+        sorted(events.items(), key=lambda item: item[1][0], reverse=True))
+
+    ratio_hist_data = ROOT.TH1D("ratio_data", "ratio_data", 8, 0, 8)
+    ratio_hist_superchic = ROOT.TH1D(
+        "ratio_superchic", "ratio_superchic", 8, 0, 8)
+    ratio_hist_starlight = ROOT.TH1D(
+        "ratio_starlight", "ratio_starlight", 8, 0, 8)
+
+    print("\n\n============================================================")
+    for i, (key, value) in enumerate(events.items()):
+        ratio = value[0] / events["Inclusive"][0]
+        error = ratio * ((value[1]/value[0])**2 + (events["Inclusive"][1]/events["Inclusive"][0])**2)**0.5
+
+        # error = value[1]
+
+        label = nice_labels[key] if key in nice_labels else key
+
+        print(f"{label} & ${100*ratio:.3f} \pm {100*error:.1f} $", end="")
+
+        if key in superchic_ratios:
+            print(
+                f" & ${100*superchic_ratios[key][0]:.2f} \pm {100*superchic_ratios[key][1]:.2f} $", end="")
+        else:
+            print(" & -- ", end="")
+
+        if key in starlight_ratios:
+            print(
+                f" & ${100*starlight_ratios[key][0]:.2f} \pm {100*starlight_ratios[key][1]:.2f} $\\\\")
+        else:
+            print(" & -- \\\\")
+
+        ratio_hist_data.SetBinContent(i, ratio)
+        ratio_hist_data.SetBinError(i, error)
+        ratio_hist_superchic.GetXaxis().SetBinLabel(i, label)
+
+        if key in superchic_ratios:
+            ratio_hist_superchic.SetBinContent(i, superchic_ratios[key][0])
+            ratio_hist_superchic.SetBinError(i, superchic_ratios[key][1])
+
+        if key in starlight_ratios:
+            ratio_hist_starlight.SetBinContent(i, starlight_ratios[key][0])
+            ratio_hist_starlight.SetBinError(i, starlight_ratios[key][1])
+
+    canvas_ratios = ROOT.TCanvas("ratios", "ratios", 800, 600)
+    canvas_ratios.cd()
+    ROOT.gStyle.SetOptStat(0)
+    canvas_ratios.SetLogy()
+    ROOT.gPad.SetLeftMargin(0.15)
+    ROOT.gPad.SetBottomMargin(0.25)
+
+    ratio_hist_superchic.SetTitle("")
+    ratio_hist_superchic.SetMarkerStyle(21)
+    ratio_hist_superchic.SetMarkerSize(1.2)
+    ratio_hist_superchic.SetMarkerColor(ROOT.kRed+2)
+    ratio_hist_superchic.SetLineColor(ROOT.kRed+2)
+    ratio_hist_superchic.GetYaxis().SetTitle("De-excitation ratio to inclusive")
+    ratio_hist_superchic.GetXaxis().SetLabelSize(0.06)
+    ratio_hist_superchic.GetXaxis().SetLabelOffset(0.01)
+    ratio_hist_superchic.GetYaxis().SetLabelSize(0.05)
+    ratio_hist_superchic.GetYaxis().SetTitleSize(0.06)
+    ratio_hist_superchic.GetYaxis().SetLabelOffset(0.01)
+
+    ratio_hist_superchic.Draw("PE")
+
+    ratio_hist_starlight.SetMarkerStyle(21)
+    ratio_hist_starlight.SetMarkerSize(1.2)
+    ratio_hist_starlight.SetMarkerColor(ROOT.kGreen+2)
+    ratio_hist_starlight.SetLineColor(ROOT.kGreen+2)
+    ratio_hist_starlight.Draw("PE SAME")
+
+    ratio_hist_data.SetMarkerStyle(20)
+    ratio_hist_data.SetMarkerSize(1.0)
+    ratio_hist_data.SetMarkerColor(ROOT.kBlack)
+    ratio_hist_data.SetLineColor(ROOT.kBlack)
+    ratio_hist_data.Draw("PE same")
+
+    legend = ROOT.TLegend(0.5, 0.7, 0.9, 0.9)
+    legend.AddEntry(ratio_hist_data, "Data", "PE")
+    legend.AddEntry(ratio_hist_superchic, "SuperChic", "PE")
+    legend.AddEntry(ratio_hist_starlight, "Starlight", "PE")
+    legend.Draw()
+
+    # Add CMS Preliminary text at the top of the plot
+    cms_text = ROOT.TLatex()
+    cms_text.SetTextFont(61)
+    cms_text.SetTextSize(0.05)
+    cms_text.DrawLatexNDC(0.17, 0.92, "CMS")
+    cms_text.SetTextFont(52)
+    cms_text.DrawLatexNDC(0.17+0.08, 0.92, "Preliminary")
+
+    # add the luminosity and energy information at the top-right of the plot
+    lumi_text = ROOT.TLatex()
+    lumi_text.SetTextAlign(31)
+    lumi_text.SetTextSize(0.04)
+    lumi_text.SetTextFont(42)
+    lumi_text.DrawLatexNDC(
+        0.88, 0.92, f"{luminosity/1000:.2f} nb^{{-1}} (PbPb @ 5.02 TeV)")
+
+    canvas_ratios.SaveAs("../plots/qed_ratios.pdf")
+
+    print("============================================================\n\n")
 
     output_hist.Scale(1e-3)
     output_hist.SetTitle("")
@@ -112,7 +272,6 @@ def get_xnxn_cross_section_histogram(input_hist, name):
     output_hist.GetYaxis().SetTitle(
         "#sigma(#gamma#gamma#rightarrow e^{+}e^{-}+XnYn) [#mub]")
 
-    
     output_hist.SetMarkerStyle(21)
     output_hist.SetMarkerSize(1.0)
     output_hist.SetMarkerColor(ROOT.kCyan+2)
@@ -152,7 +311,8 @@ def save_canvas(hist, title):
     lumi_text.SetTextAlign(31)
     lumi_text.SetTextSize(0.04)
     lumi_text.SetTextFont(42)
-    lumi_text.DrawLatexNDC(0.88, 0.92, f"{luminosity/1000:.2f} nb^{{-1}} (PbPb @ 5.02 TeV)")
+    lumi_text.DrawLatexNDC(
+        0.88, 0.92, f"{luminosity/1000:.2f} nb^{{-1}} (PbPb @ 5.02 TeV)")
 
     ROOT.gPad.GetFrame().SetLineWidth(2)
     ROOT.gPad.GetFrame().SetBorderSize(2)
@@ -183,7 +343,7 @@ def main():
     print(f"{sigma_noZDC_stat/1000:.1f} (stat) +/- {sigma_noZDC_syst/1000:.1f} (syst) nb")
     print("============================================================\n\n")
 
-    qed_zdc_file = ROOT.TFile.Open("../utils/output_ZDC.root")
+    qed_zdc_file = ROOT.TFile.Open(input_path)
 
     hist_max = qed_zdc_file.Get("hZDC_sum_peak_maxData")
     hist_sum = qed_zdc_file.Get("hZDC_sum_peakData")
@@ -191,24 +351,24 @@ def main():
     # hist_max = qed_zdc_file.Get("hZDC_sum_maxData")
     # hist_sum = qed_zdc_file.Get("hZDC_sumData")
 
-    hist_cross_section_max = get_cross_section_histogram(hist_max, "max")
-    hist_cross_section_sum = get_cross_section_histogram(hist_sum, "sum")
+    # hist_cross_section_max = get_cross_section_histogram(hist_max, "max")
+    # hist_cross_section_sum = get_cross_section_histogram(hist_sum, "sum")
 
-    save_canvas(
-        hist_cross_section_max,
-        "QED cross-section, X = max_{n}(ZDC^{+}, ZDC^{-})",
-    )
-    save_canvas(
-        hist_cross_section_sum,
-        "QED cross-section, X = #Sigma_{n}(ZDC^{+}, ZDC^{-})",
-    )
+    # save_canvas(
+    #     hist_cross_section_max,
+    #     "QED cross-section, X = max_{n}(ZDC^{+}, ZDC^{-})",
+    # )
+    # save_canvas(
+    #     hist_cross_section_sum,
+    #     "QED cross-section, X = #Sigma_{n}(ZDC^{+}, ZDC^{-})",
+    # )
 
-    qed_xnxn_file = ROOT.TFile.Open("../utils/output_new.root")
+    qed_xnxn_file = ROOT.TFile.Open(xnxn_input_path)
     hist_xnxn = qed_xnxn_file.Get("hZDC_xnxnData")
     hist_xnxn_cross_section = get_xnxn_cross_section_histogram(
         hist_xnxn, "xnxn")
 
-    save_canvas(hist_xnxn_cross_section,"")
+    save_canvas(hist_xnxn_cross_section, "")
 
 
 if __name__ == "__main__":
