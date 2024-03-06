@@ -6,7 +6,10 @@ from lbl_params import crossSections, nGenEvents, luminosity_err
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC2n"
 skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC"
 # skim = "skimmed_lblSelections_final_noZDC"
+# skim = "skimmed_lblSelections_finalXn1n"
+# skim = "skimmed_lblSelections_finalXn0n"
 
 
 def get_cross_section(n_events, n_events_err):
@@ -75,8 +78,7 @@ def main():
     integral_errors = {}
 
     for process, histogram in input_aco_histograms.items():
-        integrals[process] = histogram.Integral(
-            1, histogram.FindFixBin(0.01)-1)
+        integrals[process] = histogram.Integral(1, histogram.FindFixBin(0.01))
 
         integral_errors[process] = 0
         for i in range(1, histogram.FindFixBin(0.01)):

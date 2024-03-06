@@ -1,8 +1,9 @@
 # event cuts
 eventCuts = {
-    # "max_ZDCenergyPerSide": 10000.0,  # 4n
-    # "max_ZDCenergyPerSide": 7000.0,  # 3n
-    "max_ZDCenergyPerSide": 4000.0,  # 2n
+    # "max_ZDCenergyPerSide": 10000.0,  # <4n
+    "max_ZDCenergyPerSide": 7000.0,  # <3n
+    # "max_ZDCenergyPerSide": 4000.0,  # <2n
+    # "max_ZDCenergyPerSide": 2000.0,  # <1n
 
     "min_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
     "max_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
@@ -155,19 +156,20 @@ electronTrackMatching = {
 luminosity = 1647.180726  # μb^-1, with ZDC
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 
-# luminosity = 1609.910015010; // from brilcalc, 1/μb
-# luminosity = 1639.207543; // from Ruchi, 1/μb
-
 reference_alp_cross_section = 10e-3  # μb
 
 # QED needs to be scaled up, depending on the ZDC cut
 # qed_scaling = 1.0  # 4n OR
-qed_scaling = 2.3  # 2n AND
-# qed_scaling = 2.4  # 3n AND
+# qed_scaling = 2.2  # 1n AND
+# qed_scaling = 2.3  # 2n AND
+qed_scaling = 2.7  # 3n AND
 # qed_scaling = 2.5  # 4n AND
+# qed_scaling = 1.0  # Xn0n
 
 # LbL may be scaled up due to NLO corrections
-lbl_scaling = 1.05
+lbl_scaling = 1.05  # inclusive
+# lbl_scaling = 1.05 * 0.62  # 0n0n
+# lbl_scaling = 1.05 * (0.62 + 0.10 + 0.01)  # 0n0n + 0n1n + 1n0n + 1n1n
 
 crossSections = {
     "lbl": 2.59 * lbl_scaling,  # μb
@@ -250,13 +252,18 @@ nGenEvents = {
     "alps_90": 449000,
 }
 
-cep_scaling_min_acoplanarity = 0.016
 
 #  significance & limits parameters
-# n_acoplanarity_bins = 500
-# n_acoplanarity_bins = 35
-n_acoplanarity_bins = 1
+cep_scaling_min_acoplanarity = 0.015
+n_acoplanarity_bins = 40
 n_mass_bins = 200
+
+do_qed_sampling = True
+qed_sampling_n_events = 400
+qed_sampling_transition_point = 0.026
+qed_sampling_fit_max_aco = 0.2
+
+do_lbl_sampling = False
 
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
