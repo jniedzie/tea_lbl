@@ -5,7 +5,7 @@ samples = (
     "lbl",
     "cep",
     "qed",
-    
+
     # "lbl_noTrigger",
     # "qed_noTrigger",
 
@@ -26,10 +26,13 @@ samples = (
 sample_path = ""
 
 # skim = "initial"
+# skim = "skimmed_lblSelections_finalXn0n"
+# skim = "skimmed_lblSelections_finalXn1n"
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC"
-# skim = "skimmed_lblSelections_final_andZDC3n"
-skim = "skimmed_lblSelections_final_andZDC2n"
+skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC2n"
+# skim = "skimmed_lblSelections_final_andZDC1n"
 # skim = "skimmed_lblSelections_final_noZDC"
 # skim = "skimmed_lblSelections_onlyNee"
 
@@ -47,3 +50,9 @@ skim = "skimmed_lblSelections_final_andZDC2n"
 # for histogramming
 input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
 output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"
+
+# input_output_file_list = (
+#     (f"{base_path}/ntuples/{sample_path}/merged_{skim}.root",
+#      f"{base_path}/ntuples/{sample_path}/merged_{skim}_histograms.root"
+#      ),
+# )

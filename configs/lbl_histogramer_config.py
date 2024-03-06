@@ -1,31 +1,31 @@
 from scale_factors_config import *
 from lbl_params import *
 import ROOT
+import numpy as np
 
 nEvents = -1
 printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-sample = "collisionData"
+# sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
-# sample = "qed"
+sample = "qed"
 # sample = "emptyBeams"
 
 # skim = "initial"
 # skim = "skimmed_allSelections_photonEt2p0"
 # skim = "skimmed_allSelections"
-# skim = "skimmed_qedSelections"
+skim = "skimmed_qedSelections"
 # skim = "skimmed_allSelections_hadCrack"
 # skim = "skimmed_lblSelections_final"
-skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC3n"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
 # inputFilePath = "./renamed_test.root"
 # inputFilePath = "./skimmed_test.root"
-print(f"{inputFilePath=}")
 
 histogramsOutputFilePath = f"../{skim}_{sample}_histograms.root"
 
@@ -57,7 +57,7 @@ defaultHistParams = (
     ("conversionElectron", "nMissHits", 20,    0,    20,     ""),
     ("conversionElectron", "hOverE", 100,    0,    0.5,     ""),
     ("conversionElectron", "deltaEtaAtVertex", 100,    0,    0.5,     ""),
-    
+
     ("unconversionElectron", "pt", 200,    0,       50,     ""),
     ("unconversionElectron", "eta", 100,    -2.2,    2.2,     ""),
     ("unconversionElectron", "phi", 100,    -3.14,    3.14,     ""),
@@ -75,9 +75,9 @@ histParams = (
     ("unfoldingPhoton", "rap3", 3, -2.2, 2.2, ""),
     ("unfoldingPhoton", "rap4", 4, -2.2, 2.2, ""),
 
-    ("goodPhotonSR", "et", 200,    0,       100,     ""),
-    ("goodPhotonSR", "eta", 12,    -2.2,    2.2,     ""),
-    ("goodPhotonSR", "phi", 12,    -3.14,    3.14,     ""),
+    ("goodPhotonSR", "et", 5,    2,       8,     ""),
+    ("goodPhotonSR", "eta", 5,    -2.2,    2.2,     ""),
+    ("goodPhotonSR", "phi", 6,    -3.14,    3.14,     ""),
 
     ("diphoton", "pt", 5, 0, 1, ""),
     ("diphoton", "rapidity", 12, -2.2, 2.2, ""),
@@ -87,6 +87,9 @@ histParams = (
     ("diphoton", "acoplanarity20", 20, 0, 0.1, ""),
     ("diphoton", "acoplanarity25", 25, 0, 0.1, ""),
     ("diphoton", "acoplanarity30", 30, 0, 0.1, ""),
+    ("diphoton", "acoplanarity32", 32, 0, 0.1, ""),
+    ("diphoton", "acoplanarity33", 33, 0, 0.1, ""),
+    ("diphoton", "acoplanarity34", 34, 0, 0.1, ""),
     ("diphoton", "acoplanarity35", 35, 0, 0.1, ""),
     ("diphoton", "acoplanarity40", 40, 0, 0.1, ""),
     ("diphoton", "acoplanarity45", 45, 0, 0.1, ""),
@@ -94,8 +97,10 @@ histParams = (
     ("diphoton", "acoplanarity55", 55, 0, 0.1, ""),
     ("diphoton", "acoplanarity60", 60, 0, 0.1, ""),
 
+    ("diphoton", "acoplanarity1040", 20, 0, 0.05, ""),
+
     ("diphotonSR", "pt", 5, 0, 1, ""),
-    ("diphotonSR", "rapidity", 12, -2.2, 2.2, ""),
+    ("diphotonSR", "rapidity", 7, -2.2, 2.2, ""),
     ("diphotonSR", "mass", 10, 0, 50, ""),
     ("diphotonSR", "mass200", 200, 0, 200, ""),
     ("diphotonSR", "mass100", 100, 0, 200, ""),
@@ -110,13 +115,18 @@ histParams = (
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
     ("dielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectron", "deltaPt", 100, 0, 10, ""),
 
     ("dielectronSR", "pt", 100, 0, 1, ""),
     ("dielectronSR", "mass", 200, 0, 200, ""),
     ("dielectronSR", "rapidity", 100, -2.2, 2.2, ""),
     ("dielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectronSR", "deltaPt", 100, 0, 10, ""),
 
     ("genDielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("genDielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("genDielectron", "deltaPt", 100, 0, 10, ""),
+    ("genDielectronSR", "deltaPt", 100, 0, 10, ""),
 
     # calo
     ("caloTowerHE", "energyHad", 100, 0, 5, ""),
@@ -143,17 +153,67 @@ histParams = (
     ("eventSR3", "cosThetaStar", 3, 0, 1, ""),
 )
 
+bins = [0]
+bin_width = 0.1/35
+rebin_start = 0.037
+
+for i in range(1, 100):
+    edge = i*bin_width
+    if edge > rebin_start:
+        bins.append(0.1)
+        break
+    bins.append(edge)
+
+
+def get_log_bins(min_exp, max_exp, points_per_decade=(1,)):
+    bins = []
+
+    for exponent in range(min_exp, max_exp):
+        for point in points_per_decade:
+            bins.append(point * 10 ** exponent)
+
+    return bins
+
+
+log_bins_10 = list(np.logspace(-3, -1, 11, base=10))
+log_bins_10[0] = 0
+
+log_bins_14 = list(np.logspace(-3, -1, 15, base=10))
+log_bins_14[0] = 0
+
+log_bins_18 = list(np.logspace(-3, -1, 19, base=10))
+log_bins_18[0] = 0
+
+log_bins_20 = list(np.logspace(-3, -1, 21, base=10))
+log_bins_20[0] = 0
+
+log_bins_22 = list(np.logspace(-3, -1, 23, base=10))
+log_bins_22[0] = 0
+
+log_bins_30 = list(np.logspace(-3, -1, 31, base=10))
+log_bins_30[0] = 0
+
+log_bins_40 = list(np.logspace(-3, -1, 41, base=10))
+log_bins_40[0] = 0
+
+log_bins_10and20 = list(np.logspace(-3, -2, 11, base=10)) + list(np.logspace(-2, -1, 21, base=10))
+log_bins_10and20[0] = 0
+log_bins_10and20 = list(dict.fromkeys(log_bins_10and20))
+
+log_bins_5and35 = list(np.logspace(-3, -2, 6, base=10)) + list(np.logspace(-2, -1, 36, base=10))
+log_bins_5and35[0] = 0
+log_bins_5and35 = list(dict.fromkeys(log_bins_5and35))
+
 irregularHistParams = (
-    ("diphoton", "acoplanarity1", 
-     [0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1],
-     ""),
-    ("diphoton", "acoplanarity2", 
-     [0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.018, 0.026, 0.034, 0.042, 0.050, 0.075, 0.1],
-     ""),
-    
-    ("diphoton", "acoplanarity3", 
-     [0.0, 0.002, 0.004, 0.01, 0.025, 0.04, 0.055, 0.07, 0.1],
-     ""),
+    ("diphoton", "acoplanarity1", log_bins_14, ""),
+    ("diphoton", "acoplanarity2", log_bins_18, ""),
+    ("diphoton", "acoplanarity3", log_bins_20, ""),
+    ("diphoton", "acoplanarity4", log_bins_30, ""),
+    ("diphoton", "acoplanarity5", log_bins_40, ""),
+
+    # ("diphoton", "acoplanarity4",
+    #  [0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012, 0.014, 0.016, 0.018, 0.02, 0.035, 0.050, 0.065, 0.1],
+    #  ""),
 )
 
 histParams2D = (

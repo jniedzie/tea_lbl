@@ -89,6 +89,9 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
   histogramsHandler->Fill("diphoton_acoplanarity20", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity25", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity30", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity32", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity33", acoplanarity, GetWeight(event));
+  histogramsHandler->Fill("diphoton_acoplanarity34", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity35", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity40", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity45", acoplanarity, GetWeight(event));
@@ -96,20 +99,38 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
   histogramsHandler->Fill("diphoton_acoplanarity55", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity60", acoplanarity, GetWeight(event));
 
+  histogramsHandler->Fill("diphoton_acoplanarity1040", acoplanarity, GetWeight(event));
+
   auto hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity1");
   float binWidth1 = hist->GetBinWidth(1);
   float binWidth = hist->GetBinWidth(hist->GetXaxis()->FindFixBin(acoplanarity));
-  histogramsHandler->Fill("diphoton_acoplanarity1", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+  // histogramsHandler->Fill("diphoton_acoplanarity1", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+  // histogramsHandler->Fill("diphoton_acoplanarity1", acoplanarity, GetWeight(event)/binWidth);
+  histogramsHandler->Fill("diphoton_acoplanarity1", acoplanarity, GetWeight(event));
 
   hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity2");
   binWidth1 = hist->GetBinWidth(1);
   binWidth = hist->GetBinWidth(hist->GetXaxis()->FindFixBin(acoplanarity));
-  histogramsHandler->Fill("diphoton_acoplanarity2", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+  // histogramsHandler->Fill("diphoton_acoplanarity2", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+  histogramsHandler->Fill("diphoton_acoplanarity2", acoplanarity, GetWeight(event));
 
   hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity3");
   binWidth1 = hist->GetBinWidth(1);
   binWidth = hist->GetBinWidth(hist->GetXaxis()->FindFixBin(acoplanarity));
-  histogramsHandler->Fill("diphoton_acoplanarity3", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+  // histogramsHandler->Fill("diphoton_acoplanarity3", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+  histogramsHandler->Fill("diphoton_acoplanarity3", acoplanarity, GetWeight(event));
+
+  hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity4");
+  binWidth1 = hist->GetBinWidth(1);
+  binWidth = hist->GetBinWidth(hist->GetXaxis()->FindFixBin(acoplanarity));
+  // histogramsHandler->Fill("diphoton_acoplanarity4", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+  histogramsHandler->Fill("diphoton_acoplanarity4", acoplanarity, GetWeight(event));
+
+  hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity5");
+  binWidth1 = hist->GetBinWidth(1);
+  binWidth = hist->GetBinWidth(hist->GetXaxis()->FindFixBin(acoplanarity));
+  // histogramsHandler->Fill("diphoton_acoplanarity4", acoplanarity, GetWeight(event)*binWidth1/binWidth);
+  histogramsHandler->Fill("diphoton_acoplanarity5", acoplanarity, GetWeight(event));
 
   histogramsHandler->Fill("diphoton_seedTime", photon1->Get("seedTime"), photon2->Get("seedTime"), GetWeight(event));
 
@@ -119,7 +140,6 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
     histogramsHandler->Fill("diphotonSR_mass100", diphoton.M(), GetWeight(event));
     histogramsHandler->Fill("diphotonSR_mass200", diphoton.M(), GetWeight(event));
     histogramsHandler->Fill("diphotonSR_rapidity", diphoton.Rapidity(), GetWeight(event));
-    
 
     histogramsHandler->Fill("goodPhotonSR_et", photon1->Get("et"), GetWeight(event));
     histogramsHandler->Fill("goodPhotonSR_eta", photon1->Get("eta"), GetWeight(event));
@@ -189,8 +209,19 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
   }
 
   if (electrons->size() == 2) {
-    auto [deltaPhi, mod] = GetPhiModulation(asElectron(electrons->at(0)), asElectron(electrons->at(1)));
-    histogramsHandler->Fill("genDielectron_deltaPhi", deltaPhi, mod*GetWeight(event));
+    auto electron_1 = asElectron(electrons->at(0));
+    auto electron_2 = asElectron(electrons->at(1));
+
+    auto [deltaPhi, mod] = GetPhiModulation(electron_1, electron_2);
+    float deltaPt = fabs(electron_1->GetFourMomentum().Pt() - electron_2->GetFourMomentum().Pt());
+
+    histogramsHandler->Fill("genDielectron_deltaPhi", deltaPhi, mod * GetWeight(event));
+    histogramsHandler->Fill("genDielectron_deltaPt", deltaPt, GetWeight(event));
+
+    if (GetDielectronAcoplanarity(event) < 0.01) {
+      histogramsHandler->Fill("genDielectronSR_deltaPhi", deltaPhi, mod * GetWeight(event));
+      histogramsHandler->Fill("genDielectronSR_deltaPt", deltaPt, GetWeight(event));
+    }
   }
 }
 
@@ -228,7 +259,6 @@ pair<float, float> LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electr
 
   if (deltaPhi > TMath::Pi()) deltaPhi = 2. * TMath::Pi() - deltaPhi;
 
-
   // bring delta phi between -pi and pi
   // if (deltaPhi > TMath::Pi()) deltaPhi = deltaPhi - 2. * TMath::Pi();
   // if (deltaPhi <= -TMath::Pi()) deltaPhi = deltaPhi + 2. * TMath::Pi();
@@ -254,18 +284,21 @@ void LbLHistogramsFiller::FillElectronHistograms(const shared_ptr<Event> event) 
   float acoplanarity = GetDielectronAcoplanarity(electron1, electron2);
   auto [deltaPhi, mag] = GetPhiModulation(electron1, electron2);
   TLorentzVector dielectron = electron1->GetFourMomentum() + electron2->GetFourMomentum();
+  float deltaPt = fabs(electron1->GetFourMomentum().Pt() - electron2->GetFourMomentum().Pt());
 
   histogramsHandler->Fill("dielectron_pt", dielectron.Pt(), GetWeight(event));
   histogramsHandler->Fill("dielectron_mass", dielectron.M(), GetWeight(event));
   histogramsHandler->Fill("dielectron_rapidity", dielectron.Rapidity(), GetWeight(event));
   histogramsHandler->Fill("dielectron_acoplanarity", acoplanarity, GetWeight(event));
-  histogramsHandler->Fill("dielectron_deltaPhi", deltaPhi, mag*GetWeight(event));
+  histogramsHandler->Fill("dielectron_deltaPhi", deltaPhi, mag * GetWeight(event));
+  histogramsHandler->Fill("dielectron_deltaPt", deltaPt, GetWeight(event));
 
   if (acoplanarity > 0.01) {
     histogramsHandler->Fill("dielectronSR_pt", dielectron.Pt(), GetWeight(event));
     histogramsHandler->Fill("dielectronSR_mass", dielectron.M(), GetWeight(event));
     histogramsHandler->Fill("dielectronSR_rapidity", dielectron.Rapidity(), GetWeight(event));
-    histogramsHandler->Fill("dielectronSR_deltaPhi", deltaPhi, mag*GetWeight(event));
+    histogramsHandler->Fill("dielectronSR_deltaPhi", deltaPhi, mag * GetWeight(event));
+    histogramsHandler->Fill("dielectronSR_deltaPt", deltaPt, GetWeight(event));
 
     histogramsHandler->Fill("goodElectronSR_pt", electron1->Get("pt"), GetWeight(event));
     histogramsHandler->Fill("goodElectronSR_eta", electron1->Get("eta"), GetWeight(event));
@@ -282,7 +315,7 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
   float deltaEt = lblEvent->GetDeltaEt();
   histogramsHandler->Fill("event_deltaEt", deltaEt, GetWeight(event));
 
-  float cosThetaStar = lblEvent->GetCosThetaStar();
+  float cosThetaStar = fabs(lblEvent->GetCosThetaStar());
   histogramsHandler->Fill("event_cosThetaStar", cosThetaStar, GetWeight(event));
 
   auto photons = event->GetCollection("goodPhoton");
