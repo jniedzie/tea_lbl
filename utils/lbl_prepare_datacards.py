@@ -1,6 +1,6 @@
 from lbl_helpers import load_histograms, get_cep_scale, input_mass_histograms, add_uncertainties_on_zero
-from lbl_helpers import input_aco_histograms, scale_non_cep_histograms, limit_histogram
-from lbl_params import n_acoplanarity_bins, uncertainty_on_zero, n_mass_bins
+from lbl_helpers import input_aco_histograms, scale_non_cep_histograms, sample_from_fit, sample_lbl_from_fit
+from lbl_params import n_acoplanarity_bins, n_mass_bins, do_qed_sampling, do_lbl_sampling
 from lbl_params import systematic_uncertainty_lbl, alp_mc_uncertainty
 from lbl_paths import processes
 from Logger import info
@@ -8,56 +8,20 @@ import ROOT
 import os
 
 # skim = "skimmed_lblSelections_final"
+# skim = "skimmed_lblSelections_final_noZDC"
 # skim = "skimmed_lblSelections_final_andZDC"
-# skim = "skimmed_lblSelections_final_andZDC3n"
-skim = "skimmed_lblSelections_final_andZDC2n"
+skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC2n"
+# skim = "skimmed_lblSelections_final_andZDC1n"
+# skim = "skimmed_lblSelections_finalXn0n"
+# skim = "skimmed_lblSelections_finalXn1n"
+
 
 output_path_aco = f"../combine/significance_histograms_{skim}"
 output_path_aco += f"_nBins{n_acoplanarity_bins}.root"
 
 output_path_mass = f"../combine/limits_histograms_{skim}"
 output_path_mass += f"_nBins{n_mass_bins}.root"
-
-max_aco = 0.1
-n_events_sampling = 500
-transition_point = 0.026
-
-def sample_from_fit(hist):
-    ROOT.gRandom.SetSeed(0)
-    
-    formula = f"[p0]*(x<={transition_point})+(exp([p1]+[p2]*x))*(x>{transition_point})"
-    # formula = f"[p0]*(x<={transition_point})+([p0]*exp([p2]*(x-{transition_point})))*(x>{transition_point})"
-    fit = ROOT.TF1("fit", formula, 0, max_aco)
-    fit.SetParameters(7, 3, -31)
-    hist.Fit(fit, "WW")
-
-    new_hist = hist.Clone()
-    new_hist.Reset()
-    new_hist.FillRandom("fit", n_events_sampling)
-    
-    for i in range(1, new_hist.GetNbinsX()+1):
-        new_hist.SetBinContent(i, new_hist.GetBinContent(i)/new_hist.GetBinWidth(i))
-        new_hist.SetBinError(i, new_hist.GetBinError(i)/new_hist.GetBinWidth(i))
-    
-    new_hist.Scale(hist.Integral()/new_hist.Integral())
-
-    canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
-    hist.SetMarkerColor(ROOT.kRed)
-    hist.SetMarkerStyle(20)
-    hist.SetLineColor(ROOT.kRed)
-    hist.Draw("PE") 
-    
-    hist.GetXaxis().SetRangeUser(0, 0.2)
-    hist.GetYaxis().SetRangeUser(0, 10)
-    
-    new_hist.SetMarkerColor(ROOT.kBlack)
-    new_hist.SetMarkerStyle(20)
-    new_hist.SetLineColor(ROOT.kBlack)
-    new_hist.Draw("PEsame")
-    
-    canvas.SaveAs("../plots/qed_fit.pdf")
-
-    return new_hist
 
 
 def save_output_histograms():
@@ -89,12 +53,13 @@ def save_output_histograms():
         input_mass_histograms[process].SetName(name)
 
         # hist = limit_histogram(input_aco_histograms[process], max_aco)
+        hist = input_aco_histograms[process]
 
         print(f"saving {name}")
 
         output_file_aco.cd()
-        input_aco_histograms[process].Write()
-        # hist.Write()
+        # input_aco_histograms[process].Write()
+        hist.Write()
 
         output_file_mass.cd()
         input_mass_histograms[process].Write()
@@ -172,6 +137,9 @@ def save_datacard():
         if process not in input_aco_histograms:
             continue
 
+        print(
+            f"combineCards.py limits_histograms_2015{process}_.txt limits_histograms_{skim}_nBins{n_mass_bins}{process}_.txt > card_{process}.txt")
+
         output_file = ""
         output_file = add_datacard_header(
             output_file, rates["collisionData"], process)
@@ -182,30 +150,49 @@ def save_datacard():
         outfile.write(output_file)
 
 
-# def get_data_background_chi2():
-#     data = input_aco_histograms["collisionData"]
-#     backgrounds = [input_aco_histograms["qed"], input_aco_histograms["lbl"], input_aco_histograms["cep"]]
-#     chi2 = 0
-#     for i in range(1, data.GetNbinsX()+1):
-#         data_bin = data.GetBinContent(i)
-#         background_bin = backgrounds[0].GetBinContent(i) + backgrounds[1].GetBinContent(i) + backgrounds[2].GetBinContent(i)    
-        
-#         if data_bin != 0:
-#             chi2 += (data_bin - background_bin)**2 / data_bin
-#     return chi2
+def get_data_background_chi2():
+    data = input_aco_histograms["collisionData"]
+    backgrounds = [input_aco_histograms["qed"],
+                   input_aco_histograms["lbl"], input_aco_histograms["cep"]]
+    chi2 = 0
+    for i in range(1, data.GetNbinsX()+1):
+        data_bin = data.GetBinContent(i)
+        background_bin = backgrounds[0].GetBinContent(
+            i) + backgrounds[1].GetBinContent(i) + backgrounds[2].GetBinContent(i)
+
+        if data_bin != 0:
+            chi2 += (data_bin - background_bin)**2 / data_bin
+    return chi2
+
 
 def main():
-    info(f"Storing datacard/root file in: {output_path_aco}")
-    load_histograms(skim)
-    
-    # replace the QED histogram with sampling from a fit
-    # input_aco_histograms["qed"] = sample_from_fit(input_aco_histograms["qed"])
-    
-    save_output_histograms()
-    
-    # chi2 = get_data_background_chi2()
-    # print(f"{chi2=}")
+    ROOT.gROOT.SetBatch(True)
 
+    info(f"Storing datacard/root file in: {output_path_aco}")
+
+    # load_histograms(skim, scale_to_integral=True)
+    load_histograms(skim, scale_to_integral=False)
+
+    for process in processes:
+        if process not in input_aco_histograms:
+            continue
+        input_aco_histograms[process].SetBinErrorOption(ROOT.TH1.kPoisson)
+
+    if do_qed_sampling:
+        input_aco_histograms["qed"] = sample_from_fit(
+            input_aco_histograms["qed"],
+            divide_bin_width=True)
+
+    if do_lbl_sampling:
+        input_aco_histograms["lbl"] = sample_lbl_from_fit(
+            input_aco_histograms["lbl"], start=0.06)
+
+    for process in processes:
+        if process not in input_aco_histograms:
+            continue
+        input_aco_histograms[process].SetBinErrorOption(ROOT.TH1.kPoisson)
+
+    save_output_histograms()
     save_datacard()
 
 
