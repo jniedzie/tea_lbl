@@ -13,13 +13,22 @@ from lbl_paths import base_path, processes
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC"
 skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_finalXn0n"
+# skim = "skimmed_lblSelections_finalXn1n"
 # skim = "skimmed_lblSelections_final_andZDC2n"
+# skim = "skimmed_lblSelections_final_andZDC1n"
 # skim = "skimmed_lblSelections_final_noZDC"
 
 # output_path = "../plots/lbl_distributions/"
 # output_path = "../plots/lbl_distributions_andZDC/"
-output_path = "../plots/lbl_distributions_andZDC3n/"
+# output_path = "../plots/lbl_distributions_andZDC3n/"
+output_path = "../plots/lbl_distributions_andZDC3n_QED2p7/"
+# output_path = "../plots/lbl_distributions_andZDC3n_withAlps/"
+# output_path = "../plots/lbl_distributions_andZDC3n_withAlps_QED2p7/"
+# output_path = "../plots/lbl_distributions_Xn0n/"
+# output_path = "../plots/lbl_distributions_Xn1n/"
 # output_path = "../plots/lbl_distributions_andZDC2n/"
+# output_path = "../plots/lbl_distributions_andZDC1n/"
 # output_path = "../plots/lbl_distributions_withAlps/"
 # output_path = "../plots/lbl_distributions_noZDC/"
 
@@ -28,6 +37,7 @@ output_path = "../plots/lbl_distributions_andZDC3n/"
 
 
 do_photons = True
+do_alps = False
 
 samples = [
     Sample(
@@ -86,7 +96,7 @@ samples = [
         marker_color=ROOT.kBlack,
         fill_alpha=0.0,
         legend_description="data",
-        custom_legend=Legend(0.6, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrow#gamma#gamma+XnYn (X,Y<4)"),
+        custom_legend=Legend(0.7, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrow#gamma#gamma"),
     ),
 ]
 
@@ -105,7 +115,7 @@ alp_colors = (
     ROOT.kRed,
 )
 
-legend_width = 0.20
+legend_width = 0.10
 legend_min_x = 0.40
 legend_max_x = 0.80
 
@@ -113,37 +123,38 @@ legend_height = 0.05
 legend_max_y = 0.85
 
 
-# alp_scale = 1.0
-# alp_index = 0
-# for process in processes:
-#     if "alps" not in process:
-#         continue
+if do_alps:
+    alp_scale = 1.0
+    alp_index = 0
+    for process in processes:
+        if "alps" not in process:
+            continue
 
-#     legend_x_0 = 0.33 if alp_index < 5 else 0.50
-#     legend_x_1 = 0.43 if alp_index < 5 else 0.60
-    
-#     legend_y_0 = 0.85 - alp_index*legend_height if alp_index < 5 else 0.85 - (alp_index-5)*legend_height
-#     legend_y_1 = 0.90 - alp_index*legend_height if alp_index < 5 else 0.90 - (alp_index-5)*legend_height
+        legend_x_0 = 0.33 if alp_index < 5 else 0.50
+        legend_x_1 = 0.43 if alp_index < 5 else 0.60
+        
+        legend_y_0 = 0.85 - alp_index*legend_height if alp_index < 5 else 0.85 - (alp_index-5)*legend_height
+        legend_y_1 = 0.90 - alp_index*legend_height if alp_index < 5 else 0.90 - (alp_index-5)*legend_height
 
-#     samples.append(
-#         Sample(
-#             name=process,
-#             file_path=f"{base_path}/{process}/merged_{skim}_histograms.root",
-#             type=SampleType.signal,
-#             cross_section=crossSections[process]*get_scale_factor(photon=True)[0]*alp_scale,
-#             initial_weight_sum=nGenEvents[process],
-#             line_color=alp_colors[alp_index],
-#             line_style=ROOT.kSolid,
-#             line_width=3,
-#             fill_style=0,
-#             fill_alpha=0.0,
-#             marker_size=0.0,
-#             legend_description=process.replace("alps_", "m_{a} = ")+" GeV",
-#             custom_legend=Legend(legend_x_0, legend_y_0, legend_x_1, legend_y_1, "l")
-#         )
-#     )
-#     custom_stacks_order.append(process)
-#     alp_index += 1
+        samples.append(
+            Sample(
+                name=process,
+                file_path=f"{base_path}/{process}/merged_{skim}_histograms.root",
+                type=SampleType.signal,
+                cross_section=crossSections[process]*get_scale_factor(do_photons)[0]*alp_scale,
+                initial_weight_sum=nGenEvents[process],
+                line_color=alp_colors[alp_index],
+                line_style=ROOT.kSolid,
+                line_width=3,
+                fill_style=0,
+                fill_alpha=0.0,
+                marker_size=0.0,
+                legend_description=process.replace("alps_", "m_{a} = ")+" GeV",
+                custom_legend=Legend(legend_x_0, legend_y_0, legend_x_1, legend_y_1, "l")
+            )
+        )
+        custom_stacks_order.append(process)
+        alp_index += 1
 
 y_label = "# events"
 lbl_error = 0.20
@@ -156,24 +167,36 @@ histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
 
     # photons
+    Histogram("goodPhotonSR_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, y_scale*35, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhotonSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, y_scale*20, "#phi^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhotonSR_et"           , "", False , False, NormalizationType.to_lumi, 1,   2    , 8   , 0, y_scale*35, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphotonSR_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "y^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphotonSR_mass"           , "", False , True, NormalizationType.to_lumi, 1,   0    , 30   , 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphotonSR_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 18, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "|cos #theta*|", y_label),
+    
+    
     Histogram("goodPhoton_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 30, "#eta^{#gamma}", y_label, "", lbl_error),
     Histogram("goodPhoton_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, 30, "#phi^{#gamma}", y_label, "", lbl_error),
     Histogram("goodPhoton_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, 50, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("goodPhoton_seedTime", "", False, True, NormalizationType.to_one, 1,   -5, 5, -1, -1, "Photon seed time", y_label, "", lbl_error),
 
-    Histogram("goodPhotonSR_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, y_scale*15, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhotonSR_phi"          , "", False , False, NormalizationType.to_lumi, 1,   -3.14, 3.14 , 0, y_scale*15, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhotonSR_et"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 10   , 0, y_scale*20, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
-
     Histogram("diphoton_acoplanarity20", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_acoplanarity30", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
-    Histogram("diphoton_acoplanarity40", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity32", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity33", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity34", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    
+    
+    Histogram("diphoton_acoplanarity35", "", False, False, NormalizationType.to_lumi, 1,   1e-4, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity40", "", True, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_acoplanarity60", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     
     Histogram("diphoton_acoplanarity50", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_acoplanarity1", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_acoplanarity2", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_acoplanarity3", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity4", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     
     Histogram("diphoton_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 15, "y^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_mass"           , "", False , False, NormalizationType.to_lumi, 1,   0    , 50   , 0, 70, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
@@ -181,11 +204,10 @@ histograms = (
     Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     
-    Histogram("diphotonSR_rapidity"       , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 8, "y^{#gamma#gamma}", y_label, "", lbl_error),
-    Histogram("diphotonSR_mass"           , "", False , True, NormalizationType.to_lumi, 1,   0    , 30   , 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    
     Histogram("diphotonSR_mass100"        , "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("diphotonSR_mass200"        , "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 10, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram("diphotonSR_pt"             , "", False , False, NormalizationType.to_lumi, 1,   0    , 1    , 0, 15, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    
     
     # electrons
     Histogram("goodElectron_eta"          , "", False , False, NormalizationType.to_lumi, 1,   -2.2 , 2.2  , 0, 5000, "#eta^{e}", y_label, "", qed_error),
@@ -209,11 +231,10 @@ histograms = (
     
     # event
     Histogram("event_deltaEt", "", False, False, NormalizationType.to_lumi, 5,   0, 1, 1e-2, 10, "#DeltaE_{T}", y_label),
-    Histogram("event_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 10, "cos #theta*", y_label),
-    Histogram("eventSR10_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 10, "cos #theta*", y_label),
-    Histogram("eventSR5_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
-    Histogram("eventSR4_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
-    Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
+    Histogram("event_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "cos #theta*", y_label),
+    Histogram("eventSR10_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 15, "cos #theta*", y_label),
+    Histogram("eventSR5_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "cos #theta*", y_label),
+    Histogram("eventSR4_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "cos #theta*", y_label),
     Histogram("cutFlow", "", False, True, NormalizationType.to_lumi, 1, 0, 10, 1e1, 1e7, "Selection", "#sum genWeight"),
 )
 
@@ -238,7 +259,7 @@ plotting_options = {
     SampleType.background: "hist",
     # SampleType.background: "hist nostack",
     SampleType.signal: "hist nostack",
-    SampleType.data: "nostack pe",
+    SampleType.data: "nostack pe0",
 }
 
 canvas_size = (800, 600)
