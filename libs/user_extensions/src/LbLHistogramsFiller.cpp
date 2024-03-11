@@ -17,8 +17,13 @@ LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogram
     info() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
   }
 
-  // Create an event processor
   eventProcessor = make_unique<EventProcessor>();
+
+  acoplanarityFunction = new TF1("fit_fun", "[0] * exp([1]*x) + [2] * exp([3]*x)", 0, 0.1);
+  vector<float> params = {102020, -798.6, 693.552, -112.731};
+  for (int i = 0; i < 4; i++) {
+    acoplanarityFunction->SetParameter(i, params[i]);
+  }
 }
 
 LbLHistogramsFiller::~LbLHistogramsFiller() {}
@@ -99,6 +104,26 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
   histogramsHandler->Fill("diphoton_acoplanarity55", acoplanarity, GetWeight(event));
   histogramsHandler->Fill("diphoton_acoplanarity60", acoplanarity, GetWeight(event));
 
+  auto tracks = event->GetCollection("track");
+  auto electrons = event->GetCollection("goodElectron");
+  shared_ptr<Track> track1 = nullptr;
+
+  for (auto physicsObject : *tracks) {
+    auto track = asTrack(physicsObject);
+    if (track->OverlapsWithOtherObjects(photons) && !track->OverlapsWithOtherObjects(electrons)) {
+      if (track1 == nullptr) {
+        track1 = track;
+        break;
+      }
+    }
+  }
+  if (track1) {
+    float trackPt = track1->Get("pt");
+    if (trackPt < 0.3) histogramsHandler->Fill("diphoton_acoplanarityTrack0to0p3", acoplanarity, GetWeight(event));
+    if (trackPt > 0.3 && trackPt < 0.65) histogramsHandler->Fill("diphoton_acoplanarityTrack0p3to0p65", acoplanarity, GetWeight(event));
+    if (trackPt > 0.6 && trackPt < 2.0) histogramsHandler->Fill("diphoton_acoplanarityTrack0p65to2p0", acoplanarity, GetWeight(event));
+    if (trackPt > 2.0) histogramsHandler->Fill("diphoton_acoplanarityTrack2p0toInf", acoplanarity, GetWeight(event));
+  }
   histogramsHandler->Fill("diphoton_acoplanarity1040", acoplanarity, GetWeight(event));
 
   auto hist = histogramsHandler->GetHistogram1D("diphoton_acoplanarity1");
@@ -293,6 +318,14 @@ void LbLHistogramsFiller::FillElectronHistograms(const shared_ptr<Event> event) 
   histogramsHandler->Fill("dielectron_deltaPhi", deltaPhi, mag * GetWeight(event));
   histogramsHandler->Fill("dielectron_deltaPt", deltaPt, GetWeight(event));
 
+  float acoWeight = 1 / acoplanarityFunction->Eval(acoplanarity);
+  histogramsHandler->Fill("dielectron_deltaPhiAcoWeighted", deltaPhi, acoWeight * GetWeight(event));
+  histogramsHandler->Fill("dielectron_acoplanarityAcoWeighted", acoplanarity, acoWeight * GetWeight(event));
+
+  if ((float)electron1->Get("pt") > 6) {
+    histogramsHandler->Fill("dielectron_deltaPhiPtGt6GeV", deltaPhi, mag * GetWeight(event));
+  }
+
   if (acoplanarity > 0.01) {
     histogramsHandler->Fill("dielectronSR_pt", dielectron.Pt(), GetWeight(event));
     histogramsHandler->Fill("dielectronSR_mass", dielectron.M(), GetWeight(event));
@@ -315,19 +348,56 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
   float deltaEt = lblEvent->GetDeltaEt();
   histogramsHandler->Fill("event_deltaEt", deltaEt, GetWeight(event));
 
-  float cosThetaStar = fabs(lblEvent->GetCosThetaStar());
-  histogramsHandler->Fill("event_cosThetaStar", cosThetaStar, GetWeight(event));
-
   auto photons = event->GetCollection("goodPhoton");
-  if (photons->size() != 2) return;
-  double deltaPhi = asPhoton(photons->at(0))->GetFourMomentum().DeltaPhi(asPhoton(photons->at(1))->GetFourMomentum());
-  double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
 
-  if (acoplanarity < 0.01) {
-    histogramsHandler->Fill("eventSR3_cosThetaStar", cosThetaStar, GetWeight(event));
-    histogramsHandler->Fill("eventSR4_cosThetaStar", cosThetaStar, GetWeight(event));
-    histogramsHandler->Fill("eventSR5_cosThetaStar", cosThetaStar, GetWeight(event));
-    histogramsHandler->Fill("eventSR10_cosThetaStar", cosThetaStar, GetWeight(event));
+  if (photons->size() == 2) {
+    double deltaPhi = asPhoton(photons->at(0))->GetFourMomentum().DeltaPhi(asPhoton(photons->at(1))->GetFourMomentum());
+    double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
+    float cosThetaStar = fabs(lblEvent->GetCosThetaStar(false));
+
+    histogramsHandler->Fill("event_cosThetaStar", cosThetaStar, GetWeight(event));
+
+    if (acoplanarity < 0.01) {
+      histogramsHandler->Fill("eventSR3_cosThetaStar", cosThetaStar, GetWeight(event));
+      histogramsHandler->Fill("eventSR4_cosThetaStar", cosThetaStar, GetWeight(event));
+      histogramsHandler->Fill("eventSR5_cosThetaStar", cosThetaStar, GetWeight(event));
+      histogramsHandler->Fill("eventSR10_cosThetaStar", cosThetaStar, GetWeight(event));
+    }
+  }
+
+  auto electrons = event->GetCollection("goodElectron");
+  if (electrons->size() == 2) {
+    double deltaPhi = asElectron(electrons->at(0))->GetFourMomentum().DeltaPhi(asElectron(electrons->at(1))->GetFourMomentum());
+    double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
+    float cosThetaStar = fabs(asLbLEvent(event)->GetCosThetaStar(true));
+
+    histogramsHandler->Fill("event_electronsCosThetaStar", cosThetaStar, GetWeight(event));
+
+    if (acoplanarity < 0.01) {
+      histogramsHandler->Fill("eventSR_electronsCosThetaStar", cosThetaStar, GetWeight(event));
+    }
+  }
+
+  try{
+  auto zdcEnergies = event->GetCollection("ZDC");
+
+  float totalEnergyPlus = 0;
+  float totalEnergyMinus = 0;
+
+  for (auto physicsObject : *zdcEnergies) {
+    auto zdcEnergy = asZDCEnergy(physicsObject);
+
+    if (zdcEnergy->GetSide() > 0) {
+      totalEnergyPlus += zdcEnergy->GetEnergy();
+    } else if (zdcEnergy->GetSide() < 0) {
+      totalEnergyMinus += zdcEnergy->GetEnergy();
+    }
+  }
+  histogramsHandler->Fill("event_ZDCenergyPlus", totalEnergyPlus, GetWeight(event));
+  histogramsHandler->Fill("event_ZDCenergyMinus", totalEnergyMinus, GetWeight(event));
+  }
+  catch(const Exception &e){
+    warn() << "Cannot fill ZDC histograms, since ZDC collection was not found." << endl;
   }
 }
 

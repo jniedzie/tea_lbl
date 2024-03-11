@@ -15,12 +15,12 @@ sample = "qed"
 # sample = "emptyBeams"
 
 # skim = "initial"
-# skim = "skimmed_allSelections_photonEt2p0"
-# skim = "skimmed_allSelections"
-skim = "skimmed_qedSelections"
-# skim = "skimmed_allSelections_hadCrack"
+
 # skim = "skimmed_lblSelections_final"
-# skim = "skimmed_lblSelections_final_andZDC3n"
+skim = "skimmed_lblSelections_final_andZDC3n"
+
+# skim = "skimmed_qedSelections"
+# skim = "skimmed_tracksPhotonsSelections"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
@@ -98,6 +98,11 @@ histParams = (
     ("diphoton", "acoplanarity60", 60, 0, 0.1, ""),
 
     ("diphoton", "acoplanarity1040", 20, 0, 0.05, ""),
+    
+    ("diphoton", "acoplanarityTrack0to0p3", 400, 0, 1.0, ""),
+    ("diphoton", "acoplanarityTrack0p3to0p65", 400, 0, 1.0, ""),
+    ("diphoton", "acoplanarityTrack0p65to2p0", 400, 0, 1.0, ""),
+    ("diphoton", "acoplanarityTrack2p0toInf", 400, 0, 1.0, ""),
 
     ("diphotonSR", "pt", 5, 0, 1, ""),
     ("diphotonSR", "rapidity", 7, -2.2, 2.2, ""),
@@ -115,6 +120,9 @@ histParams = (
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
     ("dielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectron", "deltaPhiPtGt6GeV", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectron", "deltaPhiAcoWeighted", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectron", "acoplanarityAcoWeighted", 1000, 0, 1, ""),
     ("dielectron", "deltaPt", 100, 0, 10, ""),
 
     ("dielectronSR", "pt", 100, 0, 1, ""),
@@ -147,10 +155,15 @@ histParams = (
     # event
     ("event", "deltaEt", 100, 0, 1, ""),
     ("event", "cosThetaStar", 10, 0, 1, ""),
+    ("event", "electronsCosThetaStar", 100, 0, 1, ""),
+    ("eventSR", "electronsCosThetaStar", 100, 0, 1, ""),
     ("eventSR10", "cosThetaStar", 10, 0, 1, ""),
     ("eventSR5", "cosThetaStar", 5, 0, 1, ""),
     ("eventSR4", "cosThetaStar", 4, 0, 1, ""),
     ("eventSR3", "cosThetaStar", 3, 0, 1, ""),
+    
+    ("event", "ZDCenergyPlus", 10000, 0, 20000, ""),
+    ("event", "ZDCenergyMinus", 10000, 0, 20000, ""),
 )
 
 bins = [0]

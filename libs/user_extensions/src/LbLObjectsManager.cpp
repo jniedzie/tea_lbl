@@ -48,11 +48,11 @@ bool LbLObjectsManager::IsGoodTrack(const shared_ptr<Track> track) {
   return true;
 }
 
-bool LbLObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) { 
-  if(!muon->PassesPtCuts()) return false;
-  if(muon->IsEtaAboveLimit()) return false;
+bool LbLObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) {
+  if (!muon->PassesPtCuts()) return false;
+  if (muon->IsEtaAboveLimit()) return false;
 
-  return true; 
+  return true;
 }
 
 void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event) {
@@ -132,11 +132,11 @@ shared_ptr<PhysicsObjects> LbLObjectsManager::GetGenParticles(const shared_ptr<E
 
 int LbLObjectsManager::GetParticlePid(const shared_ptr<PhysicsObject> particle) {
   int particlePid = particle->Get("pid");
-  
+
   // this is a hack needed because pid was stored as float in the tree
   // float *floatPtr = reinterpret_cast<float *>(&particlePid);
   // float floatValue = *floatPtr;
   // particlePid = round(floatValue);
-  
+
   return particlePid;
 }
