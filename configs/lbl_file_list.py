@@ -1,43 +1,10 @@
+from lbl_paths import processes, skim
+
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-samples = (
-    "collisionData",
-    "lbl",
-    "cep",
-    "qed",
-
-    # "lbl_noTrigger",
-    # "qed_noTrigger",
-
-    # "alps_5",
-    # "alps_6",
-    # "alps_9",
-    # "alps_11",
-    # "alps_14",
-    # "alps_16",
-    # "alps_22",
-    # "alps_30",
-    # "alps_50",
-    # "alps_90",
-
-    # "emptyBeams",
-)
+samples = processes
 
 sample_path = ""
-
-# skim = "initial"
-# skim = "skimmed_lblSelections_finalXn0n"
-# skim = "skimmed_lblSelections_finalXn1n"
-# skim = "skimmed_lblSelections_final"
-# skim = "skimmed_lblSelections_final_andZDC"
-skim = "skimmed_lblSelections_final_andZDC3n"
-# skim = "skimmed_lblSelections_final_andZDC2n"
-# skim = "skimmed_lblSelections_final_andZDC1n"
-# skim = "skimmed_lblSelections_final_noZDC"
-# skim = "skimmed_lblSelections_onlyNee"
-
-# skim = "skimmed_qedSelections"
-# skim = "skimmed_qedSelections_noZDC"
 
 # for renaming
 # input_directory = f"{base_path}/ntuples/{sample_path}/bad_names/"
@@ -47,10 +14,11 @@ skim = "skimmed_lblSelections_final_andZDC3n"
 # input_directory = f"{base_path}/ntuples/{sample_path}/initial/"
 # output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"
 
-# for histogramming
+# for histogramming (condor)
 input_directory = f"{base_path}/ntuples/{sample_path}/{skim}/"
 output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/histograms/"
 
+# for histogramming (local)
 # input_output_file_list = (
 #     (f"{base_path}/ntuples/{sample_path}/merged_{skim}.root",
 #      f"{base_path}/ntuples/{sample_path}/merged_{skim}_histograms.root"

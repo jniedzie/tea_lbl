@@ -6,7 +6,7 @@ from Logger import info, warn, fatal
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, uncertainty_on_zero
 from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity, n_mass_bins
 from lbl_params import qed_sampling_n_events, qed_sampling_transition_point, qed_sampling_fit_max_aco
-from lbl_paths import processes, merged_histograms_path
+from lbl_paths import processes, merged_histograms_path, qed_name
 from lbl_paths import acoplanarity_histogram_name, mass_histogram_name
 
 
@@ -63,8 +63,6 @@ def load_histograms(skim, scale_to_integral=False):
         for process in processes:
             input_aco_histograms[process].Scale(scale)
 
-    print(f"Integral: {input_aco_histograms['collisionData'].Integral()}")
-
     unsilence_root()
 
 
@@ -116,7 +114,7 @@ def get_cep_scale(skim):
         fatal("collisionData histogram not found in input files. Did you forget to create/merge histograms?")
         exit()
     hist_data_no_background.Add(input_aco_histograms["lbl"], -1)
-    hist_data_no_background.Add(input_aco_histograms["qed"], -1)
+    hist_data_no_background.Add(input_aco_histograms[qed_name], -1)
 
     integral_data = hist_data_no_background.Integral(
         hist_data_no_background.FindBin(cep_scaling_min_acoplanarity),

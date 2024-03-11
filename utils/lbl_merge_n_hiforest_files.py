@@ -1,13 +1,16 @@
 import glob
 import os
 
-input_path = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune"
-input_pattern = "ntuples_loose_selections_*.root"
+# input_path = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune"
+# input_pattern = "ntuples_loose_selections_*.root"
 
-output_path = "/eos/cms/store/cmst3/group/lightbylight/analysis_jeremi/ntuples/collisionData"
+input_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/qed_MG_ee_a/bad_names_unmerged"
+input_pattern = "mc_HiForestAOD_*.root"
+
+output_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/qed_MG_ee_a/bad_names"
 output_pattern = "ntuple_{}.root"
 
-n_files_to_merge = 10
+n_files_to_merge = 30
 
 
 def get_file_paths():

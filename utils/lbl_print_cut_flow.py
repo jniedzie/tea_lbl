@@ -3,15 +3,7 @@ from collections import OrderedDict
 
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor
 from lbl_helpers import get_cep_scale
-from lbl_paths import base_path, processes
-
-# skim = "skimmed_qedSelections"
-# skim = "skimmed_qedSelections_noZDC"
-# skim = "skimmed_lblSelections_final"
-# skim = "skimmed_lblSelections_final_andZDC"
-skim = "skimmed_lblSelections_final_andZDC3n"
-# skim = "skimmed_lblSelections_final_andZDC2n"
-# skim = "skimmed_lblSelections_onlyNee"
+from lbl_paths import base_path, processes, skim
 
 
 def main():

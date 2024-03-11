@@ -2,20 +2,10 @@ from lbl_helpers import load_histograms, get_cep_scale, input_mass_histograms, a
 from lbl_helpers import input_aco_histograms, scale_non_cep_histograms, sample_from_fit, sample_lbl_from_fit
 from lbl_params import n_acoplanarity_bins, n_mass_bins, do_qed_sampling, do_lbl_sampling
 from lbl_params import systematic_uncertainty_lbl, alp_mc_uncertainty
-from lbl_paths import processes
+from lbl_paths import processes, skim
 from Logger import info
 import ROOT
 import os
-
-# skim = "skimmed_lblSelections_final"
-# skim = "skimmed_lblSelections_final_noZDC"
-# skim = "skimmed_lblSelections_final_andZDC"
-skim = "skimmed_lblSelections_final_andZDC3n"
-# skim = "skimmed_lblSelections_final_andZDC2n"
-# skim = "skimmed_lblSelections_final_andZDC1n"
-# skim = "skimmed_lblSelections_finalXn0n"
-# skim = "skimmed_lblSelections_finalXn1n"
-
 
 output_path_aco = f"../combine/significance_histograms_{skim}"
 output_path_aco += f"_nBins{n_acoplanarity_bins}.root"

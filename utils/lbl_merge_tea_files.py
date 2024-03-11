@@ -1,24 +1,20 @@
 import os
+import argparse
 
-from lbl_paths import base_path, processes
+from lbl_paths import base_path, processes, skim
 
-# skim = "initial"
-# skim = "skimmed_qedSelections"
-# skim = "skimmed_qedSelections_noZDC"
-# skim = "skimmed_lblSelections_final"
-# skim = "skimmed_lblSelections_final_andZDC"
-skim = "skimmed_lblSelections_final_andZDC3n"
-# skim = "skimmed_lblSelections_final_andZDC2n"
-# skim = "skimmed_lblSelections_final_andZDC1n"
-# skim = "skimmed_lblSelections_finalXn0n"
-# skim = "skimmed_lblSelections_finalXn1n"
-# skim = "skimmed_lblSelections_final_noZDC"
-# skim = "skimmed_lblSelections_onlyNee"
 
-merge_histograms = True  # False for merging ntuples
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--trees", action="store_true")
+    return parser.parse_args()
 
 
 def main():
+    args = get_args()
+
+    merge_histograms = not args.trees
+
     for process in processes:
         hist_path = "histograms" if merge_histograms else ""
         input_path = f"{base_path}/{process}/{skim}/{hist_path}/*.root"
