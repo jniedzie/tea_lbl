@@ -1,4 +1,5 @@
 #include "LbLEvent.hpp"
+
 #include "ExtensionsHelpers.hpp"
 #include "UserExtensionsHelpers.hpp"
 
@@ -7,13 +8,13 @@ using namespace std;
 float LbLEvent::GetDeltaEt() {
   auto photons = GetCollection("goodPhoton");
 
-  if(photons->size() != 2) {
+  if (photons->size() != 2) {
     warn() << "Couldn't calculate deltaEt -- number of photons in the event != 2" << endl;
     return -1;
   }
 
   auto towers = GetCollection("CaloTower");
-  
+
   auto photon1 = photons->at(0);
   auto photon2 = photons->at(1);
 
@@ -56,30 +57,35 @@ float LbLEvent::GetDeltaEt() {
   return maxDelta;
 }
 
-float LbLEvent::GetCosThetaStar()
-{
-  auto photons = GetCollection("goodPhoton");
+float LbLEvent::GetCosThetaStar(bool doElectrons) {
+  auto objects = GetCollection(doElectrons ? "goodElectron" : "goodPhoton");
 
-  if(photons->size() != 2) {
-    warn() << "Couldn't calculate cosThetaStar -- number of photons in the event != 2" << endl;
+  if (objects->size() != 2) {
+    warn() << "Couldn't calculate cosThetaStar -- number of objects in the event != 2" << endl;
     return -1;
   }
 
-  TLorentzVector photon1 = asPhoton(photons->at(0))->GetFourMomentum();
-  TLorentzVector photon2 = asPhoton(photons->at(1))->GetFourMomentum();
-  auto diphoton = photon1 + photon2;
+  TLorentzVector object1, object2;
 
-  float costhetastarCS = 2.*(diphoton.E()*photon1.Pz()-diphoton.Pz()*photon1.E())/(diphoton.M()*diphoton.Mt());
+  if (doElectrons) {
+    object1 = asElectron(objects->at(0))->GetFourMomentum();
+    object2 = asElectron(objects->at(1))->GetFourMomentum();
+  } else {
+    object1 = asPhoton(objects->at(0))->GetFourMomentum();
+    object2 = asPhoton(objects->at(1))->GetFourMomentum();
+  }
+  auto objectsSum = object1 + object2;
+
+  float costhetastarCS = 2. * (objectsSum.E() * object1.Pz() - objectsSum.Pz() * object1.E()) / (objectsSum.M() * objectsSum.Mt());
   return costhetastarCS;
-
 }
 
 float LbLEvent::GetDiphotonAcoplanarity() {
-    auto photons = event->GetCollection("goodPhoton");
-    if(photons->size() != 2) return -1;
+  auto photons = event->GetCollection("goodPhoton");
+  if (photons->size() != 2) return -1;
 
-    double deltaPhi = asPhoton(photons->at(0))->GetFourMomentum().DeltaPhi(asPhoton(photons->at(1))->GetFourMomentum());
-    double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
+  double deltaPhi = asPhoton(photons->at(0))->GetFourMomentum().DeltaPhi(asPhoton(photons->at(1))->GetFourMomentum());
+  double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
 
-    return acoplanarity;
-  }
+  return acoplanarity;
+}

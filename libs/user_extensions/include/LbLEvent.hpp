@@ -14,7 +14,7 @@ class LbLEvent {
   void AddExtraCollections() { event->AddExtraCollections(); }
 
   float GetDeltaEt();
-  float GetCosThetaStar();
+  float GetCosThetaStar(bool doElectrons=false);
   float GetDiphotonAcoplanarity();
 
  private:
