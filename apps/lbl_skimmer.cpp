@@ -4,13 +4,13 @@
 #include "EventReader.hpp"
 #include "EventWriter.hpp"
 #include "ExtensionsHelpers.hpp"
-#include "UserExtensionsHelpers.hpp"
 #include "HistogramsFiller.hpp"
 #include "HistogramsHandler.hpp"
 #include "LbLObjectsManager.hpp"
 #include "LbLSelections.hpp"
 #include "Logger.hpp"
 #include "Profiler.hpp"
+#include "UserExtensionsHelpers.hpp"
 
 using namespace std;
 
@@ -39,7 +39,9 @@ int main(int argc, char **argv) {
   auto lblSelections = make_unique<LbLSelections>();
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  bool applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons, applyEtDelta;
+  bool applyTrigger, applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons,
+      applyEtDelta, applyTwoTracksTwoPhotons;
+  config.GetValue("applyTrigger", applyTrigger);
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
   config.GetValue("applyTwoElectrons", applyTwoElectrons);
   config.GetValue("applyChargedExclusivity", applyChargedExclusivity);
@@ -47,20 +49,28 @@ int main(int argc, char **argv) {
   config.GetValue("applyDiphotonPt", applyDiphotonPt);
   config.GetValue("applyZDC", applyZDC);
   config.GetValue("applyEtDelta", applyEtDelta);
+  config.GetValue("applyTwoTracksTwoPhotons", applyTwoTracksTwoPhotons);
 
   cutFlowManager->RegisterCut("initial");
 
+  if (applyTrigger) {
+    cutFlowManager->RegisterCut("trigger");
+  }
   if (applyTwoPhotons) {
     cutFlowManager->RegisterCut("twoGoodPhotons");
     cutFlowManager->RegisterCut("diphotonMass");
   }
   if (applyTwoElectrons) {
     cutFlowManager->RegisterCut("twoGoodElectrons");
-    cutFlowManager->RegisterCut("nPhotons");
     cutFlowManager->RegisterCut("electronCharge");
     cutFlowManager->RegisterCut("nTracks");
     cutFlowManager->RegisterCut("dielectronMass");
     cutFlowManager->RegisterCut("dielectronPt");
+  }
+  if (applyTwoTracksTwoPhotons) {
+    cutFlowManager->RegisterCut("twoGoodPhotons");
+    cutFlowManager->RegisterCut("diphotonMass");
+    cutFlowManager->RegisterCut("twoGoodTracks");
   }
   if (applyChargedExclusivity) {
     cutFlowManager->RegisterCut("nElectrons");
@@ -95,12 +105,24 @@ int main(int argc, char **argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
 
+    if (applyTrigger) {
+      try {
+        if (!(int)event->Get("DoubleEG2")) continue;
+      }
+      catch(Exception & e) { warn() << e.what() << endl; }
+      cutFlowManager->UpdateCutFlow("trigger");
+    }
+
     if (applyTwoPhotons) {
       if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager)) continue;
     }
 
     if (applyTwoElectrons) {
       if (!lblSelections->PassesDielectronSelection(event, cutFlowManager)) continue;
+    }
+
+    if (applyTwoTracksTwoPhotons) {
+      if (!lblSelections->PassesTracksPlusPhotonsSelection(event, cutFlowManager)) continue;
     }
 
     if (applyChargedExclusivity) {

@@ -33,7 +33,7 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   }
   if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
 
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("neutralExclusivity");
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("neutralExclusivity");
 
   return true;
 }
@@ -77,7 +77,7 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
   cutFlowManager->UpdateCutFlow("electronCharge");
 
   // check charge exclusivity
-  if(!PassesDielectronChargedExclusivity(event, cutFlowManager)) return false;
+  if (!PassesDielectronChargedExclusivity(event, cutFlowManager)) return false;
 
   TLorentzVector electron1vec, electron2vec;
   electron1vec.SetPtEtaPhiM(electron1->Get("pt"), electron1->Get("eta"), electron1->Get("phi"), 0);
@@ -98,14 +98,14 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
 bool LbLSelections::PassesDielectronChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   auto electrons = event->GetCollection("goodElectron");
   auto tracks = event->GetCollection("goodTrack");
-  
+
   int nNonOverlappingTracks = 0;
   for (auto physicsObject : *tracks) {
     auto track = asTrack(physicsObject);
     if (!track->OverlapsWithOtherObjects(electrons)) nNonOverlappingTracks++;
   }
   if (nNonOverlappingTracks > eventCuts.at("max_Ntracks")) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
 
   // auto photons = event->GetCollection("goodPhoton");
   // int nNonOverlappingPhotons = 0;
@@ -122,15 +122,15 @@ bool LbLSelections::PassesDielectronChargedExclusivity(shared_ptr<Event> event, 
 bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   int nElectrons = event->GetCollection("goodElectron")->size();
   if (nElectrons > eventCuts.at("max_Nelectrons")) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nElectrons");
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nElectrons");
 
   int nTracks = event->GetCollection("goodTrack")->size();
   if (nTracks > eventCuts.at("max_Ntracks")) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
 
   int nMuons = event->GetCollection("goodMuon")->size();
   if (nMuons > eventCuts.at("max_Nmuons")) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("nMuons");
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nMuons");
 
   return true;
 }
@@ -175,11 +175,42 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
     }
   }
 
-  if ( totalEnergyPlus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC+");
-  if ( totalEnergyMinus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC-");
+  if (totalEnergyPlus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC+");
+  if (totalEnergyMinus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC-");
 
   if (totalEnergyPlus > eventCuts.at("max_ZDCenergyPerSide") && totalEnergyMinus > eventCuts.at("max_ZDCenergyPerSide")) return false;
   cutFlowManager->UpdateCutFlow("ZDC");
+
+  return true;
+}
+
+bool LbLSelections::PassesTracksPlusPhotonsSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (!PassesDiphotonSelection(event, cutFlowManager)) return false;
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodPhotons");
+
+  auto photons = event->GetCollection("goodPhoton");
+  auto electrons = event->GetCollection("goodElectron");
+  auto tracks = event->GetCollection("track");
+  auto photon1 = asPhoton(photons->at(0));
+  auto photon2 = asPhoton(photons->at(1));
+
+  shared_ptr<Track> track1 = nullptr;
+  shared_ptr<Track> track2 = nullptr;
+
+  for (auto physicsObject : *tracks) {
+    auto track = asTrack(physicsObject);
+    if (track->OverlapsWithOtherObjects(photons) && !track->OverlapsWithOtherObjects(electrons)) {
+      if (track1 == nullptr)
+        track1 = track;
+      else if (track2 == nullptr)
+        track2 = track;
+      else
+        return false;
+    }
+  }
+
+  if (track1 == nullptr || track2 == nullptr) return false;
+  if(cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodTracks");
 
   return true;
 }
