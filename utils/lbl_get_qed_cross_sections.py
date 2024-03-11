@@ -10,7 +10,8 @@ Eff_Error = 0.000782
 
 input_path = "../utils/output_ZDC.root"
 
-xnxn_input_path = "../utils/output_new.root"
+# xnxn_input_path = "../utils/output_new.root"
+xnxn_input_path = "../utils/output_ZDC_weighted.root"
 # xnxn_input_path = "../utils/output_ZDC0.9scaled.root"
 # xnxn_input_path = "../utils/output_ZDC1.1scaled.root"
 
@@ -84,22 +85,24 @@ def get_xnxn_cross_section_histogram(input_hist, name):
         4: 4,
         5: 3,
         6: 5,
+        7: 7,
     }
 
     bin_labels = {
         1: "0n0n",
-        2: "0nXn_0n0n",
+        2: "0nXn",
         3: "0n1n",
-        4: "1nXn_0n1n",
+        4: "1nXn",
         5: "1n1n",
-        6: "Inclusive",
+        6: "XnXn",
+        7: "Inclusive",
     }
 
     data_error = 0.03
 
     events = {}
 
-    for i in range(1, 7):
+    for i in range(1, len(bin_mapping)+1):
         index = bin_mapping[i]
         label = bin_labels[index]
 
@@ -121,14 +124,14 @@ def get_xnxn_cross_section_histogram(input_hist, name):
 
         events[label] = [n_events, n_events_err]
 
-    events["0nXn"] = (events["0nXn_0n0n"][0] - events["0n0n"][0],
-                      (events["0nXn_0n0n"][1]**2 + events["0n0n"][1]**2)**0.5)
+    # events["0nXn"] = (events["0nXn_0n0n"][0] - events["0n0n"][0],
+    #                   (events["0nXn_0n0n"][1]**2 + events["0n0n"][1]**2)**0.5)
 
-    events["1nXn"] = (events["1nXn_0n1n"][0] - events["0n1n"][0],
-                      (events["1nXn_0n1n"][1]**2 + events["0n1n"][1]**2)**0.5)
+    # events["1nXn"] = (events["1nXn_0n1n"][0] - events["0n1n"][0],
+    #                   (events["1nXn_0n1n"][1]**2 + events["0n1n"][1]**2)**0.5)
 
-    events["XnXn"] = (events["Inclusive"][0] -
-                      events["0nXn_0n0n"][0], events["0nXn_0n0n"][1])
+    # events["XnXn"] = (events["Inclusive"][0] -
+    #                   events["0nXn_0n0n"][0], events["0nXn_0n0n"][1])
 
     superchic_ratios = {
         "0n0n": (0.766, 0.0096),
@@ -181,17 +184,17 @@ def get_xnxn_cross_section_histogram(input_hist, name):
 
         label = nice_labels[key] if key in nice_labels else key
 
-        print(f"{label} & ${100*ratio:.3f} \pm {100*error:.1f} $", end="")
+        print(f"{label} & ${100*ratio:.1f} \pm {100*error:.1f} $", end="")
 
         if key in superchic_ratios:
             print(
-                f" & ${100*superchic_ratios[key][0]:.2f} \pm {100*superchic_ratios[key][1]:.2f} $", end="")
+                f" & ${100*superchic_ratios[key][0]:.1f} \pm {100*superchic_ratios[key][1]:.1f} $", end="")
         else:
             print(" & -- ", end="")
 
         if key in starlight_ratios:
             print(
-                f" & ${100*starlight_ratios[key][0]:.2f} \pm {100*starlight_ratios[key][1]:.2f} $\\\\")
+                f" & ${100*starlight_ratios[key][0]:.1f} \pm {100*starlight_ratios[key][1]:.1f} $\\\\")
         else:
             print(" & -- \\\\")
 
