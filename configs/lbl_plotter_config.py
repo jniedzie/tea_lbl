@@ -4,74 +4,83 @@ from Legend import Legend
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from lbl_helpers import get_cep_scale
-from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, systematic_uncertainty_qed
-from lbl_paths import base_path, processes, qed_name, skim, qed_name2
+from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, total_uncertainty_qed, total_uncertainty_lbl_run2
+from lbl_paths import base_path, processes, qed_superchic, skim, qed_starlight, qed_mg1gamma, qed_mg2gamma
 
 
-output_path = f"../plots/{skim.replace('skimmed_', '')}/"
-# output_path = f"../plots/{skim.replace('skimmed_', '')}_1gamma/"
+# output_path = f"../plots/{skim.replace('skimmed_', '')}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_1gamma/"
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_2gamma/"
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_MG5/"
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_MG5_noPtCut/"
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_comparison/"
+# output_path = f"../plots/{skim.replace('skimmed_', '')}_SCvsSL/"
 
-do_photons = True
+
+do_photons = False
 do_alps = False
 
-scale = 1
+lbl_error = total_uncertainty_lbl_run2 - 1
+qed_error = total_uncertainty_qed - 1
+
+scale = 1.0
 
 samples = [
-    Sample(
-        name=qed_name,
-        file_path=f"{base_path}/{qed_name}/merged_{skim}_histograms.root",
-        type=SampleType.background,
+    # Sample(
+    #     name=qed_superchic,
+    #     file_path=f"{base_path}/{qed_superchic}/merged_{skim}_histograms.root",
+    #     type=SampleType.background,
 
-        cross_section=scale*crossSections[qed_name]*get_scale_factor(do_photons)[0],
-        initial_weight_sum=nGenEvents[qed_name],
+    #     cross_section=scale*crossSections[qed_superchic]*get_scale_factor(do_photons)[0],
+    #     initial_weight_sum=nGenEvents[qed_superchic],
+
+    #     # line_style=ROOT.kSolid,
+    #     # line_color=ROOT.kRed,
+    #     # fill_alpha=0.0,
+        
+    #     fill_color=ROOT.kYellow,
+    #     fill_alpha=1.0,
+        
+    #     marker_size=0.0,
+    #     legend_description="#gamma#gamma#rightarrowe^{+}e^{-} (SC3 & SL avg.)"
+    # ),
+    # Sample(
+    #     name=qed_starlight,
+    #     file_path=f"{base_path}/{qed_starlight}/merged_{skim}_histograms.root",
+    #     type=SampleType.background,
+
+    #     cross_section=scale*crossSections[qed_starlight]*get_scale_factor(do_photons)[0],
+    #     initial_weight_sum=nGenEvents[qed_starlight],
+
+    #     # line_style=ROOT.kSolid,
+    #     # line_color=ROOT.kBlue,
+    #     # fill_alpha=0.0,
+        
+    #     fill_color=ROOT.kYellow,
+    #     line_color=ROOT.kYellow,
+    #     fill_alpha=1.0,
+        
+    #     marker_size=0.0,
+    #     legend_description=""
+    # ),
+     Sample(
+        name=qed_mg1gamma,
+        file_path=f"{base_path}/qed/merged_{skim}_histograms.root",
+        type=SampleType.signal,
+
+        cross_section=scale*crossSections[qed_mg1gamma]*get_scale_factor(do_photons)[0],
+        initial_weight_sum=nGenEvents[qed_mg1gamma],
 
         # line_style=ROOT.kSolid,
-        # line_color=ROOT.kRed,
+        # line_color=ROOT.kBlue,
         # fill_alpha=0.0,
         
-        fill_color=ROOT.kYellow,
+        fill_color=ROOT.kBlue,
         fill_alpha=1.0,
+        
         marker_size=0.0,
-        legend_description="QED (#gamma)"
+        legend_description="QED (MG+1gamma)"
     ),
-    # Sample(
-    #     name=qed_name2,
-    #     file_path=f"{base_path}/{qed_name2}/merged_{skim}_histograms.root",
-    #     type=SampleType.signal,
-
-    #     cross_section=scale*crossSections[qed_name2]*get_scale_factor(do_photons)[0],
-    #     initial_weight_sum=nGenEvents[qed_name2],
-
-
-    #     line_style=ROOT.kSolid,
-    #     line_color=ROOT.kOrange,
-    #     # fill_color=ROOT.kOrange,
-    #     # fill_alpha=1.0,
-    #     fill_alpha=0.0,
-    #     marker_size=0.0,
-    #     legend_description="QED (#gamma#gamma)"
-    # ),
-    #  Sample(
-    #     name="qed",
-    #     file_path=f"{base_path}/qed/merged_{skim}_histograms.root",
-    #     type=SampleType.signal,
-
-    #     cross_section=scale*crossSections["qed"]*get_scale_factor(do_photons)[0],
-    #     initial_weight_sum=nGenEvents["qed"],
-
-
-    #     line_style=ROOT.kSolid,
-    #     line_color=ROOT.kBlue,
-    #     # fill_color=ROOT.kBlue,
-    #     # fill_alpha=1.0,
-    #     fill_alpha=0.0,
-    #     marker_size=0.0,
-    #     legend_description="QED (SC)"
-    # ),
     Sample(
         name="data",
         file_path=f"{base_path}/collisionData/merged_{skim}_histograms.root",
@@ -83,8 +92,8 @@ samples = [
         marker_color=ROOT.kBlack,
         fill_alpha=0.0,
         legend_description="data",
-        # custom_legend=Legend(0.7, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrow#gamma#gamma"),
-        custom_legend=Legend(0.7, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrowe^{+}e^{-}(#gamma)(#gamma)"),
+        custom_legend=Legend(0.55, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrow#gamma#gamma"),
+        # custom_legend=Legend(0.7, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrowe^{+}e^{-}(#gamma)(#gamma)"),
     ),
 ]
 
@@ -105,27 +114,27 @@ if do_photons:
             # custom_legend = Legend(0.5, 0.5, 0.7, 0.8, "f"),
         )
     )
-    # samples.append(
-    #     Sample(
-    #         name="cep",
-    #         file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
-    #         type=SampleType.background,
-    #         cross_section=get_cep_scale(skim)[0],
-    #         initial_weight_sum=luminosity,
+    samples.append(
+        Sample(
+            name="cep",
+            file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
+            type=SampleType.background,
+            cross_section=get_cep_scale(skim)[0],
+            initial_weight_sum=luminosity,
 
-    #         # cross_section=crossSections["cep"]*get_scale_factor(do_photons)[0]*179.7778874019975,
-    #         # initial_weight_sum=nGenEvents["cep"],
+            # cross_section=crossSections["cep"]*get_scale_factor(do_photons)[0]*179.7778874019975,
+            # initial_weight_sum=nGenEvents["cep"],
 
-    #         # line_color=ROOT.kAzure-4,
-    #         fill_color=ROOT.kAzure-4,
-    #         fill_alpha=1.0,
-    #         # fill_alpha=0.0,
-    #         legend_description="CEP",
-    #         # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
-    #     )
-    # )
+            # line_color=ROOT.kAzure-4,
+            fill_color=ROOT.kAzure-4,
+            fill_alpha=1.0,
+            # fill_alpha=0.0,
+            legend_description="CEP",
+            # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
+        )
+    )
 
-custom_stacks_order = ["cep", qed_name2, qed_name, "lbl", "data"]
+custom_stacks_order = ["cep", qed_starlight, qed_superchic, "lbl", "data"]
 
 alp_colors = (
     ROOT.kGray+2,
@@ -140,9 +149,9 @@ alp_colors = (
     ROOT.kRed,
 )
 
-legend_width = 0.10
-legend_min_x = 0.40
-legend_max_x = 0.80
+legend_width = 0.05
+legend_min_x = 0.55
+legend_max_x = 0.65
 
 legend_height = 0.05
 legend_max_y = 0.85
@@ -182,23 +191,18 @@ if do_alps:
         alp_index += 1
 
 y_label = "# events"
-lbl_error = 0.20
-qed_error = systematic_uncertainty_qed - 1
-
-y_scale = 1.0
-# y_scale = 1.2  # for ZDC
 
 histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
 
     # photons
-    Histogram("goodPhotonSR_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, y_scale*35, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhotonSR_phi", "", False, False, NormalizationType.to_lumi, 1,   -3.14, 3.14, 0, y_scale*20, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhotonSR_et", "", False, False, NormalizationType.to_lumi, 1,   2, 8, 0, y_scale*35, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("goodPhotonSR_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 35, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhotonSR_phi", "", False, False, NormalizationType.to_lumi, 1,   -3.14, 3.14, 0, 20, "#phi^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhotonSR_et", "", False, False, NormalizationType.to_lumi, 1,   2, 8, 0, 35, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("diphotonSR_rapidity", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 15, "y^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphotonSR_mass", "", False, True, NormalizationType.to_lumi, 1,   0, 30, 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("diphotonSR_pt", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 18, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "|cos #theta*|", y_label),
+    Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "|cos #theta*|", y_label, "", lbl_error),
 
 
     Histogram("goodPhoton_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 30, "#eta^{#gamma}", y_label, "", lbl_error),
@@ -245,9 +249,14 @@ histograms = (
     Histogram("electron_PFPhoIso", "", False, True, NormalizationType.to_data, 1,   0, 0.1, 1e-10, 1e0, "Electron PFPhoIso", y_label, "", qed_error),
     Histogram("electron_PFNeuIso", "", False, True, NormalizationType.to_data, 1,   0, 0.1, 1e-10, 1e0, "Electron PFNeuIso", y_label, "", qed_error),
 
+
+    Histogram("goodElectron_deltaEtaAtVertex", "", False, True, NormalizationType.to_lumi, 1,  -0.02, 0.1, 1e0, 1e5, "#Delta#eta_{e} seed", y_label, "", qed_error),
+    Histogram("goodElectron_hOverE", "", False, True, NormalizationType.to_lumi, 1,   0, 0.006, 1e0, 1e6, "H/E_{e}", y_label, "", qed_error),
+    Histogram("goodElectron_nMissHits", "", False, True, NormalizationType.to_lumi, 1,   0, 5, 1e3, 1e6, "N_{e}^{misHits}", y_label, "", qed_error),
+
     Histogram("dielectron_acoplanarity", "", False, True, NormalizationType.to_data, 40,   0, 1.0, 1e-2, 1e5, "A_{#phi}^{ee}", y_label, "", qed_error),
     Histogram("dielectron_mass", "", False, True, NormalizationType.to_data, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label, "", qed_error),
-    Histogram("dielectron_pt", "", False, True, NormalizationType.to_data, 1,   0, 1, -1, 1e3, "p_{T}^{ee} (GeV)", y_label, "", qed_error),
+    Histogram("dielectron_pt", "", False, True, NormalizationType.to_data, 1,   0, 2, -1, 1e4, "p_{T}^{ee} (GeV)", y_label, "", qed_error),
     Histogram("dielectron_rapidity", "", False, True, NormalizationType.to_data, 1,   -2.2, 2.2, -1, -1, "y^{ee} (GeV)", y_label, "", qed_error),
     Histogram("dielectronSR_mass", "", False, True, NormalizationType.to_data, 1,   4.0, 100, 1e-1, 3e3, "m^{ee} (GeV)", y_label, "", qed_error),
     Histogram("dielectronSR_pt", "", False, True, NormalizationType.to_data, 1,   0, 1, -1, -1, "m^{ee} (GeV)", y_label, "", qed_error),
@@ -281,12 +290,12 @@ n_background = len([s for s in samples if s.type ==
 legends = {
     SampleType.signal: Legend(legend_min_x, legend_max_y - n_signal*legend_height, legend_min_x+legend_width, legend_max_y, "l"),
     SampleType.data: Legend(legend_max_x-legend_width, legend_max_y - 2*legend_height, legend_max_x, legend_max_y-legend_height, "pl", title="#gamma#gamma"),
-    SampleType.background: Legend(legend_max_x-legend_width, legend_max_y - (n_background+1)*legend_height, legend_max_x, legend_max_y-legend_height, "f"),
+    SampleType.background: Legend(legend_min_x, legend_max_y - (n_background+1)*legend_height, legend_max_x, legend_max_y-legend_height, "f"),
 }
 
 plotting_options = {
     SampleType.background: "hist",
-    # SampleType.background: "hist nostack",
+    # SampleType.background: "hist nostack e",
     SampleType.signal: "hist nostack",
     SampleType.data: "nostack pe0",
 }
