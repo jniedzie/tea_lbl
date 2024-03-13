@@ -1,36 +1,28 @@
 from lbl_helpers import load_histograms, get_cep_scale
 from lbl_helpers import input_aco_histograms
-from lbl_params import luminosity, luminosity_err, get_scale_factor
-from lbl_params import crossSections, nGenEvents, luminosity_err
-
-# skim = "skimmed_lblSelections_final"
-# skim = "skimmed_lblSelections_final_andZDC2n"
-skim = "skimmed_lblSelections_final_andZDC3n"
-# skim = "skimmed_lblSelections_final_andZDC"
-# skim = "skimmed_lblSelections_final_noZDC"
-# skim = "skimmed_lblSelections_finalXn1n"
-# skim = "skimmed_lblSelections_finalXn0n"
+from lbl_params import luminosity, luminosity_err, get_scale_factor, total_diphoton_efficiency, total_diphoton_efficiency_err
+from lbl_params import crossSections, nGenEvents, luminosity_err, stat_uncertainty_lbl_run2, non_stat_uncertainty_lbl_run2
+from lbl_paths import skim, qed_names
 
 
 def get_cross_section(n_events, n_events_err):
 
-    Eff = 0.1352
-    Eff_Error = 0.0030
-
     scale_factor, sf_error = get_scale_factor(photon=True)
 
-    correction_factor = scale_factor * Eff
+    correction_factor = scale_factor * total_diphoton_efficiency
     correction_factor_err = correction_factor * \
-        ((sf_error/scale_factor)**2 + (Eff_Error/Eff)**2)**0.5
+        ((sf_error/scale_factor)**2 + (total_diphoton_efficiency_err/total_diphoton_efficiency)**2)**0.5
 
     print(
         f"Correction factor: {correction_factor:.4f} +/- {correction_factor_err:.4f}")
 
     cross_section = n_events / (correction_factor * luminosity/1000.)
 
-    cross_section_syst = cross_section * \
-        ((correction_factor_err/correction_factor)
-         ** 2 + (luminosity_err/luminosity)**2)**0.5
+    # cross_section_syst = cross_section * \
+    #     ((correction_factor_err/correction_factor)
+    #      ** 2 + (luminosity_err/luminosity)**2)**0.5
+        
+    cross_section_syst = cross_section * (non_stat_uncertainty_lbl_run2-1)
 
     cross_section_stat = n_events_err / (correction_factor * luminosity/1000.)
 
@@ -91,11 +83,30 @@ def main():
         print(f"{process}: {integral:.3f} +- {integral_errors[process]:.3f}")
     print("============================================================\n\n")
 
-    total_background = integrals["cep"] + integrals["qed"]
-    total_background_err = (integral_errors["cep"]**2+integral_errors["qed"]**2)**(1/2)
+    total_background = integrals["cep"]
+    total_background_err = integral_errors["cep"]**2
+
+    for qed_name in qed_names:
+        total_background += integrals[qed_name]
+        total_background_err += integral_errors[qed_name]**2
+
+    total_background_err = total_background**(1/2)
 
     data_minus_background = integrals["collisionData"]-total_background
-    data_minus_background_err = (integral_errors["collisionData"]**2+(total_background*0.18)**2)**(1/2)
+    data_minus_background_err = (
+        integral_errors["collisionData"]**2+(total_background*(stat_uncertainty_lbl_run2-1))**2)**(1/2)
+
+    data_tail_integral = input_aco_histograms["collisionData"].Integral(
+        input_aco_histograms["collisionData"].FindFixBin(0.015), input_aco_histograms["collisionData"].GetNbinsX())
+    
+    # data_tail_integral = input_aco_histograms["collisionData"].Integral(
+    #     input_aco_histograms["collisionData"].FindFixBin(0.015), input_aco_histograms["collisionData"].GetNbinsX()) - input_aco_histograms["lbl"].Integral(input_aco_histograms["lbl"].FindFixBin(0.015), input_aco_histograms["lbl"].GetNbinsX())
+    
+    qed_tail_integral = input_aco_histograms["qed"].Integral(
+        input_aco_histograms["qed"].FindFixBin(0.015), input_aco_histograms["qed"].GetNbinsX()) + input_aco_histograms["qed_starlight"].Integral(input_aco_histograms["qed_starlight"].FindFixBin(0.015), input_aco_histograms["qed_starlight"].GetNbinsX())
+
+    print(f"\n\n{data_tail_integral=:.3f}")
+    print(f"{qed_tail_integral=:.3f}\n\n")
 
     print("\n\n============================================================")
     print(
@@ -115,9 +126,9 @@ def main():
     print(f"Observed naive significance: {observed_significance:.2f}")
     print("============================================================\n\n")
 
-    
     cross_section, cross_section_stat, cross_section_syst = get_cross_section(data_minus_background, data_minus_background_err)
-    cross_section_mc, cross_section_mc_stat, cross_section_mc_syst = get_cross_section(integrals["lbl"], integral_errors["lbl"])
+    cross_section_mc, cross_section_mc_stat, cross_section_mc_syst = get_cross_section(
+        integrals["lbl"], integral_errors["lbl"])
 
     print("\n\n============================================================")
     print(

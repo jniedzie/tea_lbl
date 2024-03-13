@@ -3,7 +3,7 @@ eventCuts = {
     # "max_ZDCenergyPerSide": 10000.0,  # <4n
     "max_ZDCenergyPerSide": 7000.0,  # <3n
     # "max_ZDCenergyPerSide": 4000.0,  # <2n
-    # "max_ZDCenergyPerSide": 2000.0,  # <1n
+    # "max_ZDCenergyPerSide": 1600.0,  # <1n
 
     "min_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
     "max_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
@@ -132,9 +132,11 @@ detectorParams = {
 # matching between calorimeters and photons/electrons
 caloMatching = {
     "maxDeltaEta_EB": 0.15,
-    "maxDeltaPhi_EB": 0.7,
+    # "maxDeltaPhi_EB": 0.7,
+    "maxDeltaPhi_EB": 0.15,
     "maxDeltaEta_EE": 0.15,
-    "maxDeltaPhi_EE": 0.4,
+    # "maxDeltaPhi_EE": 0.4,
+    "maxDeltaPhi_EE": 0.15,
 }
 
 
@@ -162,18 +164,26 @@ reference_alp_cross_section = 10e-3  # μb
 # qed_scaling = 1.0  # 4n OR
 # qed_scaling = 2.2  # 1n AND
 # qed_scaling = 2.3  # 2n AND
-qed_scaling = 2.7  # 3n AND
+# qed_scaling = 2.7  # 3n AND
 # qed_scaling = 2.5  # 4n AND
-# qed_scaling = 1.0  # Xn0n
+# qed_scaling = 1.0  # Xn0n, no scaling
+qed_scaling = 0.5  # adding SC + SL
+# qed_scaling = 2.047  # no CEP
+
 
 # LbL may be scaled up due to NLO corrections
 lbl_scaling = 1.05  # inclusive
-# lbl_scaling = 1.05 * 0.62  # 0n0n
-# lbl_scaling = 1.05 * (0.62 + 0.10 + 0.01)  # 0n0n + 0n1n + 1n0n + 1n1n
+# lbl_scaling = 1.05 * 0.63  # 0n0n
+# lbl_scaling = 1.05 * (0.63 + 0.099 + 0.07)  # 0n0n + 0n1n + 1n0n + 1n1n
 
 crossSections = {
     "lbl": 2.59 * lbl_scaling,  # μb
+    
     "qed": 8827.220 * qed_scaling,  # μb
+    "qed_starlight": 7920.0 * qed_scaling,  # μb
+    "qed_MG_ee_a": 13.45 * qed_scaling,  # μb
+    "qed_MG_ee_aa": 0.1945 * qed_scaling,  # μb
+    
     "cep": 5.8e-3,  # we scale it to data
 
     "alps_5": reference_alp_cross_section,
@@ -237,8 +247,13 @@ def get_scale_factor(photon=True):
 
 nGenEvents = {
     "lbl": 466000,
-    "qed": 59260000,
+    
     "cep": 668000,  # we scale it to data
+
+    "qed_MG_ee_a": 10228329,
+    "qed_MG_ee_aa": 6457150,
+    "qed": 59260000,
+    "qed_starlight": 66750000,
 
     "alps_5": 754000,
     "alps_6": 729000,
@@ -268,6 +283,13 @@ do_lbl_sampling = False
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
 
-systematic_uncertainty_qed = 1.068
-systematic_uncertainty_lbl = 1.24
+total_uncertainty_qed = 1.068
+total_uncertainty_lbl_run2 = 1.23
+non_stat_uncertainty_lbl_run2 = 1.18
+stat_uncertainty_lbl_run2 = 1.15
+
+total_uncertainty_lbl_run1 = 1.24
 alp_mc_uncertainty = 1.03
+
+total_diphoton_efficiency = 0.1352
+total_diphoton_efficiency_err = 0.0030

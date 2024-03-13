@@ -6,7 +6,7 @@ from Logger import info, warn, fatal
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, uncertainty_on_zero
 from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity, n_mass_bins
 from lbl_params import qed_sampling_n_events, qed_sampling_transition_point, qed_sampling_fit_max_aco
-from lbl_paths import processes, merged_histograms_path, qed_name
+from lbl_paths import processes, merged_histograms_path, qed_names
 from lbl_paths import acoplanarity_histogram_name, mass_histogram_name
 
 
@@ -114,7 +114,9 @@ def get_cep_scale(skim):
         fatal("collisionData histogram not found in input files. Did you forget to create/merge histograms?")
         exit()
     hist_data_no_background.Add(input_aco_histograms["lbl"], -1)
-    hist_data_no_background.Add(input_aco_histograms[qed_name], -1)
+    for qed_name in qed_names:
+        print(f"subtracting {qed_name}")
+        hist_data_no_background.Add(input_aco_histograms[qed_name], -1)
 
     integral_data = hist_data_no_background.Integral(
         hist_data_no_background.FindBin(cep_scaling_min_acoplanarity),
@@ -178,14 +180,24 @@ def add_uncertainties_on_zero(histogram):
     return histogram
 
 
-def sample_from_fit(hist, divide_bin_width):
+def sample_from_fit(hist, divide_bin_width, options=""):
     ROOT.gRandom.SetSeed(0)
 
     formula = f"[p0]*(x<={qed_sampling_transition_point})+(exp([p1]+[p2]*x))*(x>{qed_sampling_transition_point})"
     # formula = f"[p0]*(x<={qed_sampling_transition_point})+([p0]*exp([p2]*(x-{qed_sampling_transition_point})))*(x>{qed_sampling_transition_point})"
-    fit = ROOT.TF1("fit", formula, 0, qed_sampling_fit_max_aco)
-    # fit.SetParameters(7, 3, -31)
-    fit.SetParameters(7, 3, -35)
+
+    if options == "superchic":
+        fit = ROOT.TF1(
+            "fit", "[p0]*(x<=0.032)+(exp([p1]+[p2]*x))*(x>0.032&&x<0.2)", 0, 0.1)
+        fit.SetParameters(0.373012, 0.890578, -57.2145)
+    elif options == "starlight":
+        fit = ROOT.TF1(
+            "fit", "[p0]*(x<=0.034)+(exp([p1]+[p2]*x))*(x>0.034&&x<0.2)", 0, 0.1)
+        fit.SetParameters(0.265564, 0.0277834, -41.6268)
+    else:
+        fit = ROOT.TF1("fit", formula, 0, qed_sampling_fit_max_aco)
+        fit.SetParameters(7, 3, -35)
+
     hist.Fit(fit, "WW")
 
     new_hist = hist.Clone()
@@ -197,7 +209,7 @@ def sample_from_fit(hist, divide_bin_width):
     new_hist.Scale(hist.Integral()/new_hist.Integral())
 
     canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
-    canvas.SetLogx()
+    # canvas.SetLogx()
 
     hist.SetMarkerColor(ROOT.kRed)
     hist.SetMarkerStyle(20)
@@ -205,14 +217,14 @@ def sample_from_fit(hist, divide_bin_width):
     hist.Draw("PE")
 
     hist.GetXaxis().SetRangeUser(1e-3, 0.2)
-    hist.GetYaxis().SetRangeUser(0, 50)
+    hist.GetYaxis().SetRangeUser(0, 15)
 
     new_hist.SetMarkerColor(ROOT.kBlack)
     new_hist.SetMarkerStyle(20)
     new_hist.SetLineColor(ROOT.kBlack)
     new_hist.Draw("PEsame")
 
-    canvas.SaveAs("../plots/qed_fit.pdf")
+    canvas.SaveAs(f"../plots/qed_fit_{options}.pdf")
 
     return new_hist
 

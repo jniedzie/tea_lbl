@@ -3,12 +3,15 @@ qed_mg1gamma = "qed_MG_ee_a"
 qed_mg2gamma = "qed_MG_ee_aa"
 qed_starlight = "qed_starlight"
 
+# qed_name = qed_superchic
+qed_names = [qed_superchic, qed_starlight]
+
 processes = (
     "collisionData",
     "lbl",
     "cep",
     qed_superchic,
-    # qed_starlight,
+    qed_starlight,
     # qed_mg1gamma,
     # qed_mg2gamma,
 
@@ -28,10 +31,14 @@ processes = (
 
 # skim = "initial"
 
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n_1n0n_1n1n"
+
 # skim = "skimmed_lblSelections_finalXn0n"
 # skim = "skimmed_lblSelections_finalXn1n"
 # skim = "skimmed_lblSelections_final_2n2n"
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_noZDC"
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC"
 # skim = "skimmed_lblSelections_final_andZDC3n"
@@ -41,6 +48,7 @@ skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_onlyNee"
 
 # skim = "skimmed_qedSelections"
+# skim = "skimmed_qedSelections_noHoverEcut"
 # skim = "skimmed_qedSelections_noPtCut"
 # skim = "skimmed_qedSelections_noZDC"
 

@@ -1,8 +1,8 @@
 from lbl_helpers import load_histograms, get_cep_scale, input_mass_histograms, add_uncertainties_on_zero
 from lbl_helpers import input_aco_histograms, scale_non_cep_histograms, sample_from_fit, sample_lbl_from_fit
 from lbl_params import n_acoplanarity_bins, n_mass_bins, do_qed_sampling, do_lbl_sampling
-from lbl_params import systematic_uncertainty_lbl, alp_mc_uncertainty
-from lbl_paths import processes, skim
+from lbl_params import total_uncertainty_lbl_run2, alp_mc_uncertainty
+from lbl_paths import processes, skim, qed_names
 from Logger import info
 import ROOT
 import os
@@ -38,7 +38,6 @@ def save_output_histograms():
         # input_mass_histograms[process] = add_uncertainties_on_zero(input_mass_histograms[process])
 
         name = process if process != "collisionData" else "data_obs"
-
         input_aco_histograms[process].SetName(name)
         input_mass_histograms[process].SetName(name)
 
@@ -66,33 +65,55 @@ def add_datacard_header(file, observed_rate, alp_name=""):
         histograms_path = output_path_mass.replace("../combine/", "")
 
     file += "imax 1  number of channels\n"
-    file += f"jmax {3 if alp_name!='' else 2}  number of backgrounds\n"
+    file += f"jmax {3 if alp_name!='' else 1+len(qed_names)}  number of backgrounds\n"
     file += "kmax *  number of nuisance parameters\n"
     file += f"shapes * * {histograms_path} "
     file += " $PROCESS $PROCESS_$SYSTEMATIC\n"
     file += "bin bin1\n"
     file += f"observation {observed_rate}\n"
-    file += f"bin            {'bin1 ' if alp_name!='' else ''}bin1 bin1 bin1\n"
-    file += f"process        {alp_name} lbl  cep  qed\n"
-    file += f"process        0      1     2{'     3' if alp_name!='' else ''}\n"
+    file += f"bin            {'bin1 ' if alp_name!='' else ''}bin1 bin1"
+
+    for qed_name in qed_names:
+        file += f" bin1"
+    file += "\n"
+
+    file += f"process        {alp_name} lbl  cep"
+    for qed_name in qed_names:
+        file += f" {qed_name}"
+    file += "\n"
+    file += "process        0      1"
+
+    for i in range(len(qed_names)):
+        file += f" {i+2}"
+
+    file += f"{'     3' if alp_name!='' else ''}\n"
     return file
 
 
 def add_datacard_rates(file, rates, alp_name=""):
     file += f"rate           {rates[alp_name] if alp_name!='' else ''}  "
-    file += f"{rates['lbl']} {rates['cep']} {rates['qed']}\n"
+    file += f"{rates['lbl']} {rates['cep']}"
+
+    for qed_name in qed_names:
+        file += f" {rates[qed_name]}"
+    file += "\n"
+
     return file
 
 
 def add_datacard_nuisances(file, do_alp=False):
     if do_alp:
         file += "bck_syst     lnN    -  "
-        file += f"{systematic_uncertainty_lbl}  {systematic_uncertainty_lbl}"
-        file += f"  {systematic_uncertainty_lbl}\n"
+        file += f"{total_uncertainty_lbl_run2}  {total_uncertainty_lbl_run2}"
+        file += f"  {total_uncertainty_lbl_run2}\n"
         file += f"alp_mc     lnN  {alp_mc_uncertainty}  -  -  -\n"
     else:
         file += "bck_syst     lnN    -  "
-        file += f"{systematic_uncertainty_lbl}  {systematic_uncertainty_lbl}\n"
+        file += f"{total_uncertainty_lbl_run2}"
+
+        for i in range(len(qed_names)):
+            file += f"  {total_uncertainty_lbl_run2}"
+        file += "\n"
 
     file += "bin1   autoMCStats  10\n"
     return file
@@ -142,8 +163,11 @@ def save_datacard():
 
 def get_data_background_chi2():
     data = input_aco_histograms["collisionData"]
-    backgrounds = [input_aco_histograms["qed"],
-                   input_aco_histograms["lbl"], input_aco_histograms["cep"]]
+    backgrounds = [input_aco_histograms["lbl"], input_aco_histograms["cep"]]
+
+    for qed_name in qed_names:
+        backgrounds.append(input_aco_histograms[qed_name])
+
     chi2 = 0
     for i in range(1, data.GetNbinsX()+1):
         data_bin = data.GetBinContent(i)
@@ -169,9 +193,15 @@ def main():
         input_aco_histograms[process].SetBinErrorOption(ROOT.TH1.kPoisson)
 
     if do_qed_sampling:
-        input_aco_histograms["qed"] = sample_from_fit(
-            input_aco_histograms["qed"],
-            divide_bin_width=True)
+        for qed_name in qed_names:
+            options = ""
+            if qed_name == "qed":
+                options = "superchic"
+            if qed_name == "qed_starlight":
+                options = "starlight"
+
+            input_aco_histograms[qed_name] = sample_from_fit(
+                input_aco_histograms[qed_name], divide_bin_width=True, options=options)
 
     if do_lbl_sampling:
         input_aco_histograms["lbl"] = sample_lbl_from_fit(

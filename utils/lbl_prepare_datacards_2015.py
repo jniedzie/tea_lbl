@@ -1,6 +1,7 @@
 from Logger import info
 import ROOT
 import os
+from lbl_params import total_uncertainty_lbl_run1, alp_mc_uncertainty
 
 
 backgrounds_input_path = "../combine/ged_final_histos_invmass5_diphoton_pt1.root"
@@ -11,13 +12,11 @@ output_path_aco = "../combine/significance_histograms_2015.root"
 
 input_mass_histograms = {}
 
-systematic_uncertainty = 1.24
-alp_mc_uncertainty = 1.03
-
 
 # backgrounds_file = ROOT.TFile.Open(backgrounds_input_path)
 # alps_file = ROOT.TFile.Open(alps_input_path)
 
+eta_range_scale = 0.91
 
 def load_histograms():
     input_mass_histograms["collisionData"] = backgrounds_file.Get(
@@ -82,8 +81,8 @@ def add_datacard_rates(file, rates, alp_name):
 
 def add_datacard_nuisances(file):
     file += "bck_syst     lnN    -  "
-    file += f"{systematic_uncertainty}  {systematic_uncertainty}"
-    file += f"  {systematic_uncertainty}\n"
+    file += f"{total_uncertainty_lbl_run1}  {total_uncertainty_lbl_run1}"
+    file += f"  {total_uncertainty_lbl_run1}\n"
     file += f"alp_mc     lnN  {alp_mc_uncertainty}  -  -  -\n"
     file += "bin1   autoMCStats  10\n"
 
@@ -159,9 +158,9 @@ def get_aco_histograms():
         hist_background.SetBinContent(i+1, background_y[i])
         hist_lbl.SetBinContent(i+1, lbl_y[i])
 
-    hist_data.Scale(0.91)
-    hist_background.Scale(0.91)
-    hist_lbl.Scale(0.91)
+    hist_data.Scale(eta_range_scale)
+    hist_background.Scale(eta_range_scale)
+    hist_lbl.Scale(eta_range_scale)
 
     return hist_data, hist_background, hist_lbl
 

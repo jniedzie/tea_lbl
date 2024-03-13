@@ -1,16 +1,12 @@
 import ROOT
 from array import array
 import numpy as np
-from lbl_params import cep_scaling_min_acoplanarity, n_acoplanarity_bins
+from lbl_params import cep_scaling_min_acoplanarity, n_acoplanarity_bins, total_uncertainty_lbl_run2
+from lbl_paths import skim
 
-# skim = "skimmed_lblSelections_final"
-skim = "skimmed_lblSelections_final_andZDC3n"
-# skim = "skimmed_lblSelections_finalXn0n"
-# skim = "skimmed_lblSelections_finalXn1n"
-
-legend_header = "  #gamma#gamma#rightarrow#gamma#gamma"
+# legend_header = "  #gamma#gamma#rightarrow#gamma#gamma"
 # legend_header = "  #gamma#gamma#rightarrow#gamma#gamma (0n0n)"
-# legend_header = "  #gamma#gamma#rightarrow#gamma#gamma (0n0n, 0n1n, 1n0n, 1n1n)"
+legend_header = "  #gamma#gamma#rightarrow#gamma#gamma (0n0n, 0n1n, 1n0n, 1n1n)"
 
 input_file_path = f"../combine/significance_histograms_{skim}_nBins{n_acoplanarity_bins}.root"
 
@@ -77,11 +73,13 @@ def main():
     hist_data = file.Get("data_obs")
     hist_cep = file.Get("cep")
     hist_qed = file.Get("qed")
+    hist_qed_sl = file.Get("qed_starlight")
     hist_lbl = file.Get("lbl")
 
     hist_data.SetBinErrorOption(ROOT.TH1.kPoisson)
     hist_cep.SetBinErrorOption(ROOT.TH1.kPoisson)
     hist_qed.SetBinErrorOption(ROOT.TH1.kPoisson)
+    hist_qed_sl.SetBinErrorOption(ROOT.TH1.kPoisson)
     hist_lbl.SetBinErrorOption(ROOT.TH1.kPoisson)
 
     hist_data = transform_hist(hist_data)
@@ -93,6 +91,7 @@ def main():
     
     hist_cep = transform_hist(hist_cep)
     hist_qed = transform_hist(hist_qed)
+    hist_qed_sl = transform_hist(hist_qed_sl)
     hist_lbl = transform_hist(hist_lbl)
 
     graph_data = hist_to_graph(hist_data)
@@ -108,15 +107,19 @@ def main():
     hist_cep.SetFillColor(ROOT.kAzure-4)
     hist_lbl.SetFillColor(ROOT.kOrange+1)
     hist_qed.SetFillColor(ROOT.kYellow)
+    hist_qed.SetLineColor(ROOT.kYellow)
+    hist_qed_sl.SetFillColor(ROOT.kYellow)
 
     stack = ROOT.THStack("stack", "stack")
     stack.Add(hist_cep)
     stack.Add(hist_qed)
+    stack.Add(hist_qed_sl)
     stack.Add(hist_lbl)
 
     sum_hist = hist_cep.Clone()
     sum_hist.Add(hist_lbl)
     sum_hist.Add(hist_qed)
+    sum_hist.Add(hist_qed_sl)
     sum_hist.SetFillStyle(3004)
     sum_hist.SetFillColor(ROOT.kBlack)
 
@@ -124,14 +127,15 @@ def main():
 
     for i in range(1, sum_hist.GetNbinsX()+1):
         bin_content = sum_hist.GetBinContent(i)
-        # stat_error = sum_hist.GetBinError(i)
-        syst_error = bin_content * 0.24
+        stat_error = sum_hist.GetBinError(i)
+        syst_error = bin_content * (total_uncertainty_lbl_run2-1)
 
         # print(f"bin: {i}, content: {bin_content}, stat_error: {stat_error}, syst_error: {syst_error}")
         
         # value = sum_hist.GetXaxis().GetBinCenter(i)
         # if value > cep_scaling_min_acoplanarity:
         # sum_hist.SetBinError(i, (stat_error**2 + syst_error**2)**(1/2))
+        # sum_hist.SetBinError(i, stat_error)
         # else:
         sum_hist.SetBinError(i, syst_error)
 
@@ -229,7 +233,9 @@ def main():
     legend.SetBorderSize(0)
     legend.AddEntry(hist_data, "Data", "PE")
     legend.AddEntry(hist_lbl, "LbL (SuperChic)", "F")
-    legend.AddEntry(hist_qed, "QED+FSR (SuperChic+PHOTOS)", "F")
+    legend.AddEntry(hist_qed_sl, "#gamma#gamma #rightarrow e^{+}e^{-} (SuperChic and Starlight averaged)", "F")
+    # legend.AddEntry(hist_qed, "QED+FSR (SuperChic+PHOTOS)", "F")
+    # legend.AddEntry(hist_qed_sl, "QED (Starlight)", "F")
     legend.AddEntry(hist_cep, "CEP (SuperChic)", "F")
     legend.Draw()
 

@@ -25,8 +25,11 @@ def fit_hist(hist):
     # ROOT.gPad.SetLogx()
     ROOT.gPad.SetLogy()
     hist.Rebin(5)
+    hist.Scale(1/5)
     hist.Draw()
     hist.GetXaxis().SetRangeUser(200, 20000)
+    
+    
     
     exp_0 = ROOT.TF1("exp_0", "[0]/exp([1]*x)", 0, 20000)
     exp_0.SetParameter(0, 1.5e5)
@@ -42,37 +45,39 @@ def fit_hist(hist):
     gaus_3 = get_gaus("gaus_3", 1.5e3, 800, 1500, 8)
     hist.Fit(gaus_3, "R0", "", 7500, 9000)
     
+    print(f"integral: {hist.Integral(hist.GetXaxis().FindFixBin(0), hist.GetXaxis().FindFixBin(7000))/hist.Integral(hist.GetXaxis().FindFixBin(0), hist.GetXaxis().FindFixBin(20000))}")
+    
     exp_0.Draw("same")
     gaus_1.Draw("same")
     gaus_2.Draw("same")
     gaus_3.Draw("same")
     
     
-    total_fun = ROOT.TF1("total_fun", f"[11]*([0]/exp([1]*x)+{get_gaus_formula(2)}+{get_gaus_formula(5)}+{get_gaus_formula(8)})", 0, 20000)
-    total_fun.FixParameter(0, exp_0.GetParameter(0))
-    total_fun.FixParameter(1, exp_0.GetParameter(1))
+    # total_fun = ROOT.TF1("total_fun", f"[11]*([0]/exp([1]*x)+{get_gaus_formula(2)}+{get_gaus_formula(5)}+{get_gaus_formula(8)})", 0, 20000)
+    # total_fun.FixParameter(0, exp_0.GetParameter(0))
+    # total_fun.FixParameter(1, exp_0.GetParameter(1))
     
-    total_fun.FixParameter(2, gaus_1.GetParameter(2))
-    total_fun.FixParameter(3, gaus_1.GetParameter(3))
-    total_fun.FixParameter(4, gaus_1.GetParameter(4))
+    # total_fun.FixParameter(2, gaus_1.GetParameter(2))
+    # total_fun.FixParameter(3, gaus_1.GetParameter(3))
+    # total_fun.FixParameter(4, gaus_1.GetParameter(4))
     
-    total_fun.FixParameter(5, gaus_2.GetParameter(5))
-    total_fun.FixParameter(6, gaus_2.GetParameter(6))
-    total_fun.FixParameter(7, gaus_2.GetParameter(7))
+    # total_fun.FixParameter(5, gaus_2.GetParameter(5))
+    # total_fun.FixParameter(6, gaus_2.GetParameter(6))
+    # total_fun.FixParameter(7, gaus_2.GetParameter(7))
     
-    total_fun.FixParameter(8, gaus_3.GetParameter(8))
-    total_fun.FixParameter(9, gaus_3.GetParameter(9))
-    total_fun.FixParameter(10, gaus_3.GetParameter(10))
+    # total_fun.FixParameter(8, gaus_3.GetParameter(8))
+    # total_fun.FixParameter(9, gaus_3.GetParameter(9))
+    # total_fun.FixParameter(10, gaus_3.GetParameter(10))
     
-    total_fun.FixParameter(11, 1)
+    # total_fun.FixParameter(11, 1)
     
-    hist.Fit(total_fun, "R0", "", 200, 9000)
+    # hist.Fit(total_fun, "R0", "", 200, 9000)
     
-    print(f"\n\nvalue: {total_fun.Eval(2000)}")
+    # print(f"\n\nvalue: {total_fun.Eval(2000)}")
     
-    total_fun.SetLineColor(ROOT.kBlack)
-    total_fun.Draw("same")
-    print(f"{total_fun.GetExpFormula()=}")
+    # total_fun.SetLineColor(ROOT.kBlack)
+    # total_fun.Draw("same")
+    # print(f"{total_fun.GetExpFormula()=}")
     
     thresholds = [0, 1600, 4000, 7000, 10000, 100000]
     
@@ -100,7 +105,6 @@ def fit_hist(hist):
     print("from 3n to:")
     for i in range(0, len(thresholds)-1):
         print(f"\t{i}n: {gaus_3.Integral(thresholds[i], thresholds[i+1])/gaus_3.Integral(thresholds[0], thresholds[-1])}")
-    
     
 
 def main():

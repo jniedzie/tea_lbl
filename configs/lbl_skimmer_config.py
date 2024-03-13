@@ -6,7 +6,7 @@ printEveryNevents = 1000
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 # for LbL analysis:
-applyTrigger = False
+applyTrigger = True
 applyTwoTracksTwoPhotons = False
 applyTwoPhotons = True
 applyTwoElectrons = False
@@ -18,7 +18,7 @@ applyEtDelta = False
 
 
 # for QED analysis:
-# applyTrigger = True
+# applyTrigger = False
 # applyTwoTracksTwoPhotons = False
 # applyTwoPhotons = False
 # applyTwoElectrons = True
@@ -39,14 +39,15 @@ applyEtDelta = False
 # applyEtDelta = False
 
 
-# sample = "collisionData"
+sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
 # sample = "qed"
-sample = "qed_MG_ee_aa"
+# sample = "qed_MG_ee_aa"
 
 # skim = "skimmed_lblSelections"
 # skim = "skimmed_qedSelections"
+# skim = "initial"
 
 inputFilePath = f"{base_path}/ntuples/{sample}/initial/ntuple_0.root"
 # inputFilePath = f"{base_path}/ntuples/{sample}/merged_initial.root"

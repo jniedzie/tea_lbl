@@ -4,8 +4,8 @@ printEveryNevents = 1000
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 # sample = "collisionData"
-# sample = "lbl"
-sample = "lbl_noTrigger"
+sample = "lbl"
+# sample = "lbl_noTrigger"
 # sample = "cep"
 # sample = "qed"
 # sample = "alps_11"
@@ -58,11 +58,11 @@ branchesNames = {
   "pho_hcalRechitIsoR3"   : ("photon_hcalRechitIsoR3"     , "vector<float>"),
   "pho_hcalRechitIsoR4"   : ("photon_hcalRechitIsoR4"     , "vector<float>"),
   "pho_hcalRechitIsoR5"   : ("photon_hcalRechitIsoR5"     , "vector<float>"),
-  "pho_trackIsoR1PtCut20" : ("photon_trackIsoR1PtCut20"   , "vector<float>"),
-  "pho_trackIsoR2PtCut20" : ("photon_trackIsoR2PtCut20"   , "vector<float>"),
-  "pho_trackIsoR3PtCut20" : ("photon_trackIsoR3PtCut20"   , "vector<float>"),
-  "pho_trackIsoR4PtCut20" : ("photon_trackIsoR4PtCut20"   , "vector<float>"),
-  "pho_trackIsoR5PtCut20" : ("photon_trackIsoR5PtCut20"   , "vector<float>"),
+  # "pho_trackIsoR1PtCut20" : ("photon_trackIsoR1PtCut20"   , "vector<float>"),
+  # "pho_trackIsoR2PtCut20" : ("photon_trackIsoR2PtCut20"   , "vector<float>"),
+  # "pho_trackIsoR3PtCut20" : ("photon_trackIsoR3PtCut20"   , "vector<float>"),
+  # "pho_trackIsoR4PtCut20" : ("photon_trackIsoR4PtCut20"   , "vector<float>"),
+  # "pho_trackIsoR5PtCut20" : ("photon_trackIsoR5PtCut20"   , "vector<float>"),
 
   "CaloTower_e"           : ("CaloTower_energy"           , "vector<float>"),
   "CaloTower_et"          : ("CaloTower_et"               , "vector<float>"),

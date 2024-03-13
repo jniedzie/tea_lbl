@@ -1,13 +1,10 @@
 import ROOT
-from lbl_params import luminosity, crossSections, get_scale_factor, nGenEvents
+from lbl_params import luminosity, crossSections, get_scale_factor, nGenEvents, n_acoplanarity_bins
 from lbl_helpers import get_cep_scale
-from lbl_paths import merged_histograms_path
+from lbl_paths import merged_histograms_path, processes, skim, acoplanarity_histogram_name
 
 
-samples = ["collisionData", "lbl", "cep", "qed"]
-# skim = "skimmed_lblSelections_final"
-skim = "skimmed_lblSelections_final_andZDC3n"
-
+samples = processes
 
 def main():
     files = {}
@@ -21,6 +18,7 @@ def main():
     hists_costheta4 = {}
     hists_costheta5 = {}
     hists_costheta10 = {}
+    hists_aco = {}
 
     photon_sf, _ = get_scale_factor(photon=True)
 
@@ -36,10 +34,11 @@ def main():
         hists_costheta4[sample] = files[sample].Get("eventSR4_cosThetaStar")
         hists_costheta5[sample] = files[sample].Get("eventSR5_cosThetaStar")
         hists_costheta10[sample] = files[sample].Get("eventSR10_cosThetaStar")
+        hists_aco[sample] = files[sample].Get(acoplanarity_histogram_name.format(n_acoplanarity_bins))
 
-        if sample == "data":
+        if sample == "collisionData":
             pass
-        elif sample == "lbl" or sample == "qed":
+        elif sample == "lbl" or "qed" in sample:
             hists_mass[sample].Scale(
                 luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_pt[sample].Scale(
@@ -55,6 +54,7 @@ def main():
             hists_costheta4[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_costheta5[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_costheta10[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
+            hists_aco[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             
         elif sample == "cep":
             cep_scale = get_cep_scale(skim)[0]
@@ -67,6 +67,7 @@ def main():
             hists_costheta4[sample].Scale(cep_scale)
             hists_costheta5[sample].Scale(cep_scale)
             hists_costheta10[sample].Scale(cep_scale)
+            hists_aco[sample].Scale(cep_scale)
             
         output_file = ROOT.TFile(f"unfoldingHistograms_{sample}.root", "recreate")
         output_file.cd()
@@ -79,6 +80,7 @@ def main():
         hists_costheta4[sample].Write()
         hists_costheta5[sample].Write()
         hists_costheta10[sample].Write()
+        hists_aco[sample].Write()
         
         output_file.Close()
 
