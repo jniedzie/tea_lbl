@@ -51,6 +51,16 @@ int main(int argc, char **argv) {
   config.GetValue("applyEtDelta", applyEtDelta);
   config.GetValue("applyTwoTracksTwoPhotons", applyTwoTracksTwoPhotons);
 
+  info() << "applyTrigger: " << applyTrigger << endl;
+  info() << "applyTwoPhotons: " << applyTwoPhotons << endl;
+  info() << "applyTwoElectrons: " << applyTwoElectrons << endl;
+  info() << "applyChargedExclusivity: " << applyChargedExclusivity << endl;
+  info() << "applyNeutralExclusivity: " << applyNeutralExclusivity << endl;
+  info() << "applyDiphotonPt: " << applyDiphotonPt << endl;
+  info() << "applyZDC: " << applyZDC << endl;
+  info() << "applyEtDelta: " << applyEtDelta << endl;
+  info() << "applyTwoTracksTwoPhotons: " << applyTwoTracksTwoPhotons << endl;
+
   cutFlowManager->RegisterCut("initial");
 
   if (applyTrigger) {
@@ -95,6 +105,8 @@ int main(int argc, char **argv) {
 
   auto &profiler = Profiler::GetInstance();
   profiler.Start("total");
+
+  info() << "N events: " << eventReader->GetNevents() << endl;
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
