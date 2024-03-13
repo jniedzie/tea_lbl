@@ -240,8 +240,11 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
     auto [deltaPhi, mod] = GetPhiModulation(electron_1, electron_2);
     float deltaPt = fabs(electron_1->GetFourMomentum().Pt() - electron_2->GetFourMomentum().Pt());
 
+    auto dielectron = electron_1->GetFourMomentum() + electron_2->GetFourMomentum();
+
     histogramsHandler->Fill("genDielectron_deltaPhi", deltaPhi, mod * GetWeight(event));
     histogramsHandler->Fill("genDielectron_deltaPt", deltaPt, GetWeight(event));
+    histogramsHandler->Fill("genDielectron_pt", dielectron.Pt(), GetWeight(event));
 
     if (GetDielectronAcoplanarity(event) < 0.01) {
       histogramsHandler->Fill("genDielectronSR_deltaPhi", deltaPhi, mod * GetWeight(event));

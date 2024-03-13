@@ -8,18 +8,20 @@ printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-# sample = "collisionData"
+sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
-sample = "qed"
+# sample = "qed"
+# sample = "qed_MG_ee_a"
 # sample = "emptyBeams"
 
 # skim = "initial"
 
 # skim = "skimmed_lblSelections_final"
-skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_andZDC3n"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 
-# skim = "skimmed_qedSelections"
+skim = "skimmed_qedSelections"
 # skim = "skimmed_tracksPhotonsSelections"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
@@ -33,12 +35,40 @@ defaultHistParams = (
     # collection      variable          bins    xmin     xmax     dir
     ("goodPhoton", "et", 200,    0,       100,     ""),
     ("goodPhoton", "eta", 12,    -2.2,    2.2,     ""),
-    ("goodPhoton", "phi", 12,    -3.14,    3.14,     ""),
-    ("goodPhoton", "seedTime", 100,    -5,    5,     ""),
+    ("goodPhoton", "phi", 12, -3.14, 3.14, ""),
+    ("goodPhoton", "seedTime", 100, -5, 5, ""),
+    # ("goodPhoton", "ecalClusterIsoR2", 100, 0, 1, ""),
+    # ("goodPhoton", "ecalClusterIsoR3", 100, 0, 1, ""),
+    # ("goodPhoton", "ecalClusterIsoR4", 100, 0, 1, ""),
+    # ("goodPhoton", "ecalClusterIsoR5", 100, 0, 1, ""),
+    # ("goodPhoton", "hcalRechitIsoR1", 100, 0, 1, ""),
+    # ("goodPhoton", "hcalRechitIsoR2", 100, 0, 1, ""),
+    # ("goodPhoton", "hcalRechitIsoR3", 100, 0, 1, ""),
+    # ("goodPhoton", "hcalRechitIsoR4", 100, 0, 1, ""),
+    # ("goodPhoton", "hcalRechitIsoR5", 100, 0, 1, ""),
+    # ("goodPhoton", "trackIsoR1PtCut20", 100, 0, 1, ""),
+    # ("goodPhoton", "trackIsoR2PtCut20", 100, 0, 1, ""),
+    # ("goodPhoton", "trackIsoR3PtCut20", 100, 0, 1, ""),
+    # ("goodPhoton", "trackIsoR4PtCut20", 100, 0, 1, ""),
+    # ("goodPhoton", "trackIsoR5PtCut20", 100, 0, 1, ""),
+
 
     ("goodElectron", "pt", 200,    0,       100,     ""),
     ("goodElectron", "eta", 20,    -2.2,    2.2,     ""),
     ("goodElectron", "phi", 20,    -3.14,    3.14,     ""),
+    
+    ("goodElectron", "charge", 10, -5, 5, ""),
+    ("goodElectron", "nMissHits", 100, 0, 100, ""),
+    ("goodElectron", "hOverE", 400, 0, 1, ""),
+    ("goodElectron", "eOverP", 100, 0, 1, ""),
+    ("goodElectron", "PFRelIsoWithEA", 100, 0, 100, ""),
+    ("goodElectron", "deltaEtaAtVertex", 100, 0, 1, ""),
+    ("goodElectron", "PFChIso", 100, 0, 1, ""),
+    ("goodElectron", "PFPhoIso", 100, 0, 1, ""),
+    ("goodElectron", "PFNeuIso", 100, 0, 1, ""),
+    ("goodElectron", "conversionVeto", 10, 0, 10, ""),    
+    
+    
     ("electron", "PFChIso", 1000,    0,    10,     ""),
     ("electron", "PFPhoIso", 1000,    0,    10,     ""),
     ("electron", "PFNeuIso", 1000,    0,    10,     ""),
@@ -98,7 +128,7 @@ histParams = (
     ("diphoton", "acoplanarity60", 60, 0, 0.1, ""),
 
     ("diphoton", "acoplanarity1040", 20, 0, 0.05, ""),
-    
+
     ("diphoton", "acoplanarityTrack0to0p3", 400, 0, 1.0, ""),
     ("diphoton", "acoplanarityTrack0p3to0p65", 400, 0, 1.0, ""),
     ("diphoton", "acoplanarityTrack0p65to2p0", 400, 0, 1.0, ""),
@@ -136,6 +166,8 @@ histParams = (
     ("genDielectron", "deltaPt", 100, 0, 10, ""),
     ("genDielectronSR", "deltaPt", 100, 0, 10, ""),
 
+    ("genDielectron", "pt", 1000, 0, 10, ""),
+
     # calo
     ("caloTowerHE", "energyHad", 100, 0, 5, ""),
     ("caloTowerHE", "energyTransverse", 100, 0, 5, ""),
@@ -161,7 +193,7 @@ histParams = (
     ("eventSR5", "cosThetaStar", 5, 0, 1, ""),
     ("eventSR4", "cosThetaStar", 4, 0, 1, ""),
     ("eventSR3", "cosThetaStar", 3, 0, 1, ""),
-    
+
     ("event", "ZDCenergyPlus", 10000, 0, 20000, ""),
     ("event", "ZDCenergyMinus", 10000, 0, 20000, ""),
 )
@@ -209,11 +241,13 @@ log_bins_30[0] = 0
 log_bins_40 = list(np.logspace(-3, -1, 41, base=10))
 log_bins_40[0] = 0
 
-log_bins_10and20 = list(np.logspace(-3, -2, 11, base=10)) + list(np.logspace(-2, -1, 21, base=10))
+log_bins_10and20 = list(np.logspace(-3, -2, 11, base=10)) + \
+    list(np.logspace(-2, -1, 21, base=10))
 log_bins_10and20[0] = 0
 log_bins_10and20 = list(dict.fromkeys(log_bins_10and20))
 
-log_bins_5and35 = list(np.logspace(-3, -2, 6, base=10)) + list(np.logspace(-2, -1, 36, base=10))
+log_bins_5and35 = list(np.logspace(-3, -2, 6, base=10)) + \
+    list(np.logspace(-2, -1, 36, base=10))
 log_bins_5and35[0] = 0
 log_bins_5and35 = list(dict.fromkeys(log_bins_5and35))
 
