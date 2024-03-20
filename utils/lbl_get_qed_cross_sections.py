@@ -157,6 +157,17 @@ def get_xnxn_cross_section_histogram(input_hist, name):
         "XnXn": (0.059, 0.005),
     }
 
+    # hardcoded updated ratios (with EMD corrections)
+    data_ratios = {
+        "0n0n": (0.75, 0.08),
+        "0nXn": (0.198, 0.003),
+        "0n1n": (0.046, 0.001),
+        "XnXn": (0.062, 0.002),
+        "1nXn": (0.038, 0.001),
+        "1n1n": (0.006, 0.0),
+        "Inclusive": (0, 0),
+    }
+
     nice_labels = {
         "0nXn_0n0n": "0nXn + Xn0n + 0n0n",
         "1nXn_0n1n": "1nXn + Xn1n + 0n1n + 1n0n",
@@ -169,11 +180,14 @@ def get_xnxn_cross_section_histogram(input_hist, name):
     events = dict(
         sorted(events.items(), key=lambda item: item[1][0], reverse=True))
 
-    ratio_hist_data = ROOT.TH1D("ratio_data", "ratio_data", 8, 0, 8)
-    ratio_hist_superchic = ROOT.TH1D(
-        "ratio_superchic", "ratio_superchic", 8, 0, 8)
-    ratio_hist_starlight = ROOT.TH1D(
-        "ratio_starlight", "ratio_starlight", 8, 0, 8)
+    ratio_hist_data = ROOT.TH1D("ratio_data", "ratio_data", 6, 0, 6)
+    ratio_hist_superchic = ROOT.TH1D("ratio_superchic", "ratio_superchic", 6, 0, 6)
+    ratio_hist_starlight = ROOT.TH1D("ratio_starlight", "ratio_starlight", 6, 0, 6)
+
+    bin_swap = {
+        3: 4,
+        4: 3,
+    }
 
     print("\n\n============================================================")
     for i, (key, value) in enumerate(events.items()):
@@ -198,17 +212,28 @@ def get_xnxn_cross_section_histogram(input_hist, name):
         else:
             print(" & -- \\\\")
 
-        ratio_hist_data.SetBinContent(i, ratio)
-        ratio_hist_data.SetBinError(i, error)
-        ratio_hist_superchic.GetXaxis().SetBinLabel(i, label)
+        index = i
+
+        if i in bin_swap:
+            index = bin_swap[i]
+            
+
+        # ratio_hist_data.SetBinContent(i, ratio)
+        # ratio_hist_data.SetBinError(i, error)
+        ratio_hist_data.SetBinContent(index, data_ratios[key][0])
+        ratio_hist_data.SetBinError(index, data_ratios[key][1])
+        ratio_hist_superchic.GetXaxis().SetBinLabel(index, label)
 
         if key in superchic_ratios:
-            ratio_hist_superchic.SetBinContent(i, superchic_ratios[key][0])
-            ratio_hist_superchic.SetBinError(i, superchic_ratios[key][1])
+            ratio_hist_superchic.SetBinContent(index, superchic_ratios[key][0])
+            ratio_hist_superchic.SetBinError(index, superchic_ratios[key][1])
 
         if key in starlight_ratios:
-            ratio_hist_starlight.SetBinContent(i, starlight_ratios[key][0])
-            ratio_hist_starlight.SetBinError(i, starlight_ratios[key][1])
+            ratio_hist_starlight.SetBinContent(index, starlight_ratios[key][0])
+            ratio_hist_starlight.SetBinError(index, starlight_ratios[key][1])
+
+
+
 
     canvas_ratios = ROOT.TCanvas("ratios", "ratios", 800, 600)
     canvas_ratios.cd()
