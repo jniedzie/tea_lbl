@@ -65,7 +65,7 @@ def add_datacard_header(file, observed_rate, alp_name=""):
         histograms_path = output_path_mass.replace("../combine/", "")
 
     file += "imax 1  number of channels\n"
-    file += f"jmax {3 if alp_name!='' else 1+len(qed_names)}  number of backgrounds\n"
+    file += f"jmax {2+len(qed_names) if alp_name!='' else 1+len(qed_names)}  number of backgrounds\n"
     file += "kmax *  number of nuisance parameters\n"
     file += f"shapes * * {histograms_path} "
     file += " $PROCESS $PROCESS_$SYSTEMATIC\n"
@@ -86,7 +86,7 @@ def add_datacard_header(file, observed_rate, alp_name=""):
     for i in range(len(qed_names)):
         file += f" {i+2}"
 
-    file += f"{'     3' if alp_name!='' else ''}\n"
+    file += f"{'     4' if alp_name!='' else ''}\n"
     return file
 
 
@@ -105,8 +105,10 @@ def add_datacard_nuisances(file, do_alp=False):
     if do_alp:
         file += "bck_syst     lnN    -  "
         file += f"{total_uncertainty_lbl_run2}  {total_uncertainty_lbl_run2}"
-        file += f"  {total_uncertainty_lbl_run2}\n"
-        file += f"alp_mc     lnN  {alp_mc_uncertainty}  -  -  -\n"
+        for i in range(len(qed_names)):
+            file += f"  {total_uncertainty_lbl_run2}"
+        file += "\n"
+        file += f"alp_mc     lnN  {alp_mc_uncertainty}  -  -  - -\n"
     else:
         file += "bck_syst     lnN    -  "
         file += f"{total_uncertainty_lbl_run2}"
