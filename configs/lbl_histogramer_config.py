@@ -104,6 +104,9 @@ histParams = (
     ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
     ("unfoldingPhoton", "rap3", 3, -2.2, 2.2, ""),
     ("unfoldingPhoton", "rap4", 4, -2.2, 2.2, ""),
+    ("unfoldingPhoton", "costhetastar2", 2, 0, 1, ""),
+    ("unfoldingPhoton", "costhetastar3", 3, 0, 1, ""),
+    ("unfoldingPhoton", "costhetastar4", 4, 0, 1, ""),
 
     ("goodPhotonSR", "et", 5,    2,       8,     ""),
     ("goodPhotonSR", "eta", 5,    -2.2,    2.2,     ""),
@@ -149,7 +152,11 @@ histParams = (
     ("dielectron", "pt", 100, 0, 1, ""),
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
+    
     ("dielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("electrons", "deltaPhi", 100, -2*ROOT.TMath.Pi(), 2*ROOT.TMath.Pi(), ""),
+    
+    
     ("dielectron", "deltaPhiPtGt6GeV", 100, 0, ROOT.TMath.Pi(), ""),
     ("dielectron", "deltaPhiAcoWeighted", 100, 0, ROOT.TMath.Pi(), ""),
     ("dielectron", "acoplanarityAcoWeighted", 1000, 0, 1, ""),
@@ -160,8 +167,14 @@ histParams = (
     ("dielectronSR", "rapidity", 100, -2.2, 2.2, ""),
     ("dielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
     ("dielectronSR", "deltaPt", 100, 0, 10, ""),
+    
+    ("dielectron", "theta", 100, -2*ROOT.TMath.Pi(), 2*ROOT.TMath.Pi(), ""),
+    
+    ("dielectron", "deltaPhi0p01", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectron", "deltaPhi0p005", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectron", "deltaPhi0p001", 100, 0, ROOT.TMath.Pi(), ""),
 
-    ("genDielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("genDielectron", "deltaPhi", 400, -2*ROOT.TMath.Pi(), 2*ROOT.TMath.Pi(), ""),
     ("genDielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
     ("genDielectron", "deltaPt", 100, 0, 10, ""),
     ("genDielectronSR", "deltaPt", 100, 0, 10, ""),

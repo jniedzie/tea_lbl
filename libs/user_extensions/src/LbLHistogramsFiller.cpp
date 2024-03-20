@@ -237,17 +237,21 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
     auto electron_1 = asElectron(electrons->at(0));
     auto electron_2 = asElectron(electrons->at(1));
 
-    auto [deltaPhi, mod] = GetPhiModulation(electron_1, electron_2);
+    auto deltaPhis = GetPhiModulation(electron_1, electron_2);
     float deltaPt = fabs(electron_1->GetFourMomentum().Pt() - electron_2->GetFourMomentum().Pt());
 
     auto dielectron = electron_1->GetFourMomentum() + electron_2->GetFourMomentum();
 
-    histogramsHandler->Fill("genDielectron_deltaPhi", deltaPhi, mod * GetWeight(event));
+    for(float deltaPhi : deltaPhis){
+      histogramsHandler->Fill("genDielectron_deltaPhi", deltaPhi, GetWeight(event));
+    }
     histogramsHandler->Fill("genDielectron_deltaPt", deltaPt, GetWeight(event));
     histogramsHandler->Fill("genDielectron_pt", dielectron.Pt(), GetWeight(event));
 
     if (GetDielectronAcoplanarity(event) < 0.01) {
-      histogramsHandler->Fill("genDielectronSR_deltaPhi", deltaPhi, mod * GetWeight(event));
+      for(float deltaPhi : deltaPhis){
+        histogramsHandler->Fill("genDielectronSR_deltaPhi", deltaPhi, GetWeight(event));
+      }
       histogramsHandler->Fill("genDielectronSR_deltaPt", deltaPt, GetWeight(event));
     }
   }
@@ -267,7 +271,7 @@ float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Electron> 
   return acoplanarity;
 }
 
-pair<float, float> LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2) {
+vector<float> LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2) {
   TLorentzVector electron, positron;
   if (electron1->GetCharge() > 0) {
     positron = electron1->GetFourMomentum();
@@ -278,10 +282,8 @@ pair<float, float> LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electr
   }
 
   TLorentzVector dielectron = electron + positron;
-  TLorentzVector eleDiff = electron - positron;
+  // TLorentzVector eleDiff = electron - positron;
 
-  // Calculate delta phi
-  // float deltaPhi = dielectron.Phi() - electron.Phi();
   float deltaPhi = fabs(dielectron.Phi() - electron.Phi());
   // float deltaPhi = fabs(dielectron.Phi() - eleDiff.Phi());
 
@@ -291,15 +293,7 @@ pair<float, float> LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electr
   // if (deltaPhi > TMath::Pi()) deltaPhi = deltaPhi - 2. * TMath::Pi();
   // if (deltaPhi <= -TMath::Pi()) deltaPhi = deltaPhi + 2. * TMath::Pi();
 
-  // // // Take the absolute value
-  // deltaPhi = fabs(deltaPhi);
-
-  // float mag = 1/fabs(deltaPhi/TMath::Pi()-0.5);
-  float mag = 1;
-
-  // info() << "deltaPhi: " << deltaPhi << " mag: " << mag << endl;
-
-  return {deltaPhi, mag};
+  return {deltaPhi};
 }
 
 void LbLHistogramsFiller::FillElectronHistograms(const shared_ptr<Event> event) {
@@ -310,7 +304,7 @@ void LbLHistogramsFiller::FillElectronHistograms(const shared_ptr<Event> event) 
   auto electron1 = asElectron(electrons->at(0));
   auto electron2 = asElectron(electrons->at(1));
   float acoplanarity = GetDielectronAcoplanarity(electron1, electron2);
-  auto [deltaPhi, mag] = GetPhiModulation(electron1, electron2);
+  auto deltaPhis = GetPhiModulation(electron1, electron2);
   TLorentzVector dielectron = electron1->GetFourMomentum() + electron2->GetFourMomentum();
   float deltaPt = fabs(electron1->GetFourMomentum().Pt() - electron2->GetFourMomentum().Pt());
 
@@ -318,22 +312,47 @@ void LbLHistogramsFiller::FillElectronHistograms(const shared_ptr<Event> event) 
   histogramsHandler->Fill("dielectron_mass", dielectron.M(), GetWeight(event));
   histogramsHandler->Fill("dielectron_rapidity", dielectron.Rapidity(), GetWeight(event));
   histogramsHandler->Fill("dielectron_acoplanarity", acoplanarity, GetWeight(event));
-  histogramsHandler->Fill("dielectron_deltaPhi", deltaPhi, mag * GetWeight(event));
+  
   histogramsHandler->Fill("dielectron_deltaPt", deltaPt, GetWeight(event));
+  histogramsHandler->Fill("electrons_deltaPhi", electron1->GetFourMomentum().Phi() - electron2->GetFourMomentum().Phi(), GetWeight(event));
+
+  float theta = electron1->GetFourMomentum().Phi() - electron2->GetFourMomentum().Phi();
+  histogramsHandler->Fill("dielectron_theta", theta, GetWeight(event));
+
+
+  theta = -0.5*theta+TMath::Pi()/2;
+
+  // float r = 9e-5 * 18317/1000;
+  float r = 9e-5;
+  float sf = sqrt(r*pow(cos(theta), 2) + 1/r*pow(sin(theta), 2));
 
   float acoWeight = 1 / acoplanarityFunction->Eval(acoplanarity);
-  histogramsHandler->Fill("dielectron_deltaPhiAcoWeighted", deltaPhi, acoWeight * GetWeight(event));
-  histogramsHandler->Fill("dielectron_acoplanarityAcoWeighted", acoplanarity, acoWeight * GetWeight(event));
+  for (float deltaPhi : deltaPhis) {
 
-  if ((float)electron1->Get("pt") > 6) {
-    histogramsHandler->Fill("dielectron_deltaPhiPtGt6GeV", deltaPhi, mag * GetWeight(event));
+    histogramsHandler->Fill("dielectron_deltaPhi", deltaPhi, GetWeight(event));
+    histogramsHandler->Fill("dielectron_deltaPhiAcoWeighted", deltaPhi, acoWeight * GetWeight(event));
+    if ((float)electron1->Get("pt") > 6) {
+      histogramsHandler->Fill("dielectron_deltaPhiPtGt6GeV", deltaPhi, GetWeight(event));
+    }
+
+    if (acoplanarity > 0.01) {
+      histogramsHandler->Fill("dielectron_deltaPhi0p01", deltaPhi, GetWeight(event));
+    }
+
+    if (acoplanarity > 0.005) {
+      histogramsHandler->Fill("dielectron_deltaPhi0p005", deltaPhi, GetWeight(event));
+    }
+
+    if (acoplanarity > 0.001) {
+      histogramsHandler->Fill("dielectron_deltaPhi0p001", deltaPhi, GetWeight(event));
+    }
   }
+  histogramsHandler->Fill("dielectron_acoplanarityAcoWeighted", acoplanarity, acoWeight * GetWeight(event));
 
   if (acoplanarity > 0.01) {
     histogramsHandler->Fill("dielectronSR_pt", dielectron.Pt(), GetWeight(event));
     histogramsHandler->Fill("dielectronSR_mass", dielectron.M(), GetWeight(event));
     histogramsHandler->Fill("dielectronSR_rapidity", dielectron.Rapidity(), GetWeight(event));
-    histogramsHandler->Fill("dielectronSR_deltaPhi", deltaPhi, mag * GetWeight(event));
     histogramsHandler->Fill("dielectronSR_deltaPt", deltaPt, GetWeight(event));
 
     histogramsHandler->Fill("goodElectronSR_pt", electron1->Get("pt"), GetWeight(event));
@@ -365,6 +384,10 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
       histogramsHandler->Fill("eventSR4_cosThetaStar", cosThetaStar, GetWeight(event));
       histogramsHandler->Fill("eventSR5_cosThetaStar", cosThetaStar, GetWeight(event));
       histogramsHandler->Fill("eventSR10_cosThetaStar", cosThetaStar, GetWeight(event));
+
+      histogramsHandler->Fill("unfoldingPhoton_costhetastar2", cosThetaStar, GetWeight(event));
+      histogramsHandler->Fill("unfoldingPhoton_costhetastar3", cosThetaStar, GetWeight(event));
+      histogramsHandler->Fill("unfoldingPhoton_costhetastar4", cosThetaStar, GetWeight(event));
     }
   }
 
@@ -381,25 +404,24 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
     }
   }
 
-  try{
-  auto zdcEnergies = event->GetCollection("ZDC");
+  try {
+    auto zdcEnergies = event->GetCollection("ZDC");
 
-  float totalEnergyPlus = 0;
-  float totalEnergyMinus = 0;
+    float totalEnergyPlus = 0;
+    float totalEnergyMinus = 0;
 
-  for (auto physicsObject : *zdcEnergies) {
-    auto zdcEnergy = asZDCEnergy(physicsObject);
+    for (auto physicsObject : *zdcEnergies) {
+      auto zdcEnergy = asZDCEnergy(physicsObject);
 
-    if (zdcEnergy->GetSide() > 0) {
-      totalEnergyPlus += zdcEnergy->GetEnergy();
-    } else if (zdcEnergy->GetSide() < 0) {
-      totalEnergyMinus += zdcEnergy->GetEnergy();
+      if (zdcEnergy->GetSide() > 0) {
+        totalEnergyPlus += zdcEnergy->GetEnergy();
+      } else if (zdcEnergy->GetSide() < 0) {
+        totalEnergyMinus += zdcEnergy->GetEnergy();
+      }
     }
-  }
-  histogramsHandler->Fill("event_ZDCenergyPlus", totalEnergyPlus, GetWeight(event));
-  histogramsHandler->Fill("event_ZDCenergyMinus", totalEnergyMinus, GetWeight(event));
-  }
-  catch(const Exception &e){
+    histogramsHandler->Fill("event_ZDCenergyPlus", totalEnergyPlus, GetWeight(event));
+    histogramsHandler->Fill("event_ZDCenergyMinus", totalEnergyMinus, GetWeight(event));
+  } catch (const Exception &e) {
     warn() << "Cannot fill ZDC histograms, since ZDC collection was not found." << endl;
   }
 }

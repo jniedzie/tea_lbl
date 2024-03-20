@@ -22,7 +22,7 @@ class LbLHistogramsFiller {
   float GetWeight(const std::shared_ptr<Event> event);
   float GetDielectronAcoplanarity(const std::shared_ptr<Event> event);
   float GetDielectronAcoplanarity(const std::shared_ptr<Electron> &electron1, const std::shared_ptr<Electron> &electron2);
-  std::pair<float, float> GetPhiModulation(const std::shared_ptr<Electron> &electron1, const std::shared_ptr<Electron> &electron2);
+  std::vector<float> GetPhiModulation(const std::shared_ptr<Electron> &electron1, const std::shared_ptr<Electron> &electron2);
 
   void FillCaloHistograms(const std::shared_ptr<Event> event);
   void FillPhotonHistograms(const std::shared_ptr<Event> event);
