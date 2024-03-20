@@ -21,15 +21,24 @@ def get_gaus(name, scale, mean, sigma, offset):
 def get_total_function():
     pass
 
-def fit_hist(hist):
+def fit_hist(hist, side):
     # ROOT.gPad.SetLogx()
     ROOT.gPad.SetLogy()
+    ROOT.gPad.SetBottomMargin(0.15)
     hist.Rebin(5)
     hist.Scale(1/5)
     hist.Draw()
+    hist.SetTitle("")
+    
+    hist.GetXaxis().SetTitle(f"#sum E_{{ZDC}}^{{{side}}} (GeV)")
+    hist.GetXaxis().SetTitleSize(0.05)
+    hist.GetXaxis().SetTitleOffset(1.2)
+    
+    hist.GetYaxis().SetTitle("Events")
+    hist.GetYaxis().SetTitleSize(0.05)
+    hist.GetYaxis().SetTitleOffset(0.99)
+    
     hist.GetXaxis().SetRangeUser(200, 20000)
-    
-    
     
     exp_0 = ROOT.TF1("exp_0", "[0]/exp([1]*x)", 0, 20000)
     exp_0.SetParameter(0, 1.5e5)
@@ -89,22 +98,72 @@ def fit_hist(hist):
             continue
         line.DrawLine(threshold, 0, threshold, 1.5e3)
     
+    hist_matrix = ROOT.TH2D("hist_matrix", "hist_matrix", 4, 0, 4, 5, 0, 5)
+    
     print(f"\n\n{hist.GetName()}")
     print("from 0n to:")
     for i in range(0, len(thresholds)-1):
-        print(f"\t{i}n: {exp_0.Integral(thresholds[i], thresholds[i+1])/exp_0.Integral(thresholds[0], thresholds[-1])}")
+        fraction = exp_0.Integral(thresholds[i], thresholds[i+1])/exp_0.Integral(thresholds[0], thresholds[-1])
+        print(f"\t{i}n: {fraction}")
+        hist_matrix.SetBinContent(1, i+1, fraction)
     
     print("from 1n to:")
     for i in range(0, len(thresholds)-1):
-        print(f"\t{i}n: {gaus_1.Integral(thresholds[i], thresholds[i+1])/gaus_1.Integral(thresholds[0], thresholds[-1])}")
+        fraction = gaus_1.Integral(thresholds[i], thresholds[i+1])/gaus_1.Integral(thresholds[0], thresholds[-1])
+        print(f"\t{i}n: {fraction}")
+        hist_matrix.SetBinContent(2, i+1, fraction)
         
     print("from 2n to:")
     for i in range(0, len(thresholds)-1):
-        print(f"\t{i}n: {gaus_2.Integral(thresholds[i], thresholds[i+1])/gaus_2.Integral(thresholds[0], thresholds[-1])}")
+        fraction = gaus_2.Integral(thresholds[i], thresholds[i+1])/gaus_2.Integral(thresholds[0], thresholds[-1])
+        print(f"\t{i}n: {fraction}")
+        hist_matrix.SetBinContent(3, i+1, fraction)
         
     print("from 3n to:")
     for i in range(0, len(thresholds)-1):
-        print(f"\t{i}n: {gaus_3.Integral(thresholds[i], thresholds[i+1])/gaus_3.Integral(thresholds[0], thresholds[-1])}")
+        fraction = gaus_3.Integral(thresholds[i], thresholds[i+1])/gaus_3.Integral(thresholds[0], thresholds[-1])
+        print(f"\t{i}n: {fraction}")
+        hist_matrix.SetBinContent(4, i+1, fraction)
+    
+    canvas_matrix = ROOT.TCanvas("canvas_matrix", "canvas_matrix", 800, 800)
+    ROOT.gPad.SetRightMargin(0.15)
+    
+    # plot labels 0, 1, 2,... in the middle of each bin
+    hist_matrix.GetXaxis().SetBinLabel(1, "0n")
+    hist_matrix.GetXaxis().SetBinLabel(2, "1n")
+    hist_matrix.GetXaxis().SetBinLabel(3, "2n")
+    hist_matrix.GetXaxis().SetBinLabel(4, "3n")
+    
+    hist_matrix.GetYaxis().SetBinLabel(1, "0n")
+    hist_matrix.GetYaxis().SetBinLabel(2, "1n")
+    hist_matrix.GetYaxis().SetBinLabel(3, "2n")
+    hist_matrix.GetYaxis().SetBinLabel(4, "3n")
+    hist_matrix.GetYaxis().SetBinLabel(5, "4n")
+    
+    
+    hist_matrix.GetXaxis().SetTitle("From")
+    hist_matrix.GetYaxis().SetTitle("To")
+    
+    # set axis title alignment to the center
+    hist_matrix.GetXaxis().CenterTitle()
+    hist_matrix.GetYaxis().CenterTitle()
+    
+    # set text precision to 2 decimal places
+    hist_matrix.GetZaxis().SetDecimals()
+    
+    # draw with colors and text, setting 2 decimal places precision, and increasing text font size
+    hist_matrix.SetMarkerSize(1.5)
+    ROOT.gStyle.SetPaintTextFormat(".1e")
+    hist_matrix.Draw("colz text")
+    hist_matrix.GetZaxis().SetLabelSize(0.03)
+    hist_matrix.GetZaxis().SetTitleSize(0.05)
+    hist_matrix.GetZaxis().SetTitleOffset(1.2)
+    hist_matrix.GetZaxis().SetRangeUser(0, 1)
+    
+    
+    hist_matrix.SetTitle(f"Neutron categories migration (ZDC^{{{side}}})")
+    
+    canvas_matrix.SaveAs(f"../plots/zdc_matrix_{'plus' if side=='+' else 'minus'}.pdf")
     
 
 def main():
@@ -115,14 +174,14 @@ def main():
     hist_plus = input_file.Get("event_ZDCenergyPlus")
     hist_minus = input_file.Get("event_ZDCenergyMinus")
 
-    canvas = ROOT.TCanvas("canvas", "canvas", 800, 1200)
-    canvas.Divide(1, 2)
+    canvas = ROOT.TCanvas("canvas", "canvas", 1800, 600)
+    canvas.Divide(2, 1)
 
     canvas.cd(1)
-    fit_hist(hist_plus)
+    fit_hist(hist_plus, "+")
 
     canvas.cd(2)
-    fit_hist(hist_minus)
+    fit_hist(hist_minus, "-")
 
     canvas.SaveAs("../plots/zdc_energy.pdf")
 
