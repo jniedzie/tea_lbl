@@ -93,8 +93,14 @@ def main():
     total_background_err = total_background**(1/2)
 
     data_minus_background = integrals["collisionData"]-total_background
+    
+    print(f"{integral_errors['collisionData']=}")
+    print(f"{total_background*(stat_uncertainty_lbl_run2-1)=}")
+    
     data_minus_background_err = (
         integral_errors["collisionData"]**2+(total_background*(stat_uncertainty_lbl_run2-1))**2)**(1/2)
+
+    print(f"{data_minus_background_err=}")
 
     data_tail_integral = input_aco_histograms["collisionData"].Integral(
         input_aco_histograms["collisionData"].FindFixBin(0.015), input_aco_histograms["collisionData"].GetNbinsX())

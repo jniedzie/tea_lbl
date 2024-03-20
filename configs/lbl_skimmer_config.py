@@ -6,7 +6,7 @@ printEveryNevents = 1000
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 # for LbL analysis:
-applyTrigger = True
+applyTrigger = False
 applyTwoTracksTwoPhotons = False
 applyTwoPhotons = True
 applyTwoElectrons = False

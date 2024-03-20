@@ -14,10 +14,10 @@ def main():
     hists_rap = {}
     hists_rap3 = {}
     hists_rap4 = {}
+    hists_costheta2 = {}
     hists_costheta3 = {}
     hists_costheta4 = {}
-    hists_costheta5 = {}
-    hists_costheta10 = {}
+    
     hists_aco = {}
 
     photon_sf, _ = get_scale_factor(photon=True)
@@ -30,10 +30,10 @@ def main():
         hists_rap[sample] = files[sample].Get("unfoldingPhoton_absRap")
         hists_rap3[sample] = files[sample].Get("unfoldingPhoton_rap3")
         hists_rap4[sample] = files[sample].Get("unfoldingPhoton_rap4")
-        hists_costheta3[sample] = files[sample].Get("eventSR3_cosThetaStar")
-        hists_costheta4[sample] = files[sample].Get("eventSR4_cosThetaStar")
-        hists_costheta5[sample] = files[sample].Get("eventSR5_cosThetaStar")
-        hists_costheta10[sample] = files[sample].Get("eventSR10_cosThetaStar")
+        hists_costheta2[sample] = files[sample].Get("unfoldingPhoton_costhetastar2")
+        hists_costheta3[sample] = files[sample].Get("unfoldingPhoton_costhetastar3")
+        hists_costheta4[sample] = files[sample].Get("unfoldingPhoton_costhetastar4")
+        
         hists_aco[sample] = files[sample].Get(acoplanarity_histogram_name.format(n_acoplanarity_bins))
 
         if sample == "collisionData":
@@ -50,10 +50,10 @@ def main():
             hists_rap4[sample].Scale(
                 luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             
+            hists_costheta2[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_costheta3[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_costheta4[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
-            hists_costheta5[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
-            hists_costheta10[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
+            
             hists_aco[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             
         elif sample == "cep":
@@ -63,10 +63,9 @@ def main():
             hists_rap[sample].Scale(cep_scale)
             hists_rap3[sample].Scale(cep_scale)
             hists_rap4[sample].Scale(cep_scale)
+            hists_costheta2[sample].Scale(cep_scale)
             hists_costheta3[sample].Scale(cep_scale)
             hists_costheta4[sample].Scale(cep_scale)
-            hists_costheta5[sample].Scale(cep_scale)
-            hists_costheta10[sample].Scale(cep_scale)
             hists_aco[sample].Scale(cep_scale)
             
         output_file = ROOT.TFile(f"unfoldingHistograms_{sample}.root", "recreate")
@@ -76,10 +75,9 @@ def main():
         hists_rap[sample].Write()
         hists_rap3[sample].Write()
         hists_rap4[sample].Write()
+        hists_costheta2[sample].Write()
         hists_costheta3[sample].Write()
         hists_costheta4[sample].Write()
-        hists_costheta5[sample].Write()
-        hists_costheta10[sample].Write()
         hists_aco[sample].Write()
         
         output_file.Close()

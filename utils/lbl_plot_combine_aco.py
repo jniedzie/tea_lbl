@@ -69,6 +69,7 @@ def hist_to_graph(hist):
 
 
 def main():
+    ROOT.gROOT.SetBatch(True)
     file = ROOT.TFile.Open(input_file_path)
     hist_data = file.Get("data_obs")
     hist_cep = file.Get("cep")
@@ -233,7 +234,7 @@ def main():
     legend.SetBorderSize(0)
     legend.AddEntry(hist_data, "Data", "PE")
     legend.AddEntry(hist_lbl, "LbL (SuperChic)", "F")
-    legend.AddEntry(hist_qed_sl, "#gamma#gamma #rightarrow e^{+}e^{-} (SuperChic and Starlight averaged)", "F")
+    legend.AddEntry(hist_qed_sl, "#gamma#gamma #rightarrow e^{+}e^{-} (SC 3.03 and SL 3.13 averaged)", "F")
     # legend.AddEntry(hist_qed, "QED+FSR (SuperChic+PHOTOS)", "F")
     # legend.AddEntry(hist_qed_sl, "QED (Starlight)", "F")
     legend.AddEntry(hist_cep, "CEP (SuperChic)", "F")
