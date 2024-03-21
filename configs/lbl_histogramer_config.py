@@ -14,8 +14,11 @@ sample = "collisionData"
 # sample = "qed"
 # sample = "qed_MG_ee_a"
 # sample = "emptyBeams"
+# sample = "qed_sc_noPhotos"
+
 
 # skim = "initial"
+# skim = "afterTrigger"
 
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC3n"
@@ -26,6 +29,7 @@ skim = "skimmed_qedSelections"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
 inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
+
 # inputFilePath = "./renamed_test.root"
 # inputFilePath = "./skimmed_test.root"
 
@@ -176,8 +180,8 @@ histParams = (
 
     ("genDielectron", "deltaPhi", 400, -2*ROOT.TMath.Pi(), 2*ROOT.TMath.Pi(), ""),
     ("genDielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
-    ("genDielectron", "deltaPt", 100, 0, 10, ""),
-    ("genDielectronSR", "deltaPt", 100, 0, 10, ""),
+    ("genDielectron", "deltaPt", 2000, -1, 1, ""),
+    ("genDielectronSR", "deltaPt", 2000, -1, 1, ""),
 
     ("genDielectron", "pt", 1000, 0, 10, ""),
 

@@ -32,9 +32,11 @@ processes = (
 
 # skim = "initial"
 
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+# skim = "afterTrigger"
+
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n"
-# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n_1n0n_1n1n"
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n_1n0n_1n1n"
 
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_noNEE"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_noCHE"

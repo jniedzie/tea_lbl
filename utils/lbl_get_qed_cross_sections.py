@@ -254,6 +254,8 @@ def get_xnxn_cross_section_histogram(input_hist, name):
     ratio_hist_superchic.GetYaxis().SetTitleSize(0.06)
     ratio_hist_superchic.GetYaxis().SetLabelOffset(0.01)
 
+    ratio_hist_superchic.GetYaxis().SetRangeUser(1e-3, 1)
+
     ratio_hist_superchic.Draw("PE")
 
     ratio_hist_starlight.SetMarkerStyle(21)
