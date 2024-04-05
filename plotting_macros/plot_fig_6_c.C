@@ -1,7 +1,10 @@
 #ifdef __CLING__
 #pragma cling optimize(0)
 #endif
-void ()
+
+#include "style.h"
+
+void plot_fig_6_c()
 {
    gROOT->SetBatch(kTRUE);
 //=========Macro generated from canvas: goodPhotonSR_eta/goodPhotonSR_eta
@@ -34,7 +37,7 @@ void ()
    goodPhotonSR_eta_1->SetBorderSize(2);
    goodPhotonSR_eta_1->SetLeftMargin(0.16);
    goodPhotonSR_eta_1->SetRightMargin(0.15);
-   goodPhotonSR_eta_1->SetBottomMargin(0);
+   goodPhotonSR_eta_1->SetBottomMargin(0.05);
    goodPhotonSR_eta_1->SetFrameFillStyle(0);
    goodPhotonSR_eta_1->SetFrameBorderMode(0);
    goodPhotonSR_eta_1->SetFrameFillStyle(0);
@@ -56,8 +59,8 @@ void ()
    goodPhotonSR_etabackground_stack_4->GetXaxis()->SetTitle("#eta^{#gamma}");
    goodPhotonSR_etabackground_stack_4->GetXaxis()->SetLabelFont(42);
    goodPhotonSR_etabackground_stack_4->GetXaxis()->SetLabelOffset(0.007);
-   goodPhotonSR_etabackground_stack_4->GetXaxis()->SetLabelSize(0.06);
-   goodPhotonSR_etabackground_stack_4->GetXaxis()->SetTitleSize(0.06);
+   goodPhotonSR_etabackground_stack_4->GetXaxis()->SetLabelSize(0.0);
+   goodPhotonSR_etabackground_stack_4->GetXaxis()->SetTitleSize(fig_6_x_title_size);
    goodPhotonSR_etabackground_stack_4->GetXaxis()->SetTitleOffset(1.7);
    goodPhotonSR_etabackground_stack_4->GetXaxis()->SetTitleFont(42);
    goodPhotonSR_etabackground_stack_4->GetYaxis()->SetTitle("Events / 0.88");
@@ -66,8 +69,9 @@ void ()
    goodPhotonSR_etabackground_stack_4->GetYaxis()->SetLabelFont(42);
    goodPhotonSR_etabackground_stack_4->GetYaxis()->SetLabelOffset(0.007);
    goodPhotonSR_etabackground_stack_4->GetYaxis()->SetLabelSize(0.06);
-   goodPhotonSR_etabackground_stack_4->GetYaxis()->SetTitleSize(0.05);
-   goodPhotonSR_etabackground_stack_4->GetYaxis()->SetTitleOffset(1.5);
+   goodPhotonSR_etabackground_stack_4->GetYaxis()->SetTitleSize(fig_6_y_title_size);
+   goodPhotonSR_etabackground_stack_4->GetYaxis()->SetTitleOffset(1.0);
+   
    goodPhotonSR_etabackground_stack_4->GetYaxis()->SetTitleFont(42);
    goodPhotonSR_etabackground_stack_4->GetZaxis()->SetLabelFont(42);
    goodPhotonSR_etabackground_stack_4->GetZaxis()->SetLabelOffset(0.007);
@@ -232,7 +236,8 @@ void ()
    goodPhotonSR_etadata_stack_5->GetYaxis()->SetLabelOffset(0.007);
    goodPhotonSR_etadata_stack_5->GetYaxis()->SetLabelSize(0.06);
    goodPhotonSR_etadata_stack_5->GetYaxis()->SetTitleSize(0.05);
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetTitleOffset(1.5);
+   goodPhotonSR_etadata_stack_5->GetYaxis()->SetTitleOffset(1.0);
+   
    goodPhotonSR_etadata_stack_5->GetYaxis()->SetTitleFont(42);
    goodPhotonSR_etadata_stack_5->GetZaxis()->SetLabelFont(42);
    goodPhotonSR_etadata_stack_5->GetZaxis()->SetLabelOffset(0.007);
@@ -291,8 +296,8 @@ void ()
 
    ci = 1556;
    color = new TColor(ci, 0, 0, 0, " ", 0.3);
-   backgrounds_unc_goodPhotonSR_eta__4->SetFillColor(ci);
-   backgrounds_unc_goodPhotonSR_eta__4->SetFillStyle(3244);
+   backgrounds_unc_goodPhotonSR_eta__4->SetFillColorAlpha(ci, 0.5);
+   backgrounds_unc_goodPhotonSR_eta__4->SetFillStyle(3004);
    backgrounds_unc_goodPhotonSR_eta__4->SetMarkerStyle(20);
    backgrounds_unc_goodPhotonSR_eta__4->SetMarkerSize(0);
    backgrounds_unc_goodPhotonSR_eta__4->GetXaxis()->SetRange(1,5);
@@ -306,107 +311,8 @@ void ()
    backgrounds_unc_goodPhotonSR_eta__4->GetZaxis()->SetTitleFont(42);
    backgrounds_unc_goodPhotonSR_eta__4->Draw("same e2");
    
-   TLegend *leg = new TLegend(0.62,0.7,0.82,0.75,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   TLegendEntry *entry=leg->AddEntry("goodPhotonSR_eta_stack_3","#gamma#gamma#rightarrowe^{+}e^{-}","f");
-
-   ci = TColor::GetColor("#ffff00");
-   entry->SetFillColor(ci);
-   entry->SetFillStyle(1001);
-
-   ci = TColor::GetColor("#000000");
-   entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
-   entry->SetTextFont(42);
-   leg->Draw();
-   
-   leg = new TLegend(0.72,0.75,0.82,0.8,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   leg->Draw();
-   
-   leg = new TLegend(0.62,0.8,0.82,0.9,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   entry=leg->AddEntry("goodPhotonSR_eta_stack_1","Data","pl");
-
-   ci = TColor::GetColor("#000000");
-   entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(20);
-   entry->SetMarkerSize(1);
-   entry->SetTextFont(42);
-   leg->Draw();
-   
-   leg = new TLegend(0.62,0.75,0.82,0.8,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   entry=leg->AddEntry("goodPhotonSR_eta_stack_4","#gamma#gamma#rightarrow#gamma#gamma","f");
-
-   ci = TColor::GetColor("#ff9933");
-   entry->SetFillColor(ci);
-   entry->SetFillStyle(1001);
-
-   ci = TColor::GetColor("#000000");
-   entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
-   entry->SetTextFont(42);
-   leg->Draw();
-   
-   leg = new TLegend(0.62,0.65,0.82,0.7,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   entry=leg->AddEntry("goodPhotonSR_eta_stack_1","gg#rightarrow#gamma#gamma","f");
-
-   ci = TColor::GetColor("#6699ff");
-   entry->SetFillColor(ci);
-   entry->SetFillStyle(1001);
-
-   ci = TColor::GetColor("#000000");
-   entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
-   entry->SetTextFont(42);
-   leg->Draw();
+   auto leg = get_lbl_legend();
+  leg->Draw();
    
    TH1F *goodPhotonSR_etabackground_copy__5 = new TH1F("goodPhotonSR_etabackground_copy__5","",5,-2.2,2.2);
    goodPhotonSR_etabackground_copy__5->SetMinimum(0);
@@ -417,7 +323,7 @@ void ()
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetTitle("#eta^{#gamma}");
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetLabelFont(42);
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetLabelOffset(0.007);
-   goodPhotonSR_etabackground_copy__5->GetXaxis()->SetLabelSize(0.06);
+   goodPhotonSR_etabackground_copy__5->GetXaxis()->SetLabelSize(fig_6_x_label_size);
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetTitleSize(0.06);
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetTitleOffset(1.7);
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetTitleFont(42);
@@ -426,9 +332,10 @@ void ()
    goodPhotonSR_etabackground_copy__5->GetYaxis()->SetNdivisions(505);
    goodPhotonSR_etabackground_copy__5->GetYaxis()->SetLabelFont(42);
    goodPhotonSR_etabackground_copy__5->GetYaxis()->SetLabelOffset(0.007);
-   goodPhotonSR_etabackground_copy__5->GetYaxis()->SetLabelSize(0.06);
+   goodPhotonSR_etabackground_copy__5->GetYaxis()->SetLabelSize(fig_6_y_label_size);
    goodPhotonSR_etabackground_copy__5->GetYaxis()->SetTitleSize(0.05);
-   goodPhotonSR_etabackground_copy__5->GetYaxis()->SetTitleOffset(1.5);
+   goodPhotonSR_etabackground_copy__5->GetYaxis()->SetTitleOffset(1.0);
+   
    goodPhotonSR_etabackground_copy__5->GetYaxis()->SetTitleFont(42);
    goodPhotonSR_etabackground_copy__5->GetZaxis()->SetLabelFont(42);
    goodPhotonSR_etabackground_copy__5->GetZaxis()->SetLabelOffset(0.007);
@@ -450,8 +357,8 @@ void ()
    goodPhotonSR_eta_2->SetBorderSize(2);
    goodPhotonSR_eta_2->SetLeftMargin(0.16);
    goodPhotonSR_eta_2->SetRightMargin(0.15);
-   goodPhotonSR_eta_2->SetTopMargin(0);
-   goodPhotonSR_eta_2->SetBottomMargin(0.3);
+   goodPhotonSR_eta_2->SetTopMargin(0.05);
+   goodPhotonSR_eta_2->SetBottomMargin(fig_6_ratio_bottom_margin);
    goodPhotonSR_eta_2->SetFrameFillStyle(0);
    goodPhotonSR_eta_2->SetFrameBorderMode(0);
    goodPhotonSR_eta_2->SetFrameFillStyle(0);
@@ -472,17 +379,18 @@ void ()
    ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetTitle("#eta^{#gamma}");
    ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetLabelFont(42);
    ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetLabelOffset(0.007);
-   ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetLabelSize(0.1);
-   ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetTitleSize(0.12);
+   ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetLabelSize(fig_6_x_ratio_label_size);
+   ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetTitleSize(fig_6_x_ratio_title_size);
    ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetTitleOffset(1);
    ratio_stack_goodPhotonSR_eta_stack_6->GetXaxis()->SetTitleFont(42);
    ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetTitle("Data/MC");
+  ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->CenterTitle();
    ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->CenterTitle(true);
    ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetNdivisions(505);
    ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetLabelFont(42);
    ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetLabelOffset(0.007);
-   ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetLabelSize(0.1);
-   ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetTitleSize(0.1);
+   ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetLabelSize(fig_6_y_ratio_label_size);
+   ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetTitleSize(fig_6_y_ratio_title_size);
    ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetTitleOffset(0.5);
    ratio_stack_goodPhotonSR_eta_stack_6->GetYaxis()->SetTitleFont(42);
    ratio_stack_goodPhotonSR_eta_stack_6->GetZaxis()->SetLabelFont(42);
@@ -544,8 +452,8 @@ void ()
 
    ci = 1556;
    color = new TColor(ci, 0, 0, 0, " ", 0.3);
-   ratio_uncertainty_goodPhotonSR_eta__6->SetFillColor(ci);
-   ratio_uncertainty_goodPhotonSR_eta__6->SetFillStyle(3244);
+   ratio_uncertainty_goodPhotonSR_eta__6->SetFillColorAlpha(ci, 0.5);
+   ratio_uncertainty_goodPhotonSR_eta__6->SetFillStyle(3004);
    ratio_uncertainty_goodPhotonSR_eta__6->SetMarkerStyle(20);
    ratio_uncertainty_goodPhotonSR_eta__6->SetMarkerSize(0);
    ratio_uncertainty_goodPhotonSR_eta__6->GetXaxis()->SetRange(1,5);
@@ -560,27 +468,21 @@ void ()
    ratio_uncertainty_goodPhotonSR_eta__6->Draw("same e2");
    goodPhotonSR_eta_2->Modified();
    goodPhotonSR_eta->cd();
-   TLatex *   tex = new TLatex(0.85,0.928,"1.6 nb^{-1} ( PbPb @ 5.02 TeV)");
-tex->SetNDC();
-   tex->SetTextAlign(31);
-   tex->SetTextFont(42);
-   tex->SetTextSize(0.036);
-   tex->SetLineWidth(2);
-   tex->Draw();
-      tex = new TLatex(0.19105,0.9176,"CMS");
-   tex->SetTextAlign(13);
-   tex->SetTextFont(61);
-   tex->SetTextSize(0.045);
-   tex->SetLineWidth(2);
-   tex->Draw();
-      tex = new TLatex(0.19105,0.8636,"Preliminary");
-   tex->SetTextAlign(13);
-   tex->SetTextFont(52);
-   tex->SetTextSize(0.0342);
-   tex->SetLineWidth(2);
-   tex->Draw();
+     auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");
+  tex->SetNDC();
+  tex->SetTextFont(42);
+  tex->SetTextSize(0.04);
+  tex->SetLineWidth(2);
+  tex->Draw();
+
+  tex = new TLatex(0.52, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex->SetNDC();
+  tex->SetTextFont(42);
+  tex->SetTextSize(0.04);
+  tex->SetLineWidth(2);
+  tex->Draw();
    goodPhotonSR_eta->Modified();
    goodPhotonSR_eta->cd();
    goodPhotonSR_eta->SetSelected(goodPhotonSR_eta);
-   goodPhotonSR_eta->SaveAs("Figure_006_c.pdf");
+   goodPhotonSR_eta->SaveAs("figures/Figure_006_c.pdf");
 }

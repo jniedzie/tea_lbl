@@ -29,7 +29,7 @@ void plot_fig_7_b()
    pad11->SetFillColor(0);
    pad11->SetBorderMode(0);
    pad11->SetBorderSize(2);
-   pad11->SetLogy();
+   // pad11->SetLogy();
    pad11->SetTickx(1);
    pad11->SetTicky(1);
    pad11->SetLeftMargin(0.16);
@@ -40,18 +40,23 @@ void plot_fig_7_b()
    pad11->SetFrameBorderMode(0);
    pad11->SetFrameFillStyle(0);
    pad11->SetFrameBorderMode(0);
-   Double_t xAxis3[6] = {5, 9, 13, 17, 21, 25}; 
+   Double_t xAxis3[5] = {5, 9, 13, 17, 21}; 
    
-   TH1D *hUnfoDataInvmass_xSec__11 = new TH1D("hUnfoDataInvmass_xSec__11","",5, xAxis3);
+   TH1D *hUnfoDataInvmass_xSec__11 = new TH1D("hUnfoDataInvmass_xSec__11","",4, xAxis3);
    hUnfoDataInvmass_xSec__11->SetBinContent(1,20.10558);
    hUnfoDataInvmass_xSec__11->SetBinContent(2,5.333797);
    hUnfoDataInvmass_xSec__11->SetBinContent(3,1.310625);
+   hUnfoDataInvmass_xSec__11->SetBinContent(4,0);
+   
    hUnfoDataInvmass_xSec__11->SetBinError(1,4.825339);
    hUnfoDataInvmass_xSec__11->SetBinError(2,1.280111);
    hUnfoDataInvmass_xSec__11->SetBinError(3,0.3145499);
-   hUnfoDataInvmass_xSec__11->SetMinimum(0.3);
-   hUnfoDataInvmass_xSec__11->SetMaximum(100);
-   hUnfoDataInvmass_xSec__11->SetEntries(5);
+   hUnfoDataInvmass_xSec__11->SetBinError(4,1.84);
+   
+   // hUnfoDataInvmass_xSec__11->SetMinimum(0.3);
+   hUnfoDataInvmass_xSec__11->SetMinimum(0.0);
+   // hUnfoDataInvmass_xSec__11->SetMaximum(100);
+   hUnfoDataInvmass_xSec__11->SetMaximum(30);
 
    Int_t ci;      // for color index setting
    TColor *color; // for color definition with alpha
@@ -83,19 +88,22 @@ void plot_fig_7_b()
    hUnfoDataInvmass_xSec__11->GetZaxis()->SetTitleOffset(1);
    hUnfoDataInvmass_xSec__11->GetZaxis()->SetTitleFont(42);
    hUnfoDataInvmass_xSec__11->Draw("e2");
-   Double_t xAxis4[6] = {5, 9, 13, 17, 21, 25}; 
+   Double_t xAxis4[5] = {5, 9, 13, 17, 21}; 
    
-   TH1D *hUnfoDataInvmass_xSec__12 = new TH1D("hUnfoDataInvmass_xSec__12","",5, xAxis4);
+   TH1D *hUnfoDataInvmass_xSec__12 = new TH1D("hUnfoDataInvmass_xSec__12","",4, xAxis4);
    hUnfoDataInvmass_xSec__12->SetBinContent(1,20.10558);
    hUnfoDataInvmass_xSec__12->SetBinContent(2,5.333797);
    hUnfoDataInvmass_xSec__12->SetBinContent(3,1.310625);
+   hUnfoDataInvmass_xSec__12->SetBinContent(4,0);
+   
    hUnfoDataInvmass_xSec__12->SetBinError(1,9.579709);
    hUnfoDataInvmass_xSec__12->SetBinError(2,3.517862);
    hUnfoDataInvmass_xSec__12->SetBinError(3,1.564104);
    hUnfoDataInvmass_xSec__12->SetBinError(4,1.48);
+
    hUnfoDataInvmass_xSec__12->SetMinimum(0.3);
    hUnfoDataInvmass_xSec__12->SetMaximum(100);
-   hUnfoDataInvmass_xSec__12->SetEntries(5);
+   
    hUnfoDataInvmass_xSec__12->SetLineWidth(2);
    hUnfoDataInvmass_xSec__12->SetMarkerStyle(20);
    hUnfoDataInvmass_xSec__12->GetXaxis()->SetTitle("m^{#gamma#gamma} (GeV)");
@@ -118,21 +126,21 @@ void plot_fig_7_b()
    hUnfoDataInvmass_xSec__12->GetZaxis()->SetTitleSize(0.06);
    hUnfoDataInvmass_xSec__12->GetZaxis()->SetTitleOffset(1);
    hUnfoDataInvmass_xSec__12->GetZaxis()->SetTitleFont(42);
-   hUnfoDataInvmass_xSec__12->Draw("psameex0");
-   Double_t xAxis5[6] = {5, 9, 13, 17, 21, 25}; 
+   hUnfoDataInvmass_xSec__12->Draw("psameex");
+   Double_t xAxis5[5] = {5, 9, 13, 17, 21}; 
    
-   TH1D *hGenInvmass_xSec__13 = new TH1D("hGenInvmass_xSec__13","",5, xAxis5);
+   TH1D *hGenInvmass_xSec__13 = new TH1D("hGenInvmass_xSec__13","",4, xAxis5);
    hGenInvmass_xSec__13->SetBinContent(1,16.72245);
    hGenInvmass_xSec__13->SetBinContent(2,4.207361);
    hGenInvmass_xSec__13->SetBinContent(3,1.304726);
    hGenInvmass_xSec__13->SetBinContent(4,0.5307833);
-   hGenInvmass_xSec__13->SetBinContent(5,0.2570547);
+   
    hGenInvmass_xSec__13->SetBinError(1,0.1524323);
    hGenInvmass_xSec__13->SetBinError(2,0.07645956);
    hGenInvmass_xSec__13->SetBinError(3,0.04257814);
    hGenInvmass_xSec__13->SetBinError(4,0.02715723);
-   hGenInvmass_xSec__13->SetBinError(5,0.01889904);
-   hGenInvmass_xSec__13->SetEntries(5);
+   
+   
 
    ci = TColor::GetColor("#009999");
    hGenInvmass_xSec__13->SetLineColor(ci);
@@ -162,20 +170,20 @@ void plot_fig_7_b()
    hGenInvmass_xSec__13->GetZaxis()->SetTitleOffset(1);
    hGenInvmass_xSec__13->GetZaxis()->SetTitleFont(42);
    hGenInvmass_xSec__13->Draw("psame");
-   Double_t xAxis6[6] = {5, 9, 13, 17, 21, 25}; 
+   Double_t xAxis6[5] = {5, 9, 13, 17, 21}; 
    
-   TH1D *hGenInvmass_xSec__14 = new TH1D("hGenInvmass_xSec__14","",5, xAxis6);
+   TH1D *hGenInvmass_xSec__14 = new TH1D("hGenInvmass_xSec__14","",4, xAxis6);
    hGenInvmass_xSec__14->SetBinContent(1,16.72245);
    hGenInvmass_xSec__14->SetBinContent(2,4.207361);
    hGenInvmass_xSec__14->SetBinContent(3,1.304726);
    hGenInvmass_xSec__14->SetBinContent(4,0.5307833);
-   hGenInvmass_xSec__14->SetBinContent(5,0.2570547);
+   
    hGenInvmass_xSec__14->SetBinError(1,0.1524323);
    hGenInvmass_xSec__14->SetBinError(2,0.07645956);
    hGenInvmass_xSec__14->SetBinError(3,0.04257814);
    hGenInvmass_xSec__14->SetBinError(4,0.02715723);
-   hGenInvmass_xSec__14->SetBinError(5,0.01889904);
-   hGenInvmass_xSec__14->SetEntries(5);
+   
+   
 
    ci = TColor::GetColor("#009999");
    hGenInvmass_xSec__14->SetLineColor(ci);
@@ -205,19 +213,23 @@ void plot_fig_7_b()
    hGenInvmass_xSec__14->GetZaxis()->SetTitleOffset(1);
    hGenInvmass_xSec__14->GetZaxis()->SetTitleFont(42);
    hGenInvmass_xSec__14->Draw("histsame");
-   Double_t xAxis7[6] = {5, 9, 13, 17, 21, 25}; 
+   Double_t xAxis7[5] = {5, 9, 13, 17, 21}; 
    
-   TH1D *hUnfoDataInvmass_xSec__15 = new TH1D("hUnfoDataInvmass_xSec__15","",5, xAxis7);
+   TH1D *hUnfoDataInvmass_xSec__15 = new TH1D("hUnfoDataInvmass_xSec__15","",4, xAxis7);
+   
    hUnfoDataInvmass_xSec__15->SetBinContent(1,20.10558);
    hUnfoDataInvmass_xSec__15->SetBinContent(2,5.333797);
    hUnfoDataInvmass_xSec__15->SetBinContent(3,1.310625);
+   hUnfoDataInvmass_xSec__15->SetBinContent(4,0);
+
    hUnfoDataInvmass_xSec__15->SetBinError(1,9.579709);
    hUnfoDataInvmass_xSec__15->SetBinError(2,3.517862);
    hUnfoDataInvmass_xSec__15->SetBinError(3,1.564104);
-   hUnfoDataInvmass_xSec__15->SetBinError(4,1.48);
+   hUnfoDataInvmass_xSec__15->SetBinError(4,1.84);
+
    hUnfoDataInvmass_xSec__15->SetMinimum(0.3);
    hUnfoDataInvmass_xSec__15->SetMaximum(100);
-   hUnfoDataInvmass_xSec__15->SetEntries(5);
+   
    hUnfoDataInvmass_xSec__15->SetLineWidth(2);
    hUnfoDataInvmass_xSec__15->SetMarkerStyle(20);
    hUnfoDataInvmass_xSec__15->GetXaxis()->SetTitle("m^{#gamma#gamma} (GeV)");
@@ -241,23 +253,20 @@ void plot_fig_7_b()
    hUnfoDataInvmass_xSec__15->GetZaxis()->SetTitleOffset(1);
    hUnfoDataInvmass_xSec__15->GetZaxis()->SetTitleFont(42);
    hUnfoDataInvmass_xSec__15->Draw("psameex0");
-   Double_t xAxis8[6] = {5, 9, 13, 17, 21, 25}; 
+   Double_t xAxis8[5] = {5, 9, 13, 17, 21}; 
    
-   TH1F *hgammaUPC_LbL_Invmass__16 = new TH1F("hgammaUPC_LbL_Invmass__16","d#sigma/dm_{inv} (pb/GeV) photon pairs (after cuts) [LbL]",5, xAxis8);
+   TH1F *hgammaUPC_LbL_Invmass__16 = new TH1F("hgammaUPC_LbL_Invmass__16","d#sigma/dm_{inv} (pb/GeV) photon pairs (after cuts) [LbL]",4, xAxis8);
    hgammaUPC_LbL_Invmass__16->SetBinContent(1,17.17089);
    hgammaUPC_LbL_Invmass__16->SetBinContent(2,4.355528);
    hgammaUPC_LbL_Invmass__16->SetBinContent(3,1.342409);
    hgammaUPC_LbL_Invmass__16->SetBinContent(4,0.5182647);
-   hgammaUPC_LbL_Invmass__16->SetBinContent(5,0.2173214);
-   hgammaUPC_LbL_Invmass__16->SetBinContent(6,0.2408735);
+   
+
    hgammaUPC_LbL_Invmass__16->SetBinError(1,0.03195681);
    hgammaUPC_LbL_Invmass__16->SetBinError(2,0.01609487);
    hgammaUPC_LbL_Invmass__16->SetBinError(3,0.008935306);
    hgammaUPC_LbL_Invmass__16->SetBinError(4,0.005551915);
-   hgammaUPC_LbL_Invmass__16->SetBinError(5,0.00359516);
-   hgammaUPC_LbL_Invmass__16->SetBinError(6,0.003784962);
-   hgammaUPC_LbL_Invmass__16->SetEntries(396880);
-
+   
    ci = TColor::GetColor("#000099");
    hgammaUPC_LbL_Invmass__16->SetLineColor(ci);
    hgammaUPC_LbL_Invmass__16->SetLineWidth(2);
@@ -287,23 +296,19 @@ void plot_fig_7_b()
    hgammaUPC_LbL_Invmass__16->GetZaxis()->SetTitleOffset(1);
    hgammaUPC_LbL_Invmass__16->GetZaxis()->SetTitleFont(42);
    hgammaUPC_LbL_Invmass__16->Draw("histsame");
-   Double_t xAxis9[6] = {5, 9, 13, 17, 21, 25}; 
+   Double_t xAxis9[5] = {5, 9, 13, 17, 21}; 
    
-   TH1F *hgammaUPC_LbL_Invmass__17 = new TH1F("hgammaUPC_LbL_Invmass__17","d#sigma/dm_{inv} (pb/GeV) photon pairs (after cuts) [LbL]",5, xAxis9);
+   TH1F *hgammaUPC_LbL_Invmass__17 = new TH1F("hgammaUPC_LbL_Invmass__17","d#sigma/dm_{inv} (pb/GeV) photon pairs (after cuts) [LbL]",4, xAxis9);
    hgammaUPC_LbL_Invmass__17->SetBinContent(1,17.17089);
    hgammaUPC_LbL_Invmass__17->SetBinContent(2,4.355528);
    hgammaUPC_LbL_Invmass__17->SetBinContent(3,1.342409);
    hgammaUPC_LbL_Invmass__17->SetBinContent(4,0.5182647);
-   hgammaUPC_LbL_Invmass__17->SetBinContent(5,0.2173214);
-   hgammaUPC_LbL_Invmass__17->SetBinContent(6,0.2408735);
+   
    hgammaUPC_LbL_Invmass__17->SetBinError(1,0.03195681);
    hgammaUPC_LbL_Invmass__17->SetBinError(2,0.01609487);
    hgammaUPC_LbL_Invmass__17->SetBinError(3,0.008935306);
    hgammaUPC_LbL_Invmass__17->SetBinError(4,0.005551915);
-   hgammaUPC_LbL_Invmass__17->SetBinError(5,0.00359516);
-   hgammaUPC_LbL_Invmass__17->SetBinError(6,0.003784962);
-   hgammaUPC_LbL_Invmass__17->SetEntries(396880);
-
+   
    ci = TColor::GetColor("#000099");
    hgammaUPC_LbL_Invmass__17->SetLineColor(ci);
    hgammaUPC_LbL_Invmass__17->SetLineWidth(2);
@@ -391,7 +396,7 @@ void plot_fig_7_b()
    tex->SetTextSize(0.035);
    tex->SetLineWidth(2);
    tex->Draw();
-      tex = new TLatex(0.52,0.96,"#scale[0.8]{PbPb, 1.64 nb^{-1} (#sqrt{S_{NN}} = 5.02 TeV)}");
+      tex = new TLatex(0.52,0.96,"#scale[0.8]{PbPb, 1.64 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
    tex->SetTextFont(42);
    tex->SetTextSize(0.035);
    tex->SetLineWidth(2);
@@ -575,5 +580,5 @@ void plot_fig_7_b()
    c6->Modified();
    c6->cd();
    c6->SetSelected(c6);
-   c6->SaveAs("Figure_007_b.pdf");  
+   c6->SaveAs("figures/Figure_007_b.pdf");  
 }

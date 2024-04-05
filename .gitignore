@@ -7,3 +7,5 @@ bin/*
 plots/*
 combine/*
 utils/__pycache__/*
+
+plotting_macros/figures/*.pdf

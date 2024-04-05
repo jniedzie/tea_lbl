@@ -528,7 +528,7 @@ void plot_fig_4_d()
    tex->SetTextSize(0.037);
    tex->SetLineWidth(2);
    tex->Draw();
-      tex = new TLatex(0.55,0.96,"#scale[0.8]{PbPb, 1.64 nb^{-1} (#sqrt{S_{NN}} = 5.02 TeV)}");
+      tex = new TLatex(0.55,0.96,"#scale[0.8]{PbPb, 1.64 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
    tex->SetTextFont(42);
    tex->SetTextSize(0.037);
    tex->SetLineWidth(2);

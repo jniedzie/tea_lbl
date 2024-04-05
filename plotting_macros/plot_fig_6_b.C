@@ -1,6 +1,9 @@
 #ifdef __CLING__
 #pragma cling optimize(0)
 #endif
+
+#include "style.h"
+
 void plot_fig_6_b()
 {
    gROOT->SetBatch(kTRUE);
@@ -34,7 +37,7 @@ void plot_fig_6_b()
    diphotonSR_pt_1->SetBorderSize(2);
    diphotonSR_pt_1->SetLeftMargin(0.16);
    diphotonSR_pt_1->SetRightMargin(0.15);
-   diphotonSR_pt_1->SetBottomMargin(0);
+   diphotonSR_pt_1->SetBottomMargin(0.05);
    diphotonSR_pt_1->SetFrameFillStyle(0);
    diphotonSR_pt_1->SetFrameBorderMode(0);
    diphotonSR_pt_1->SetFrameFillStyle(0);
@@ -56,18 +59,18 @@ void plot_fig_6_b()
    diphotonSR_ptbackground_stack_10->GetXaxis()->SetTitle("p_{T}^{#gamma#gamma} (GeV)");
    diphotonSR_ptbackground_stack_10->GetXaxis()->SetLabelFont(42);
    diphotonSR_ptbackground_stack_10->GetXaxis()->SetLabelOffset(0.007);
-   diphotonSR_ptbackground_stack_10->GetXaxis()->SetLabelSize(0.06);
-   diphotonSR_ptbackground_stack_10->GetXaxis()->SetTitleSize(0.06);
+   diphotonSR_ptbackground_stack_10->GetXaxis()->SetLabelSize(0.0);
+   diphotonSR_ptbackground_stack_10->GetXaxis()->SetTitleSize(fig_6_x_title_size);
    diphotonSR_ptbackground_stack_10->GetXaxis()->SetTitleOffset(1.7);
    diphotonSR_ptbackground_stack_10->GetXaxis()->SetTitleFont(42);
-   diphotonSR_ptbackground_stack_10->GetYaxis()->SetTitle("Events / 0.2 GeV");
+   diphotonSR_ptbackground_stack_10->GetYaxis()->SetTitle("Events / 0.2 (GeV^{-1})");
    diphotonSR_ptbackground_stack_10->GetYaxis()->CenterTitle(true);
    diphotonSR_ptbackground_stack_10->GetYaxis()->SetNdivisions(505);
    diphotonSR_ptbackground_stack_10->GetYaxis()->SetLabelFont(42);
    diphotonSR_ptbackground_stack_10->GetYaxis()->SetLabelOffset(0.007);
    diphotonSR_ptbackground_stack_10->GetYaxis()->SetLabelSize(0.06);
-   diphotonSR_ptbackground_stack_10->GetYaxis()->SetTitleSize(0.05);
-   diphotonSR_ptbackground_stack_10->GetYaxis()->SetTitleOffset(1.5);
+   diphotonSR_ptbackground_stack_10->GetYaxis()->SetTitleSize(fig_6_y_title_size);
+   diphotonSR_ptbackground_stack_10->GetYaxis()->SetTitleOffset(1.0);
    diphotonSR_ptbackground_stack_10->GetYaxis()->SetTitleFont(42);
    diphotonSR_ptbackground_stack_10->GetZaxis()->SetLabelFont(42);
    diphotonSR_ptbackground_stack_10->GetZaxis()->SetLabelOffset(0.007);
@@ -230,7 +233,7 @@ void plot_fig_6_b()
    diphotonSR_ptdata_stack_11->GetYaxis()->SetLabelOffset(0.007);
    diphotonSR_ptdata_stack_11->GetYaxis()->SetLabelSize(0.06);
    diphotonSR_ptdata_stack_11->GetYaxis()->SetTitleSize(0.05);
-   diphotonSR_ptdata_stack_11->GetYaxis()->SetTitleOffset(1.5);
+   diphotonSR_ptdata_stack_11->GetYaxis()->SetTitleOffset(1.0);
    diphotonSR_ptdata_stack_11->GetYaxis()->SetTitleFont(42);
    diphotonSR_ptdata_stack_11->GetZaxis()->SetLabelFont(42);
    diphotonSR_ptdata_stack_11->GetZaxis()->SetLabelOffset(0.007);
@@ -289,8 +292,8 @@ void plot_fig_6_b()
 
    ci = 1558;
    color = new TColor(ci, 0, 0, 0, " ", 0.3);
-   backgrounds_unc_diphotonSR_pt__10->SetFillColor(ci);
-   backgrounds_unc_diphotonSR_pt__10->SetFillStyle(3244);
+   backgrounds_unc_diphotonSR_pt__10->SetFillColorAlpha(ci, 0.5);
+   backgrounds_unc_diphotonSR_pt__10->SetFillStyle(3004);
    backgrounds_unc_diphotonSR_pt__10->SetMarkerStyle(20);
    backgrounds_unc_diphotonSR_pt__10->SetMarkerSize(0);
    backgrounds_unc_diphotonSR_pt__10->GetXaxis()->SetRange(1,5);
@@ -304,107 +307,8 @@ void plot_fig_6_b()
    backgrounds_unc_diphotonSR_pt__10->GetZaxis()->SetTitleFont(42);
    backgrounds_unc_diphotonSR_pt__10->Draw("same e2");
    
-   TLegend *leg = new TLegend(0.62,0.7,0.82,0.75,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   TLegendEntry *entry=leg->AddEntry("diphotonSR_pt_stack_3","#gamma#gamma#rightarrowe^{+}e^{-}","f");
-
-   ci = TColor::GetColor("#ffff00");
-   entry->SetFillColor(ci);
-   entry->SetFillStyle(1001);
-
-   ci = TColor::GetColor("#000000");
-   entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
-   entry->SetTextFont(42);
-   leg->Draw();
-   
-   leg = new TLegend(0.72,0.75,0.82,0.8,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   leg->Draw();
-   
-   leg = new TLegend(0.62,0.8,0.82,0.9,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   entry=leg->AddEntry("diphotonSR_pt_stack_1","Data","pl");
-
-   ci = TColor::GetColor("#000000");
-   entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(20);
-   entry->SetMarkerSize(1);
-   entry->SetTextFont(42);
-   leg->Draw();
-   
-   leg = new TLegend(0.62,0.75,0.82,0.8,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   entry=leg->AddEntry("diphotonSR_pt_stack_4","#gamma#gamma#rightarrow#gamma#gamma","f");
-
-   ci = TColor::GetColor("#ff9933");
-   entry->SetFillColor(ci);
-   entry->SetFillStyle(1001);
-
-   ci = TColor::GetColor("#000000");
-   entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
-   entry->SetTextFont(42);
-   leg->Draw();
-   
-   leg = new TLegend(0.62,0.65,0.82,0.7,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextSize(0.035);
-   leg->SetLineColor(1);
-   leg->SetLineStyle(1);
-   leg->SetLineWidth(1);
-   leg->SetFillColor(0);
-   leg->SetFillStyle(1001);
-   entry=leg->AddEntry("diphotonSR_pt_stack_1","gg#rightarrow#gamma#gamma","f");
-
-   ci = TColor::GetColor("#6699ff");
-   entry->SetFillColor(ci);
-   entry->SetFillStyle(1001);
-
-   ci = TColor::GetColor("#000000");
-   entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
-   entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
-   entry->SetMarkerSize(1);
-   entry->SetTextFont(42);
-   leg->Draw();
+  auto leg = get_lbl_legend();
+  leg->Draw();
    
    TH1F *diphotonSR_ptbackground_copy__11 = new TH1F("diphotonSR_ptbackground_copy__11","",5,0,1);
    diphotonSR_ptbackground_copy__11->SetMinimum(0);
@@ -415,18 +319,18 @@ void plot_fig_6_b()
    diphotonSR_ptbackground_copy__11->GetXaxis()->SetTitle("p_{T}^{#gamma#gamma} (GeV)");
    diphotonSR_ptbackground_copy__11->GetXaxis()->SetLabelFont(42);
    diphotonSR_ptbackground_copy__11->GetXaxis()->SetLabelOffset(0.007);
-   diphotonSR_ptbackground_copy__11->GetXaxis()->SetLabelSize(0.06);
+   diphotonSR_ptbackground_copy__11->GetXaxis()->SetLabelSize(fig_6_x_label_size);
    diphotonSR_ptbackground_copy__11->GetXaxis()->SetTitleSize(0.06);
    diphotonSR_ptbackground_copy__11->GetXaxis()->SetTitleOffset(1.7);
    diphotonSR_ptbackground_copy__11->GetXaxis()->SetTitleFont(42);
-   diphotonSR_ptbackground_copy__11->GetYaxis()->SetTitle("Events / 0.2 GeV");
+   diphotonSR_ptbackground_copy__11->GetYaxis()->SetTitle("Events / 0.2 (GeV^{-1})");
    diphotonSR_ptbackground_copy__11->GetYaxis()->CenterTitle(true);
    diphotonSR_ptbackground_copy__11->GetYaxis()->SetNdivisions(505);
    diphotonSR_ptbackground_copy__11->GetYaxis()->SetLabelFont(42);
    diphotonSR_ptbackground_copy__11->GetYaxis()->SetLabelOffset(0.007);
-   diphotonSR_ptbackground_copy__11->GetYaxis()->SetLabelSize(0.06);
+   diphotonSR_ptbackground_copy__11->GetYaxis()->SetLabelSize(fig_6_y_label_size);
    diphotonSR_ptbackground_copy__11->GetYaxis()->SetTitleSize(0.05);
-   diphotonSR_ptbackground_copy__11->GetYaxis()->SetTitleOffset(1.5);
+   diphotonSR_ptbackground_copy__11->GetYaxis()->SetTitleOffset(1.0);
    diphotonSR_ptbackground_copy__11->GetYaxis()->SetTitleFont(42);
    diphotonSR_ptbackground_copy__11->GetZaxis()->SetLabelFont(42);
    diphotonSR_ptbackground_copy__11->GetZaxis()->SetLabelOffset(0.007);
@@ -448,8 +352,8 @@ void plot_fig_6_b()
    diphotonSR_pt_2->SetBorderSize(2);
    diphotonSR_pt_2->SetLeftMargin(0.16);
    diphotonSR_pt_2->SetRightMargin(0.15);
-   diphotonSR_pt_2->SetTopMargin(0);
-   diphotonSR_pt_2->SetBottomMargin(0.3);
+   diphotonSR_pt_2->SetTopMargin(0.05);
+   diphotonSR_pt_2->SetBottomMargin(fig_6_ratio_bottom_margin);
    diphotonSR_pt_2->SetFrameFillStyle(0);
    diphotonSR_pt_2->SetFrameBorderMode(0);
    diphotonSR_pt_2->SetFrameFillStyle(0);
@@ -470,17 +374,18 @@ void plot_fig_6_b()
    ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetTitle("p_{T}^{#gamma#gamma} (GeV)");
    ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetLabelFont(42);
    ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetLabelOffset(0.007);
-   ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetLabelSize(0.1);
-   ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetTitleSize(0.12);
+   ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetLabelSize(fig_6_x_ratio_label_size);
+   ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetTitleSize(fig_6_x_ratio_title_size);
    ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetTitleOffset(1);
    ratio_stack_diphotonSR_pt_stack_12->GetXaxis()->SetTitleFont(42);
    ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetTitle("Data/MC");
+  ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->CenterTitle();
    ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->CenterTitle(true);
    ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetNdivisions(505);
    ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetLabelFont(42);
    ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetLabelOffset(0.007);
-   ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetLabelSize(0.1);
-   ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetTitleSize(0.1);
+   ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetLabelSize(fig_6_y_ratio_label_size);
+   ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetTitleSize(fig_6_y_ratio_title_size);
    ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetTitleOffset(0.5);
    ratio_stack_diphotonSR_pt_stack_12->GetYaxis()->SetTitleFont(42);
    ratio_stack_diphotonSR_pt_stack_12->GetZaxis()->SetLabelFont(42);
@@ -542,8 +447,8 @@ void plot_fig_6_b()
 
    ci = 1558;
    color = new TColor(ci, 0, 0, 0, " ", 0.3);
-   ratio_uncertainty_diphotonSR_pt__12->SetFillColor(ci);
-   ratio_uncertainty_diphotonSR_pt__12->SetFillStyle(3244);
+   ratio_uncertainty_diphotonSR_pt__12->SetFillColorAlpha(ci, 0.5);
+   ratio_uncertainty_diphotonSR_pt__12->SetFillStyle(3004);
    ratio_uncertainty_diphotonSR_pt__12->SetMarkerStyle(20);
    ratio_uncertainty_diphotonSR_pt__12->SetMarkerSize(0);
    ratio_uncertainty_diphotonSR_pt__12->GetXaxis()->SetRange(1,5);
@@ -558,27 +463,21 @@ void plot_fig_6_b()
    ratio_uncertainty_diphotonSR_pt__12->Draw("same e2");
    diphotonSR_pt_2->Modified();
    diphotonSR_pt->cd();
-   TLatex *   tex = new TLatex(0.85,0.928,"1.6 nb^{-1} ( PbPb @ 5.02 TeV)");
-tex->SetNDC();
-   tex->SetTextAlign(31);
-   tex->SetTextFont(42);
-   tex->SetTextSize(0.036);
-   tex->SetLineWidth(2);
-   tex->Draw();
-      tex = new TLatex(0.19105,0.9176,"CMS");
-   tex->SetTextAlign(13);
-   tex->SetTextFont(61);
-   tex->SetTextSize(0.045);
-   tex->SetLineWidth(2);
-   tex->Draw();
-      tex = new TLatex(0.19105,0.8636,"Preliminary");
-   tex->SetTextAlign(13);
-   tex->SetTextFont(52);
-   tex->SetTextSize(0.0342);
-   tex->SetLineWidth(2);
-   tex->Draw();
+     auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");
+  tex->SetNDC();
+  tex->SetTextFont(42);
+  tex->SetTextSize(0.04);
+  tex->SetLineWidth(2);
+  tex->Draw();
+
+  tex = new TLatex(0.52, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex->SetNDC();
+  tex->SetTextFont(42);
+  tex->SetTextSize(0.04);
+  tex->SetLineWidth(2);
+  tex->Draw();
    diphotonSR_pt->Modified();
    diphotonSR_pt->cd();
    diphotonSR_pt->SetSelected(diphotonSR_pt);
-   diphotonSR_pt->SaveAs("Figure_006_b.pdf");
+   diphotonSR_pt->SaveAs("figures/Figure_006_b.pdf");
 }
