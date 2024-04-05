@@ -11,7 +11,10 @@ def main():
 
     hists_mass = {}
     hists_pt = {}
-    hists_rap = {}
+    hists_absrap = {}
+    hists_absrap3 = {}
+    
+    
     hists_rap3 = {}
     hists_rap4 = {}
     hists_costheta2 = {}
@@ -27,7 +30,8 @@ def main():
 
         hists_mass[sample] = files[sample].Get("unfoldingPhoton_mass")
         hists_pt[sample] = files[sample].Get("unfoldingPhoton_pt")
-        hists_rap[sample] = files[sample].Get("unfoldingPhoton_absRap")
+        hists_absrap[sample] = files[sample].Get("unfoldingPhoton_absRap")
+        hists_absrap3[sample] = files[sample].Get("unfoldingPhoton_absRap3")
         hists_rap3[sample] = files[sample].Get("unfoldingPhoton_rap3")
         hists_rap4[sample] = files[sample].Get("unfoldingPhoton_rap4")
         hists_costheta2[sample] = files[sample].Get("unfoldingPhoton_costhetastar2")
@@ -43,8 +47,8 @@ def main():
                 luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_pt[sample].Scale(
                 luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
-            hists_rap[sample].Scale(
-                luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
+            hists_absrap[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
+            hists_absrap3[sample].Scale(luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_rap3[sample].Scale(
                 luminosity*crossSections[sample]*photon_sf/nGenEvents[sample])
             hists_rap4[sample].Scale(
@@ -60,7 +64,8 @@ def main():
             cep_scale = get_cep_scale(skim)[0]
             hists_mass[sample].Scale(cep_scale)
             hists_pt[sample].Scale(cep_scale)
-            hists_rap[sample].Scale(cep_scale)
+            hists_absrap[sample].Scale(cep_scale)
+            hists_absrap3[sample].Scale(cep_scale)
             hists_rap3[sample].Scale(cep_scale)
             hists_rap4[sample].Scale(cep_scale)
             hists_costheta2[sample].Scale(cep_scale)
@@ -72,7 +77,8 @@ def main():
         output_file.cd()
         hists_mass[sample].Write()
         hists_pt[sample].Write()
-        hists_rap[sample].Write()
+        hists_absrap[sample].Write()
+        hists_absrap3[sample].Write()
         hists_rap3[sample].Write()
         hists_rap4[sample].Write()
         hists_costheta2[sample].Write()

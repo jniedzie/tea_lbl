@@ -20,7 +20,7 @@ output_path = f"../plots/{skim.replace('skimmed_', '')}/"
 
 
 do_photons = True
-do_alps = True
+do_alps = False
 
 lbl_error = total_uncertainty_lbl_run2 - 1
 qed_error = total_uncertainty_qed - 1
@@ -46,8 +46,10 @@ samples = [
         fill_alpha=1.0,
         
         marker_size=0.0,
-        # legend_description="#gamma#gamma#rightarrowe^{+}e^{-} (SC3 & SL avg.)"
-        legend_description="QED"
+        
+        legend_description="#gamma#gamma#rightarrowe^{+}e^{-}",
+        custom_legend=Legend(0.62, 0.70, 0.82, 0.75, "FL"),
+        # legend_description="QED"
     ),
     Sample(
         name=qed_starlight,
@@ -96,8 +98,9 @@ samples = [
         marker_size=1.0,
         marker_color=ROOT.kBlack,
         fill_alpha=0.0,
-        legend_description="data",
-        custom_legend=Legend(0.72, 0.80, 0.82, 0.90, "pl", "#gamma#gamma#rightarrow#gamma#gamma"),
+        legend_description="Data",
+        custom_legend=Legend(0.62, 0.80, 0.82, 0.90, "pl", ""),
+        # custom_legend=Legend(0.62, 0.80, 0.82, 0.90, "pl", "#gamma#gamma#rightarrow#gamma#gamma"),
         # custom_legend=Legend(0.7, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrowe^{+}e^{-}(#gamma)(#gamma)"),
     ),
 ]
@@ -114,9 +117,8 @@ if do_photons:
             fill_color=ROOT.kOrange+1,
             fill_alpha=1.0,
             # fill_alpha=0.0,
-            legend_description="LbL",
-            # if you add a custom legend for this sample, it will override the default legend.
-            # custom_legend = Legend(0.5, 0.5, 0.7, 0.8, "f"),
+            legend_description="#gamma#gamma#rightarrow#gamma#gamma",
+            custom_legend=Legend(0.62, 0.75, 0.82, 0.80, "FL"),
         )
     )
     samples.append(
@@ -134,8 +136,8 @@ if do_photons:
             fill_color=ROOT.kAzure-4,
             fill_alpha=1.0,
             # fill_alpha=0.0,
-            legend_description="CEP",
-            # custom_legend = Legend(0.7, 0.5, 0.9, 0.8, "f"),
+            legend_description="gg#rightarrow#gamma#gamma",
+            custom_legend=Legend(0.62, 0.65, 0.82, 0.70, "FL"),
         )
     )
 
@@ -195,19 +197,21 @@ if do_alps:
         custom_stacks_order.append(process)
         alp_index += 1
 
-y_label = "# events"
+y_label = "Events"
 
 histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
 
     # photons
-    Histogram("goodPhotonSR_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 35, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhotonSR_phi", "", False, False, NormalizationType.to_lumi, 1,   -3.14, 3.14, 0, 20, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhotonSR_et", "", False, False, NormalizationType.to_lumi, 1,   2, 8, 0, 35, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram("diphotonSR_rapidity", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 15, "y^{#gamma#gamma}", y_label, "", lbl_error),
-    Histogram("diphotonSR_mass", "", False, True, NormalizationType.to_lumi, 1,   0, 30, 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram("diphotonSR_pt", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 18, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "|cos #theta*|", y_label, "", lbl_error),
+    Histogram("goodPhotonSR_et", "", False, False, NormalizationType.to_lumi, 1,   2, 8, 0, 35, "E_{T}^{#gamma} (GeV)", "Events / 1.2 GeV", "", lbl_error),
+    Histogram("goodPhotonSR_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 35, "#eta^{#gamma}", "Events / 0.88", "", lbl_error),
+    Histogram("goodPhotonSR_phi", "", False, False, NormalizationType.to_lumi, 1,   -3.14, 3.14, 0, 20, "#phi^{#gamma}", "Events / 1.57", "", lbl_error),
+    
+    Histogram("diphotonSR_pt", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 18, "p_{T}^{#gamma#gamma} (GeV)", "Events / 0.2 GeV", "", lbl_error),
+    Histogram("diphotonSR_rapidity", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 15, "y^{#gamma#gamma}", "Events / 0.63", "", lbl_error),
+    Histogram("diphotonSR_mass", "", False, True, NormalizationType.to_lumi, 1,   0, 25, 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", "Events / 5 GeV", "", lbl_error),
+    
+    Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "|cos #theta*|", "Events / 0.33", "", lbl_error),
 
 
     Histogram("goodPhoton_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 30, "#eta^{#gamma}", y_label, "", lbl_error),
