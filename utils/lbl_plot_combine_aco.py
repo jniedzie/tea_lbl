@@ -4,9 +4,9 @@ import numpy as np
 from lbl_params import cep_scaling_min_acoplanarity, n_acoplanarity_bins, total_uncertainty_lbl_run2
 from lbl_paths import skim
 
-# legend_header = "  #gamma#gamma#rightarrow#gamma#gamma"
+legend_header = "  #gamma#gamma#rightarrow#gamma#gamma"
 # legend_header = "  #gamma#gamma#rightarrow#gamma#gamma (0n0n)"
-legend_header = "  #gamma#gamma#rightarrow#gamma#gamma (0n0n, 0n1n, 1n0n, 1n1n)"
+# legend_header = "  #gamma#gamma#rightarrow#gamma#gamma (0n0n, 0n1n, 1n0n, 1n1n)"
 
 input_file_path = f"../combine/significance_histograms_{skim}_nBins{n_acoplanarity_bins}.root"
 
@@ -155,7 +155,13 @@ def main():
     graph_data.Draw("PEsame")
 
     stack.SetTitle("")
-    stack.GetYaxis().SetTitle("# events")
+    stack.GetYaxis().SetTitle("Events")
+    stack.GetYaxis().SetTitleSize(20)
+    stack.GetYaxis().SetTitleFont(43)
+    stack.GetYaxis().SetTitleOffset(1.55)
+
+    stack.GetYaxis().SetLabelFont(43)
+    stack.GetYaxis().SetLabelSize(20)
 
     stack.SetMaximum(y_max)
     stack.SetMinimum(0)
@@ -186,15 +192,15 @@ def main():
     ratio_band.GetYaxis().SetLabelSize(15)
 
     ratio_band.GetXaxis().SetLabelFont(43)
-    ratio_band.GetXaxis().SetLabelSize(15)
+    ratio_band.GetXaxis().SetLabelSize(20)
     ratio_band.GetXaxis().SetMoreLogLabels()
     ratio_band.GetXaxis().SetNoExponent()
     ratio_band.GetXaxis().SetRangeUser(1e-3, 1)
     ratio_band.GetXaxis().SetNdivisions(505)
     ratio_band.GetXaxis().SetLabelOffset(0.03)
 
-    ratio_band.GetXaxis().SetTitleSize(0.1)
-    # ratio_band.GetXaxis().SetTitleFont(43)
+    ratio_band.GetXaxis().SetTitleSize(20)
+    ratio_band.GetXaxis().SetTitleFont(43)
     ratio_band.GetXaxis().SetTitleOffset(1.2)
     ratio_band.GetXaxis().SetTitle("A^{#gamma#gamma}_{#phi}")
     
@@ -229,15 +235,16 @@ def main():
     # ============================================================================
 
     pad1.cd()
-    legend = ROOT.TLegend(0.4, 0.6, 0.89, 0.89)
-    legend.SetHeader(legend_header)
+    legend = ROOT.TLegend(0.27, 0.50, 0.89, 0.89)
+    # legend.SetHeader(legend_header)
+    
     legend.SetBorderSize(0)
     legend.AddEntry(hist_data, "Data", "PE")
-    legend.AddEntry(hist_lbl, "LbL (SuperChic)", "F")
-    legend.AddEntry(hist_qed_sl, "#gamma#gamma #rightarrow e^{+}e^{-} (SC 3.03 and SL 3.13 averaged)", "F")
+    legend.AddEntry(hist_lbl, "#gamma#gamma #rightarrow #gamma#gamma (SUPERCHIC 3.03)", "F")
+    legend.AddEntry(hist_qed_sl, "#gamma#gamma #rightarrow e^{+}e^{-} (SUPERCHIC 3.03 and STARLIGHT 3.13 averaged)", "F")
     # legend.AddEntry(hist_qed, "QED+FSR (SuperChic+PHOTOS)", "F")
     # legend.AddEntry(hist_qed_sl, "QED (Starlight)", "F")
-    legend.AddEntry(hist_cep, "CEP (SuperChic)", "F")
+    legend.AddEntry(hist_cep, "gg #rightarrow #gamma#gamma (SUPERCHIC 3.03, scaled to data)", "F")
     legend.Draw()
 
     # add CMS Preliminary label on top of the plot
@@ -250,8 +257,8 @@ def main():
     label.SetTextFont(42)
     label.DrawLatexNDC(0.6, 0.92, "1.6 nb^{-1} (PbPb @ 5.02 TeV)")
 
-    canvas.SaveAs(input_file_path.replace(
-        "../combine/", "../plots/").replace(".root", ".pdf"))
+    canvas.SaveAs(input_file_path.replace("../combine/", "../plots/").replace(".root", ".pdf"))
+    canvas.SaveAs(input_file_path.replace("../combine/", "../plots/").replace(".root", ".C"))
 
 
 if __name__ == "__main__":

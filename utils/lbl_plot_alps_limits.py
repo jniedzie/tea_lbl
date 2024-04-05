@@ -192,6 +192,8 @@ cross_section_limits = {
 
 
 def main():
+    ROOT.gROOT.SetBatch(True)
+    
     scale = reference_alp_cross_section * 1e3  # convert from μb to nb
 
     # crate a TGraph of obs cross section limit vs. mass
@@ -216,7 +218,8 @@ def main():
     for i, mass in enumerate(cross_section_limits):
         obs_graph.SetPoint(i, mass, cross_section_limits[mass][0]*scale)
 
-        print(f"{mass}\t{get_alp_coupling(mass, cross_section_limits[mass][0]*scale)}")
+        # print(f"{mass}\t{get_alp_coupling(mass, cross_section_limits[mass][0]*scale)}")  # observed 
+        print(f"{mass}\t{get_alp_coupling(mass, cross_section_limits[mass][3]*scale)}")  # expected
 
         exp_graph.SetPoint(i, mass, cross_section_limits[mass][3]*scale)
 
@@ -259,9 +262,9 @@ def main():
     ROOT.gPad.SetLeftMargin(0.15)
     ROOT.gPad.SetBottomMargin(0.15)
 
-    exp_graph_2sigma.GetXaxis().SetTitle("m_{a} [GeV]")
+    exp_graph_2sigma.GetXaxis().SetTitle("m_{a} (GeV)")
     exp_graph_2sigma.GetYaxis().SetTitle(
-        "#sigma_{pp #rightarrow a #rightarrow #gamma #gamma} [nb]")
+        "#sigma_{#gamma #gamma #rightarrow a #rightarrow #gamma #gamma} (nb)")
 
     exp_graph_2sigma.GetXaxis().SetMoreLogLabels()
 
@@ -281,23 +284,24 @@ def main():
     legend.AddEntry(exp_graph_2sigma, "Expected #pm 2 #sigma", "F")
     legend.Draw()
 
-    # draw "CMS" label on the top-left of the pad
-    label = ROOT.TLatex()
-    label.SetNDC()
-    label.SetTextFont(61)
-    label.SetTextSize(0.05)
-    label.DrawLatex(0.1, 0.92, "CMS Preliminary")
-    
-    # draw "1.6 fb^{-1} (PbPb @ 5.02 TeV)" label on the top-right of the pad
-    label_right = ROOT.TLatex()
-    label_right.SetNDC()
-    label_right.SetTextFont(52)
-    label_right.SetTextSize(0.04)
-    label_right.SetTextAlign(31)
-    label_right.DrawLatex(0.9, 0.92, "(1.6 + 0.4) nb^{-1} (PbPb @ 5.02 TeV)")
+    tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}")
+    tex.SetNDC()
+    tex.SetTextFont(42)
+    tex.SetTextSize(0.045)
+    tex.SetLineWidth(2)
+    tex.Draw()
+
+    tex2 = ROOT.TLatex(0.45, 0.92, "#scale[0.8]{PbPb, (1.65 + 0.39) nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}")
+    tex2.SetNDC()
+    tex2.SetTextFont(42)
+    tex2.SetTextSize(0.045)
+    tex2.SetLineWidth(2)
+    tex2.Draw()
 
     canvas.Update()
     canvas.SaveAs("../plots/limits_cross_section.pdf")
+    canvas.SaveAs("../plots/limits_cross_section.C")
+    canvas.SaveAs("../plotting_macros/figures/Figure_008.pdf")
 
 
 if __name__ == "__main__":
