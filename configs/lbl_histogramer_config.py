@@ -22,9 +22,9 @@ sample = "collisionData"
 
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC3n"
-# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 
-skim = "skimmed_qedSelections"
+# skim = "skimmed_qedSelections"
 # skim = "skimmed_tracksPhotonsSelections"
 
 # inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
@@ -106,6 +106,7 @@ histParams = (
     ("unfoldingPhoton", "pt", 5, 0, 1, ""),
     ("unfoldingPhoton", "mass", 5, 5, 25, ""),
     ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
+    ("unfoldingPhoton", "absRap3", 3, 0, 2.2, ""),
     ("unfoldingPhoton", "rap3", 3, -2.2, 2.2, ""),
     ("unfoldingPhoton", "rap4", 4, -2.2, 2.2, ""),
     ("unfoldingPhoton", "costhetastar2", 2, 0, 1, ""),
@@ -295,7 +296,7 @@ visualizationParams = {
     "circleRadius": 1.0,
     "circleColor": ROOT.kBlack,
     "towerInnerWidth": 0.08,
-    "towerOuterWidthScale": 0.1,
+    "towerOuterWidthScale": 0.05,
     "towerColor": -1,
     # "towerColorR": 0.45,
     # "towerColorG": 0.97,
@@ -303,7 +304,7 @@ visualizationParams = {
     "towerColorR": 0.72,
     "towerColorG": 0.21,
     "towerColorB": 0.31,
-    "towerAlpha": 0.5,
+    "towerAlpha": 0.05,
     "towerFillStyle": 1001,
     "backgroundColor": ROOT.kWhite,
     "canvasSize": 8.0,

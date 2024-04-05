@@ -51,9 +51,13 @@ tuple<array<float, 5>, array<float, 5>> getVertices(float circleRadius, float tr
   return {verticesX, verticesY};
 }
 
-vector<TGraph *> getTrapezoids(const vector<pair<float, float>> &phiAndEt, const map<string, float> &visualizationParams,
-                               float circleRadius, float trapezoidInnerWidth, float maxTowerEt, float refTowerPhi, float maxTowerHeight) {
-  vector<TGraph *> trapezoids;
+vector<unique_ptr<TGraph>> getTrapezoids(const vector<pair<float, float>> &phiAndEt, const map<string, float> &visualizationParams, float maxTowerEt, float refTowerPhi) {
+  
+  float circleRadius = visualizationParams.at("circleRadius");
+  float trapezoidInnerWidth = visualizationParams.at("towerInnerWidth");
+  float maxTowerHeight = visualizationParams.at("maxTowerHeight");
+  
+  vector<unique_ptr<TGraph>> trapezoids;
   for (auto &[phi, et] : phiAndEt) {
     double trapezoidHeight = et;
 
@@ -73,7 +77,7 @@ vector<TGraph *> getTrapezoids(const vector<pair<float, float>> &phiAndEt, const
 
     auto [verticesX, verticesY] = getVertices(circleRadius, trapezoidInnerWidth, trapezoidOuterWidth, trapezoidHeight, angle_rad);
 
-    trapezoids.push_back(new TGraph(5, verticesX.data(), verticesY.data()));
+    trapezoids.push_back(make_unique<TGraph>(5, verticesX.data(), verticesY.data()));
   }
   return trapezoids;
 }
@@ -90,6 +94,26 @@ int getTowerColor(const map<string, float> &visualizationParams) {
   return towerColor;
 }
 
+
+
+void addShapesToCanvas(const vector<pair<float, float>> &towersPhiAndEt, const vector<pair<float, float>> &photonsPhiAndEt, TCanvas *canvas,
+                const map<string, float> &visualizationParams) {
+  canvas->cd();
+
+  
+  auto [maxTowerEt, refTowerPhi] = findRefEtandPhi(towersPhiAndEt);
+  auto towersTrapezoids = getTrapezoids(towersPhiAndEt, visualizationParams, maxTowerEt, refTowerPhi);
+
+  int towerColor = getTowerColor(visualizationParams);
+  for(auto &trapezoid : towersTrapezoids) {
+    trapezoid->SetFillColorAlpha(towerColor, visualizationParams.at("towerAlpha"));
+    trapezoid->SetFillStyle(visualizationParams.at("towerFillStyle"));
+    trapezoid->DrawClone("f");
+  }
+
+  canvas->Update();
+}
+
 void drawShapes(const vector<pair<float, float>> &towersPhiAndEt, const vector<pair<float, float>> &photonsPhiAndEt, string outputFileName,
                 const map<string, float> &visualizationParams) {
   auto canvas = new TCanvas(outputFileName.c_str(), outputFileName.c_str(), 800, 800);
@@ -103,32 +127,9 @@ void drawShapes(const vector<pair<float, float>> &towersPhiAndEt, const vector<p
   circle->SetLineColor(visualizationParams.at("circleColor"));
   circle->Draw();
 
-  double trapezoidInnerWidth = visualizationParams.at("towerInnerWidth");
-  auto [maxTowerEt, refTowerPhi] = findRefEtandPhi(towersPhiAndEt);
-  float maxTowerHeight = visualizationParams.at("maxTowerHeight");
-
-  auto towersTrapezoids = getTrapezoids(towersPhiAndEt, 
-  visualizationParams, circleRadius, trapezoidInnerWidth, maxTowerEt, refTowerPhi, maxTowerHeight);
-
-  int towerColor = getTowerColor(visualizationParams);
-  for(auto trapezoid : towersTrapezoids) {
-    trapezoid->SetFillColorAlpha(towerColor, visualizationParams.at("towerAlpha"));
-    trapezoid->SetFillStyle(visualizationParams.at("towerFillStyle"));
-    trapezoid->Draw("f");
-  }
-  
-
-  auto [maxPhotonEt, refPhotonPhi] = findRefEtandPhi(photonsPhiAndEt);
-  auto photonsTrapezoids = getTrapezoids(photonsPhiAndEt, visualizationParams, circleRadius, 0.1*trapezoidInnerWidth, maxPhotonEt, refPhotonPhi, maxTowerHeight);
-  int photonColor = kBlue;
-  for(auto trapezoid : photonsTrapezoids) {
-    trapezoid->SetFillColorAlpha(photonColor, 0.5);
-    trapezoid->SetFillStyle(1001);
-    trapezoid->Draw("f");
-  }
+  addShapesToCanvas(towersPhiAndEt, photonsPhiAndEt, canvas, visualizationParams);
 
   canvas->Update();
-
   string outputDir = outputFileName.substr(0, outputFileName.find_last_of("/"));
   gSystem->mkdir(outputDir.c_str());
   canvas->SaveAs(outputFileName.c_str());
@@ -142,6 +143,7 @@ void CheckArgs(int argc, char **argv) {
 }
 
 float getDiphotonAcoplanarity(const shared_ptr<PhysicsObjects> &photons) {
+  if (photons->size() < 2) return 1.0;
   auto photon1 = photons->at(0);
   auto photon2 = photons->at(1);
   TLorentzVector photon1vec, photon2vec;
@@ -179,39 +181,50 @@ int main(int argc, char **argv) {
 
   vector<float> etas;
 
+  auto overlapCanvas = new TCanvas("overlapCanvas", "overlapCanvas", 800, 800);
+  overlapCanvas->cd();
+  overlapCanvas->SetFillColor(visualizationParams.at("backgroundColor"));
+  float canvasSize = visualizationParams.at("canvasSize");
+  overlapCanvas->Range(-canvasSize, -canvasSize, canvasSize, canvasSize);
+  double circleRadius = visualizationParams.at("circleRadius");
+  TEllipse *circle = new TEllipse(0, 0, circleRadius);
+  circle->SetFillColor(visualizationParams.at("backgroundColor"));
+  circle->SetFillStyle(1001);
+  circle->SetLineColor(visualizationParams.at("circleColor"));
+  circle->Draw();
+
   info() << "Starting event loop" << endl;
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
     lblObjectsManager->InsertGoodPhotonsCollection(event);
-
     auto photons = event->GetCollection("goodPhoton");
 
     float acoplanarity = getDiphotonAcoplanarity(photons);
     if (acoplanarity > 0.01) continue;
 
-    vector<pair<float, float>> tracksPhiAndPt;
-    auto tracks = event->GetCollection("track");
+    // vector<pair<float, float>> tracksPhiAndPt;
+    // auto tracks = event->GetCollection("track");
 
-    for(auto track : *tracks){
-      tracksPhiAndPt.push_back({(float)track->Get("phi"), (float)track->Get("pt")});
-    }
+    // for(auto track : *tracks){
+    //   tracksPhiAndPt.push_back({(float)track->Get("phi"), (float)track->Get("pt")});
+    // }
 
-    vector<pair<float, float>> photonsPhiAndEt = {{(float)photons->at(0)->Get("phi"), (float)photons->at(0)->Get("et")},
-                                                  {(float)photons->at(1)->Get("phi"), (float)photons->at(1)->Get("et")}};
+    // vector<pair<float, float>> photonsPhiAndEt = {{(float)photons->at(0)->Get("phi"), (float)photons->at(0)->Get("et")},
+    //                                               {(float)photons->at(1)->Get("phi"), (float)photons->at(1)->Get("et")}};
 
     auto towers = event->GetCollection("CaloTower");
     vector<pair<float, float>> towersPhiAndEt;
 
-    auto photon1 = photons->at(0);
-    auto photon2 = photons->at(1);
+    // auto photon1 = photons->at(0);
+    // auto photon2 = photons->at(1);
 
-    float photon1Et = photon1->Get("et");
-    float photon2Et = photon2->Get("et");
+    // float photon1Et = photon1->Get("et");
+    // float photon2Et = photon2->Get("et");
 
-    float maxDeltaR = 1.5;
-    float highestTowerEt1 = 0;
-    float highestTowerEt2 = 0;
+    // float maxDeltaR = 1.5;
+    // float highestTowerEt1 = 0;
+    // float highestTowerEt2 = 0;
 
     for (auto physicsObject : *towers) {
       auto tower = asCaloTower(physicsObject);
@@ -228,41 +241,53 @@ int main(int argc, char **argv) {
       float phi = tower->Get("phi");
       float et = tower->Get("et");
 
-      if(sqrt(pow(phi - (float)photon1->Get("phi"), 2) + pow((float)tower->Get("eta") - (float)photon1->Get("eta"), 2)) < maxDeltaR) {
-        if(et > highestTowerEt1) highestTowerEt1 = et;
-      }
-      if(sqrt(pow(phi - (float)photon2->Get("phi"), 2) + pow((float)tower->Get("eta") - (float)photon2->Get("eta"), 2)) < maxDeltaR) {
-        if(et > highestTowerEt2) highestTowerEt2 = et;
-      }
+      // if(sqrt(pow(phi - (float)photon1->Get("phi"), 2) + pow((float)tower->Get("eta") - (float)photon1->Get("eta"), 2)) < maxDeltaR) {
+      //   if(et > highestTowerEt1) highestTowerEt1 = et;
+      // }
+      // if(sqrt(pow(phi - (float)photon2->Get("phi"), 2) + pow((float)tower->Get("eta") - (float)photon2->Get("eta"), 2)) < maxDeltaR) {
+      //   if(et > highestTowerEt2) highestTowerEt2 = et;
+      // }
       towersPhiAndEt.push_back({phi, et});
     }
 
-    float deltaEt1 = fabs(photon1Et - highestTowerEt1)/photon1Et;
-    float deltaEt2 = fabs(photon2Et - highestTowerEt2)/photon2Et;
+    // float deltaEt1 = fabs(photon1Et - highestTowerEt1)/photon1Et;
+    // float deltaEt2 = fabs(photon2Et - highestTowerEt2)/photon2Et;
 
-    float maxDelta = max(deltaEt1, deltaEt2);
-    info() << "Max delta: " << maxDelta << endl;
+    // float maxDelta = max(deltaEt1, deltaEt2);
+    // info() << "Max delta: " << maxDelta << endl;
 
-    auto etaPhiMapToFill = (acoplanarity > 0.01) ? etaPhiMap : etaPhiMapSR;
+    // auto etaPhiMapToFill = (acoplanarity > 0.01) ? etaPhiMap : etaPhiMapSR;
 
-    if(maxDelta > 0.65){
-      if(deltaEt1 > deltaEt2) {
-        info() << (float)photon1->Get("eta") << " " << (float)photon1->Get("phi") << endl;
-        etaPhiMapToFill->Fill((float)photon1->Get("eta"), (float)photon1->Get("phi"));
-        etaMap->Fill(fabs((float)photon1->Get("eta")));
-        etas.push_back(fabs((float)photon1->Get("eta")));
-      } else {
-        info() << (float)photon2->Get("eta") << " " << (float)photon2->Get("phi") << endl;
-        etaPhiMapToFill->Fill((float)photon2->Get("eta"), (float)photon2->Get("phi"));
-        etaMap->Fill(fabs((float)photon2->Get("eta")));
-        etas.push_back(fabs((float)photon2->Get("eta")));
-      }
-    }
+    // if(maxDelta > 0.65){
+    //   if(deltaEt1 > deltaEt2) {
+    //     info() << (float)photon1->Get("eta") << " " << (float)photon1->Get("phi") << endl;
+    //     etaPhiMapToFill->Fill((float)photon1->Get("eta"), (float)photon1->Get("phi"));
+    //     etaMap->Fill(fabs((float)photon1->Get("eta")));
+    //     etas.push_back(fabs((float)photon1->Get("eta")));
+    //   } else {
+    //     info() << (float)photon2->Get("eta") << " " << (float)photon2->Get("phi") << endl;
+    //     etaPhiMapToFill->Fill((float)photon2->Get("eta"), (float)photon2->Get("phi"));
+    //     etaMap->Fill(fabs((float)photon2->Get("eta")));
+    //     etas.push_back(fabs((float)photon2->Get("eta")));
+    //   }
+    // }
 
     // drawShapes(towersPhiAndEt, photonsPhiAndEt, "../plots/visualizations/event_" + to_string(iEvent) + ".pdf", visualizationParams);
-    drawShapes(towersPhiAndEt, {}, "../plots/visualizations/event_" + to_string(iEvent) + ".pdf", visualizationParams);
+    // drawShapes(towersPhiAndEt, {}, "../plots/visualizations/event_" + to_string(iEvent) + ".pdf", visualizationParams);
     // drawShapes(towersPhiAndEt, tracksPhiAndPt, "../plots/visualizations/event_" + to_string(iEvent) + ".pdf", visualizationParams);
+
+    int runNumber = event->Get("runNumber");
+    int lumiSection = event->Get("lumiSection");
+    int eventNumber = event->Get("eventNumber");
+    info() << runNumber << ":" << lumiSection << ":" << eventNumber << endl;
+
+    addShapesToCanvas(towersPhiAndEt, {}, overlapCanvas, visualizationParams);
+
   }
+
+  overlapCanvas->Update();
+  gSystem->mkdir("../plots/visualizations/");
+  overlapCanvas->SaveAs("../plots/visualizations/event_display.pdf");
 
   gStyle->SetOptStat(0);
   auto canvas = new TCanvas("canvas", "canvas", 1600, 800);
