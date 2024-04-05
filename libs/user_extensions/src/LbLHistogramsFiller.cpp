@@ -25,8 +25,8 @@ LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogram
     acoplanarityFunction->SetParameter(i, params[i]);
   }
 
-  auto file = TFile::Open("/afs/desy.de/user/j/jniedzie/tea_lbl/merged_afterTrigger_histograms_default.root");
-  genDielectronDeltaPt = (TH1D *)file->Get("genDielectron_deltaPt");
+  // auto file = TFile::Open("/afs/desy.de/user/j/jniedzie/tea_lbl/merged_afterTrigger_histograms_default.root");
+  // genDielectronDeltaPt = (TH1D *)file->Get("genDielectron_deltaPt");
 }
 
 LbLHistogramsFiller::~LbLHistogramsFiller() {}
@@ -180,6 +180,7 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
     histogramsHandler->Fill("unfoldingPhoton_pt", diphoton.Pt(), GetWeight(event));
     histogramsHandler->Fill("unfoldingPhoton_mass", diphoton.M(), GetWeight(event));
     histogramsHandler->Fill("unfoldingPhoton_absRap", fabs(diphoton.Rapidity()), GetWeight(event));
+    histogramsHandler->Fill("unfoldingPhoton_absRap3", fabs(diphoton.Rapidity()), GetWeight(event));
     histogramsHandler->Fill("unfoldingPhoton_rap3", diphoton.Rapidity(), GetWeight(event));
     histogramsHandler->Fill("unfoldingPhoton_rap4", diphoton.Rapidity(), GetWeight(event));
   }
@@ -195,6 +196,7 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
   float leadingPhotonEtBarrelEndcap = 0;
 
   auto photons = event->GetCollection("genPhoton");
+  auto electrons = event->GetCollection("genElectron");
 
   for (auto physObject : *photons) {
     auto photon = asPhoton(physObject)->GetFourMomentum();
@@ -235,7 +237,7 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
     histogramsHandler->Fill("leadingGenPhotonBarrelEndcap_energy", leadingPhotonEnergyBarrelEndcap, GetWeight(event));
   }
 
-  auto electrons = event->GetCollection("genElectron");
+  
   if (electrons->size() == 2) {
     auto electron_1 = asElectron(electrons->at(0));
     auto electron_2 = asElectron(electrons->at(1));
@@ -286,7 +288,7 @@ float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron
   // int sign = gRandom->Rndm() > 0.5 ? 1 : -1;
   // positron.SetPtEtaPhiM(electron.Pt() + sign * 0.01712, positron.Eta(), positron.Phi(), positron.M());
 
-  positron.SetPtEtaPhiM(electron.Pt() + genDielectronDeltaPt->GetRandom(), positron.Eta(), positron.Phi(), positron.M());
+  // positron.SetPtEtaPhiM(electron.Pt() + genDielectronDeltaPt->GetRandom(), positron.Eta(), positron.Phi(), positron.M());
 
   TLorentzVector dielectron = electron + positron;
 
