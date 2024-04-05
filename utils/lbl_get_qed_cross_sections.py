@@ -184,6 +184,16 @@ def get_xnxn_cross_section_histogram(input_hist, name):
     ratio_hist_superchic = ROOT.TH1D("ratio_superchic", "ratio_superchic", 6, 0, 6)
     ratio_hist_starlight = ROOT.TH1D("ratio_starlight", "ratio_starlight", 6, 0, 6)
 
+    emd_shifts = {
+        "0n0n": 0.110,
+        "0nXn": -0.104,
+        "0n1n": -0.0532,
+        "XnXn": -0.0063,
+        "1nXn": -0.00437,
+        "1n1n": -0.0014546,
+        "Inclusive": 0.0,
+    }
+
     bin_swap = {
         3: 4,
         4: 3,
@@ -194,11 +204,14 @@ def get_xnxn_cross_section_histogram(input_hist, name):
         ratio = value[0] / events["Inclusive"][0]
         error = ratio * ((value[1]/value[0])**2 + (events["Inclusive"][1]/events["Inclusive"][0])**2)**0.5
 
+        ratio += emd_shifts[key]
+        error = (error**2 + (0.02*emd_shifts[key])**2)**0.5
+
         # error = value[1]
 
         label = nice_labels[key] if key in nice_labels else key
 
-        print(f"{label} & ${100*ratio:.1f} \pm {100*error:.1f} $", end="")
+        print(f"{label} & ${100*ratio:.2f} \pm {100*error:.2f} $", end="")
 
         if key in superchic_ratios:
             print(
@@ -218,10 +231,10 @@ def get_xnxn_cross_section_histogram(input_hist, name):
             index = bin_swap[i]
             
 
-        # ratio_hist_data.SetBinContent(i, ratio)
-        # ratio_hist_data.SetBinError(i, error)
-        ratio_hist_data.SetBinContent(index, data_ratios[key][0])
-        ratio_hist_data.SetBinError(index, data_ratios[key][1])
+        ratio_hist_data.SetBinContent(index, ratio)
+        ratio_hist_data.SetBinError(index, error)
+        # ratio_hist_data.SetBinContent(index, data_ratios[key][0])
+        # ratio_hist_data.SetBinError(index, data_ratios[key][1])
         ratio_hist_superchic.GetXaxis().SetBinLabel(index, label)
 
         if key in superchic_ratios:
@@ -247,9 +260,16 @@ def get_xnxn_cross_section_histogram(input_hist, name):
     ratio_hist_superchic.SetMarkerSize(1.2)
     ratio_hist_superchic.SetMarkerColor(ROOT.kRed+2)
     ratio_hist_superchic.SetLineColor(ROOT.kRed+2)
-    ratio_hist_superchic.GetYaxis().SetTitle("De-excitation ratio to inclusive")
     ratio_hist_superchic.GetXaxis().SetLabelSize(0.06)
     ratio_hist_superchic.GetXaxis().SetLabelOffset(0.01)
+    ratio_hist_superchic.GetXaxis().SetTitle("Neutron multiplicity category")
+    ratio_hist_superchic.GetXaxis().SetTitleSize(0.055)
+    ratio_hist_superchic.GetXaxis().SetTitleOffset(1.8)
+    ratio_hist_superchic.GetXaxis().CenterTitle()
+    
+    
+    ratio_hist_superchic.GetYaxis().SetTitle("De-excitation ratio to inclusive")
+    ratio_hist_superchic.GetYaxis().CenterTitle()
     ratio_hist_superchic.GetYaxis().SetLabelSize(0.05)
     ratio_hist_superchic.GetYaxis().SetTitleSize(0.06)
     ratio_hist_superchic.GetYaxis().SetLabelOffset(0.01)
@@ -270,10 +290,12 @@ def get_xnxn_cross_section_histogram(input_hist, name):
     ratio_hist_data.SetLineColor(ROOT.kBlack)
     ratio_hist_data.Draw("PE same")
 
-    legend = ROOT.TLegend(0.5, 0.7, 0.9, 0.9)
-    legend.AddEntry(ratio_hist_data, "Data", "PE")
-    legend.AddEntry(ratio_hist_superchic, "SuperChic", "PE")
-    legend.AddEntry(ratio_hist_starlight, "Starlight", "PE")
+    legend = ROOT.TLegend(0.6, 0.75, 0.89, 0.89)
+    legend.AddEntry(ratio_hist_data, "Data", "PEL")
+    legend.AddEntry(ratio_hist_superchic, "SUPERCHIC 4.2", "PEL")
+    legend.AddEntry(ratio_hist_starlight, "STARLIGHT 3.13", "PEL")
+    legend.SetBorderSize(0)
+    
     legend.Draw()
 
     # Add CMS Preliminary text at the top of the plot
@@ -293,6 +315,7 @@ def get_xnxn_cross_section_histogram(input_hist, name):
         0.88, 0.92, f"{luminosity/1000:.2f} nb^{{-1}} (PbPb @ 5.02 TeV)")
 
     canvas_ratios.SaveAs("../plots/qed_ratios.pdf")
+    canvas_ratios.SaveAs("../plots/qed_ratios.C")
 
     print("============================================================\n\n")
 
