@@ -284,7 +284,8 @@ def main():
     legend.AddEntry(exp_graph_2sigma, "Expected #pm 2 #sigma", "F")
     legend.Draw()
 
-    tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}")
+    # tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}")
+    tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS}")
     tex.SetNDC()
     tex.SetTextFont(42)
     tex.SetTextSize(0.045)

@@ -60,12 +60,13 @@ def hist_to_graph(hist):
         ex.append(0)
         ey_up.append(hist.GetBinErrorUp(i))
         ey_down.append(hist.GetBinErrorLow(i))
-
-    # x[0] = min_aco
+        
+        if y[-1] == 0:
+            y[-1] = -999
+            ey_up[-1] = 0
+            ey_down[-1] = 0
 
     return ROOT.TGraphAsymmErrors(n, array('d', x), array('d', y), array('d', ex), array('d', ex), array('d', ey_down), array('d', ey_up))
-
-    # return ROOT.TGraphErrors(n, array('d', x), array('d', y), array('d', ex), array('d', ey))
 
 
 def main():
@@ -85,10 +86,10 @@ def main():
 
     hist_data = transform_hist(hist_data)
     
-    for i in range(1, hist_data.GetNbinsX()+1):
-        if hist_data.GetBinContent(i) == 0:
-            hist_data.SetBinContent(i, -999)
-            hist_data.SetBinError(i, 0)
+    # for i in range(1, hist_data.GetNbinsX()+1):
+    #     if hist_data.GetBinContent(i) == 0:
+    #         hist_data.SetBinContent(i, -999)
+    #         hist_data.SetBinError(i, 0)
     
     hist_cep = transform_hist(hist_cep)
     hist_qed = transform_hist(hist_qed)
