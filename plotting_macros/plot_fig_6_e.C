@@ -47,11 +47,11 @@ void plot_fig_6_e() {
   THStack *goodPhotonSR_phibackground = new THStack();
   goodPhotonSR_phibackground->SetName("goodPhotonSR_phibackground");
   goodPhotonSR_phibackground->SetTitle("");
-  goodPhotonSR_phibackground->SetMaximum(20);
+  goodPhotonSR_phibackground->SetMaximum(21);
 
   TH1F *goodPhotonSR_phibackground_stack_7 = new TH1F("goodPhotonSR_phibackground_stack_7", "", 6, -3.14, 3.14);
   goodPhotonSR_phibackground_stack_7->SetMinimum(0);
-  goodPhotonSR_phibackground_stack_7->SetMaximum(20);
+  goodPhotonSR_phibackground_stack_7->SetMaximum(21);
   goodPhotonSR_phibackground_stack_7->SetDirectory(0);
   goodPhotonSR_phibackground_stack_7->SetStats(0);
   goodPhotonSR_phibackground_stack_7->SetLineStyle(0);
@@ -224,75 +224,47 @@ void plot_fig_6_e() {
   goodPhotonSR_phibackground->Add(goodPhotonSR_phi_stack_4, "");
   goodPhotonSR_phibackground->Draw("hist");
 
-  auto goodPhotonSR_phidata = new THStack();
-  goodPhotonSR_phidata->SetName("goodPhotonSR_phidata");
-  goodPhotonSR_phidata->SetTitle("");
-  goodPhotonSR_phidata->SetMaximum(20);
+  Double_t Graph0_fx3003[6] = {-2.616667, -1.57, -0.5233334, 0.5233334, 1.57, 2.616667};
+  Double_t Graph0_fy3003[6] = {10, 8, 8, 10, 8, 8};
+  Double_t Graph0_felx3003[6] = {0.5233334, 0.5233334, 0.5233334, 0.5233334, 0.5233334, 0.5233334};
+  Double_t Graph0_fely3003[6] = {3.108694, 2.768386, 2.768386, 3.108694, 2.768386, 2.768386};
+  Double_t Graph0_fehx3003[6] = {0.5233334, 0.5233334, 0.5233334, 0.5233334, 0.5233334, 0.5233334};
+  Double_t Graph0_fehy3003[6] = {4.26695, 3.945142, 3.945142, 4.26695, 3.945142, 3.945142};
+  TGraphAsymmErrors *grae =
+      new TGraphAsymmErrors(6, Graph0_fx3003, Graph0_fy3003, Graph0_felx3003, Graph0_fehx3003, Graph0_fely3003, Graph0_fehy3003);
+  grae->SetName("Graph0");
+  grae->SetTitle("Graph");
+  grae->SetFillStyle(1000);
+  grae->SetMarkerStyle(20);
 
-  TH1F *goodPhotonSR_phidata_stack_8 = new TH1F("goodPhotonSR_phidata_stack_8", "", 6, -3.14, 3.14);
-  goodPhotonSR_phidata_stack_8->SetMinimum(0);
-  goodPhotonSR_phidata_stack_8->SetMaximum(20);
-  goodPhotonSR_phidata_stack_8->SetDirectory(0);
-  goodPhotonSR_phidata_stack_8->SetStats(0);
-  goodPhotonSR_phidata_stack_8->SetLineStyle(0);
-  goodPhotonSR_phidata_stack_8->GetXaxis()->SetTitle("#phi^{#gamma}");
-  goodPhotonSR_phidata_stack_8->GetXaxis()->SetLabelFont(42);
-  goodPhotonSR_phidata_stack_8->GetXaxis()->SetLabelOffset(0.007);
-  goodPhotonSR_phidata_stack_8->GetXaxis()->SetLabelSize(0.06);
-  goodPhotonSR_phidata_stack_8->GetXaxis()->SetTitleSize(0.06);
-  goodPhotonSR_phidata_stack_8->GetXaxis()->SetTitleOffset(1.7);
-  goodPhotonSR_phidata_stack_8->GetXaxis()->SetTitleFont(42);
-  goodPhotonSR_phidata_stack_8->GetYaxis()->SetTitle("Events / 1.57");
-  goodPhotonSR_phidata_stack_8->GetYaxis()->CenterTitle(true);
-  goodPhotonSR_phidata_stack_8->GetYaxis()->SetNdivisions(505);
-  goodPhotonSR_phidata_stack_8->GetYaxis()->SetLabelFont(42);
-  goodPhotonSR_phidata_stack_8->GetYaxis()->SetLabelOffset(0.007);
-  goodPhotonSR_phidata_stack_8->GetYaxis()->SetLabelSize(0.06);
-  goodPhotonSR_phidata_stack_8->GetYaxis()->SetTitleSize(0.05);
-  goodPhotonSR_phidata_stack_8->GetYaxis()->SetTitleOffset(1.0);
-  goodPhotonSR_phidata_stack_8->GetYaxis()->SetTitleFont(42);
-  goodPhotonSR_phidata_stack_8->GetZaxis()->SetLabelFont(42);
-  goodPhotonSR_phidata_stack_8->GetZaxis()->SetLabelOffset(0.007);
-  goodPhotonSR_phidata_stack_8->GetZaxis()->SetLabelSize(0.05);
-  goodPhotonSR_phidata_stack_8->GetZaxis()->SetTitleSize(0.06);
-  goodPhotonSR_phidata_stack_8->GetZaxis()->SetTitleOffset(1);
-  goodPhotonSR_phidata_stack_8->GetZaxis()->SetTitleFont(42);
-  goodPhotonSR_phidata->SetHistogram(goodPhotonSR_phidata_stack_8);
+  TH1F *Graph_Graph03003 = new TH1F("Graph_Graph03003", "Graph", 100, -3.14, 3.14);
+  Graph_Graph03003->SetMinimum(4.32808);
+  Graph_Graph03003->SetMaximum(15.17048);
+  Graph_Graph03003->SetDirectory(0);
+  Graph_Graph03003->SetStats(0);
+  Graph_Graph03003->SetLineStyle(0);
+  Graph_Graph03003->GetXaxis()->SetLabelFont(42);
+  Graph_Graph03003->GetXaxis()->SetLabelOffset(0.007);
+  Graph_Graph03003->GetXaxis()->SetLabelSize(0.05);
+  Graph_Graph03003->GetXaxis()->SetTitleSize(0.06);
+  Graph_Graph03003->GetXaxis()->SetTitleOffset(0.9);
+  Graph_Graph03003->GetXaxis()->SetTitleFont(42);
+  Graph_Graph03003->GetYaxis()->SetLabelFont(42);
+  Graph_Graph03003->GetYaxis()->SetLabelOffset(0.007);
+  Graph_Graph03003->GetYaxis()->SetLabelSize(0.05);
+  Graph_Graph03003->GetYaxis()->SetTitleSize(0.06);
+  Graph_Graph03003->GetYaxis()->SetTitleOffset(1.25);
+  Graph_Graph03003->GetYaxis()->SetTitleFont(42);
+  Graph_Graph03003->GetZaxis()->SetLabelFont(42);
+  Graph_Graph03003->GetZaxis()->SetLabelOffset(0.007);
+  Graph_Graph03003->GetZaxis()->SetLabelSize(0.05);
+  Graph_Graph03003->GetZaxis()->SetTitleSize(0.06);
+  Graph_Graph03003->GetZaxis()->SetTitleOffset(1);
+  Graph_Graph03003->GetZaxis()->SetTitleFont(42);
+  grae->SetHistogram(Graph_Graph03003);
 
-  goodPhotonSR_phi_stack_1 = new TH1D("goodPhotonSR_phi_stack_1", "goodPhotonSR_phi", 6, -3.14, 3.14);
-  goodPhotonSR_phi_stack_1->SetBinContent(1, 10);
-  goodPhotonSR_phi_stack_1->SetBinContent(2, 8);
-  goodPhotonSR_phi_stack_1->SetBinContent(3, 8);
-  goodPhotonSR_phi_stack_1->SetBinContent(4, 10);
-  goodPhotonSR_phi_stack_1->SetBinContent(5, 8);
-  goodPhotonSR_phi_stack_1->SetBinContent(6, 8);
-  goodPhotonSR_phi_stack_1->SetBinError(1, 3.162278);
-  goodPhotonSR_phi_stack_1->SetBinError(2, 2.828427);
-  goodPhotonSR_phi_stack_1->SetBinError(3, 2.828427);
-  goodPhotonSR_phi_stack_1->SetBinError(4, 3.162278);
-  goodPhotonSR_phi_stack_1->SetBinError(5, 2.828427);
-  goodPhotonSR_phi_stack_1->SetBinError(6, 2.828427);
-  goodPhotonSR_phi_stack_1->SetEntries(52);
-  goodPhotonSR_phi_stack_1->SetDirectory(0);
-
-  ci = 1486;
-  color = new TColor(ci, 0, 1, 0, " ", 0);
-  goodPhotonSR_phi_stack_1->SetFillColor(ci);
-
-  ci = TColor::GetColor("#000000");
-  goodPhotonSR_phi_stack_1->SetLineColor(ci);
-  goodPhotonSR_phi_stack_1->SetMarkerStyle(20);
-  goodPhotonSR_phi_stack_1->GetXaxis()->SetRange(1, 6);
-  goodPhotonSR_phi_stack_1->GetXaxis()->SetLabelFont(42);
-  goodPhotonSR_phi_stack_1->GetXaxis()->SetTitleOffset(1);
-  goodPhotonSR_phi_stack_1->GetXaxis()->SetTitleFont(42);
-  goodPhotonSR_phi_stack_1->GetYaxis()->SetLabelFont(42);
-  goodPhotonSR_phi_stack_1->GetYaxis()->SetTitleFont(42);
-  goodPhotonSR_phi_stack_1->GetZaxis()->SetLabelFont(42);
-  goodPhotonSR_phi_stack_1->GetZaxis()->SetTitleOffset(1);
-  goodPhotonSR_phi_stack_1->GetZaxis()->SetTitleFont(42);
-  goodPhotonSR_phidata->Add(goodPhotonSR_phi_stack_1, "");
-  goodPhotonSR_phidata->Draw("nostack pe0 same");
+  grae->Draw("pe");
+  
 
   TH1D *backgrounds_unc_goodPhotonSR_phi__7 = new TH1D("backgrounds_unc_goodPhotonSR_phi__7", "goodPhotonSR_phi", 6, -3.14, 3.14);
   backgrounds_unc_goodPhotonSR_phi__7->SetBinContent(0, 0.008127124);
@@ -335,7 +307,7 @@ void plot_fig_6_e() {
 
   TH1F *goodPhotonSR_phibackground_copy__8 = new TH1F("goodPhotonSR_phibackground_copy__8", "", 6, -3.14, 3.14);
   goodPhotonSR_phibackground_copy__8->SetMinimum(0);
-  goodPhotonSR_phibackground_copy__8->SetMaximum(20);
+  goodPhotonSR_phibackground_copy__8->SetMaximum(21);
   goodPhotonSR_phibackground_copy__8->SetDirectory(0);
   goodPhotonSR_phibackground_copy__8->SetStats(0);
   goodPhotonSR_phibackground_copy__8->SetLineStyle(0);
@@ -451,7 +423,7 @@ void plot_fig_6_e() {
   ratio_goodPhotonSR_phi_stack_1->GetZaxis()->SetTitleOffset(1);
   ratio_goodPhotonSR_phi_stack_1->GetZaxis()->SetTitleFont(42);
   ratio_stack_goodPhotonSR_phi->Add(ratio_goodPhotonSR_phi_stack_1, "");
-  ratio_stack_goodPhotonSR_phi->Draw("p");
+  ratio_stack_goodPhotonSR_phi->Draw("pe1");
   TLine *line = new TLine(-3.14, 1, 3.14, 1);
   line->SetLineStyle(2);
   line->Draw();
@@ -493,7 +465,8 @@ void plot_fig_6_e() {
   ratio_uncertainty_goodPhotonSR_phi__9->Draw("same e2");
   goodPhotonSR_phi_2->Modified();
   goodPhotonSR_phi->cd();
-  auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");
+  // auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");
+  auto tex = new TLatex(0.16, 0.95, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
   tex->SetTextSize(0.04);

@@ -69,7 +69,7 @@ TLegend* get_lbl_legend() {
   TLegend* leg = new TLegend(0.45, 0.65, 0.80, 0.89, NULL, "brNDC");
   leg->SetBorderSize(0);
   leg->SetTextSize(0.035);
-  auto entry = leg->AddEntry("", "Data", "pl");
+  auto entry = leg->AddEntry("", "Data", "ple");
 
   entry->SetLineColor(kBlack);
   entry->SetLineStyle(1);

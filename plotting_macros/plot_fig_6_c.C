@@ -48,11 +48,11 @@ void plot_fig_6_c()
    THStack *goodPhotonSR_etabackground = new THStack();
    goodPhotonSR_etabackground->SetName("goodPhotonSR_etabackground");
    goodPhotonSR_etabackground->SetTitle("");
-   goodPhotonSR_etabackground->SetMaximum(35);
+   goodPhotonSR_etabackground->SetMaximum(37);
    
    TH1F *goodPhotonSR_etabackground_stack_4 = new TH1F("goodPhotonSR_etabackground_stack_4","",5,-2.2,2.2);
    goodPhotonSR_etabackground_stack_4->SetMinimum(0);
-   goodPhotonSR_etabackground_stack_4->SetMaximum(35);
+   goodPhotonSR_etabackground_stack_4->SetMaximum(37);
    goodPhotonSR_etabackground_stack_4->SetDirectory(0);
    goodPhotonSR_etabackground_stack_4->SetStats(0);
    goodPhotonSR_etabackground_stack_4->SetLineStyle(0);
@@ -211,75 +211,46 @@ void plot_fig_6_c()
    goodPhotonSR_etabackground->Add(goodPhotonSR_eta_stack_4,"");
    goodPhotonSR_etabackground->Draw("hist");
    
-   auto goodPhotonSR_etadata = new THStack();
-   goodPhotonSR_etadata->SetName("goodPhotonSR_etadata");
-   goodPhotonSR_etadata->SetTitle("");
-   goodPhotonSR_etadata->SetMaximum(35);
-   
-   TH1F *goodPhotonSR_etadata_stack_5 = new TH1F("goodPhotonSR_etadata_stack_5","",5,-2.2,2.2);
-   goodPhotonSR_etadata_stack_5->SetMinimum(0);
-   goodPhotonSR_etadata_stack_5->SetMaximum(35);
-   goodPhotonSR_etadata_stack_5->SetDirectory(0);
-   goodPhotonSR_etadata_stack_5->SetStats(0);
-   goodPhotonSR_etadata_stack_5->SetLineStyle(0);
-   goodPhotonSR_etadata_stack_5->GetXaxis()->SetTitle("#eta^{#gamma}");
-   goodPhotonSR_etadata_stack_5->GetXaxis()->SetLabelFont(42);
-   goodPhotonSR_etadata_stack_5->GetXaxis()->SetLabelOffset(0.007);
-   goodPhotonSR_etadata_stack_5->GetXaxis()->SetLabelSize(0.06);
-   goodPhotonSR_etadata_stack_5->GetXaxis()->SetTitleSize(0.06);
-   goodPhotonSR_etadata_stack_5->GetXaxis()->SetTitleOffset(1.7);
-   goodPhotonSR_etadata_stack_5->GetXaxis()->SetTitleFont(42);
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetTitle("Events / 0.88");
-   goodPhotonSR_etadata_stack_5->GetYaxis()->CenterTitle(true);
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetNdivisions(505);
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetLabelFont(42);
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetLabelOffset(0.007);
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetLabelSize(0.06);
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetTitleSize(0.05);
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetTitleOffset(1.0);
-   
-   goodPhotonSR_etadata_stack_5->GetYaxis()->SetTitleFont(42);
-   goodPhotonSR_etadata_stack_5->GetZaxis()->SetLabelFont(42);
-   goodPhotonSR_etadata_stack_5->GetZaxis()->SetLabelOffset(0.007);
-   goodPhotonSR_etadata_stack_5->GetZaxis()->SetLabelSize(0.05);
-   goodPhotonSR_etadata_stack_5->GetZaxis()->SetTitleSize(0.06);
-   goodPhotonSR_etadata_stack_5->GetZaxis()->SetTitleOffset(1);
-   goodPhotonSR_etadata_stack_5->GetZaxis()->SetTitleFont(42);
-   goodPhotonSR_etadata->SetHistogram(goodPhotonSR_etadata_stack_5);
-   
-   
-   goodPhotonSR_eta_stack_1 = new TH1D("goodPhotonSR_eta_stack_1","goodPhotonSR_eta",5,-2.2,2.2);
-   goodPhotonSR_eta_stack_1->SetBinContent(1,5);
-   goodPhotonSR_eta_stack_1->SetBinContent(2,13);
-   goodPhotonSR_eta_stack_1->SetBinContent(3,20);
-   goodPhotonSR_eta_stack_1->SetBinContent(4,9);
-   goodPhotonSR_eta_stack_1->SetBinContent(5,5);
-   goodPhotonSR_eta_stack_1->SetBinError(1,2.236068);
-   goodPhotonSR_eta_stack_1->SetBinError(2,3.605551);
-   goodPhotonSR_eta_stack_1->SetBinError(3,4.472136);
-   goodPhotonSR_eta_stack_1->SetBinError(4,3);
-   goodPhotonSR_eta_stack_1->SetBinError(5,2.236068);
-   goodPhotonSR_eta_stack_1->SetEntries(52);
-   goodPhotonSR_eta_stack_1->SetDirectory(0);
+   Double_t Graph0_fx3002[5] = {-1.76, -0.88, 5.551115e-17, 0.88, 1.76};
+  Double_t Graph0_fy3002[5] = {5, 13, 20, 9, 5};
+  Double_t Graph0_felx3002[5] = {0.44, 0.44, 0.44, 0.44, 0.44};
+  Double_t Graph0_fely3002[5] = {2.159691, 3.558662, 4.434448, 2.943461, 2.159691};
+  Double_t Graph0_fehx3002[5] = {0.44, 0.44, 0.44, 0.44, 0.44};
+  Double_t Graph0_fehy3002[5] = {3.382473, 4.697573, 5.546519, 4.110204, 3.382473};
+  TGraphAsymmErrors *grae =
+      new TGraphAsymmErrors(5, Graph0_fx3002, Graph0_fy3002, Graph0_felx3002, Graph0_fehx3002, Graph0_fely3002, Graph0_fehy3002);
+  grae->SetName("Graph0");
+  grae->SetTitle("Graph");
+  grae->SetFillStyle(1000);
+  grae->SetMarkerStyle(20);
 
-   ci = 1484;
-   color = new TColor(ci, 0, 1, 0, " ", 0);
-   goodPhotonSR_eta_stack_1->SetFillColor(ci);
+  TH1F *Graph_Graph03002 = new TH1F("Graph_Graph03002", "Graph", 100, -2.112, 2.112);
+  Graph_Graph03002->SetMinimum(0.5696878);
+  Graph_Graph03002->SetMaximum(27.81714);
+  Graph_Graph03002->SetDirectory(0);
+  Graph_Graph03002->SetStats(0);
+  Graph_Graph03002->SetLineStyle(0);
+  Graph_Graph03002->GetXaxis()->SetLabelFont(42);
+  Graph_Graph03002->GetXaxis()->SetLabelOffset(0.007);
+  Graph_Graph03002->GetXaxis()->SetLabelSize(0.05);
+  Graph_Graph03002->GetXaxis()->SetTitleSize(0.06);
+  Graph_Graph03002->GetXaxis()->SetTitleOffset(0.9);
+  Graph_Graph03002->GetXaxis()->SetTitleFont(42);
+  Graph_Graph03002->GetYaxis()->SetLabelFont(42);
+  Graph_Graph03002->GetYaxis()->SetLabelOffset(0.007);
+  Graph_Graph03002->GetYaxis()->SetLabelSize(0.05);
+  Graph_Graph03002->GetYaxis()->SetTitleSize(0.06);
+  Graph_Graph03002->GetYaxis()->SetTitleOffset(1.25);
+  Graph_Graph03002->GetYaxis()->SetTitleFont(42);
+  Graph_Graph03002->GetZaxis()->SetLabelFont(42);
+  Graph_Graph03002->GetZaxis()->SetLabelOffset(0.007);
+  Graph_Graph03002->GetZaxis()->SetLabelSize(0.05);
+  Graph_Graph03002->GetZaxis()->SetTitleSize(0.06);
+  Graph_Graph03002->GetZaxis()->SetTitleOffset(1);
+  Graph_Graph03002->GetZaxis()->SetTitleFont(42);
+  grae->SetHistogram(Graph_Graph03002);
 
-   ci = TColor::GetColor("#000000");
-   goodPhotonSR_eta_stack_1->SetLineColor(ci);
-   goodPhotonSR_eta_stack_1->SetMarkerStyle(20);
-   goodPhotonSR_eta_stack_1->GetXaxis()->SetRange(1,5);
-   goodPhotonSR_eta_stack_1->GetXaxis()->SetLabelFont(42);
-   goodPhotonSR_eta_stack_1->GetXaxis()->SetTitleOffset(1);
-   goodPhotonSR_eta_stack_1->GetXaxis()->SetTitleFont(42);
-   goodPhotonSR_eta_stack_1->GetYaxis()->SetLabelFont(42);
-   goodPhotonSR_eta_stack_1->GetYaxis()->SetTitleFont(42);
-   goodPhotonSR_eta_stack_1->GetZaxis()->SetLabelFont(42);
-   goodPhotonSR_eta_stack_1->GetZaxis()->SetTitleOffset(1);
-   goodPhotonSR_eta_stack_1->GetZaxis()->SetTitleFont(42);
-   goodPhotonSR_etadata->Add(goodPhotonSR_eta_stack_1,"");
-   goodPhotonSR_etadata->Draw("nostack pe0 same");
+  grae->Draw("pe");
    
    TH1D *backgrounds_unc_goodPhotonSR_eta__4 = new TH1D("backgrounds_unc_goodPhotonSR_eta__4","goodPhotonSR_eta",5,-2.2,2.2);
    backgrounds_unc_goodPhotonSR_eta__4->SetBinContent(1,3.910067);
@@ -316,7 +287,7 @@ void plot_fig_6_c()
    
    TH1F *goodPhotonSR_etabackground_copy__5 = new TH1F("goodPhotonSR_etabackground_copy__5","",5,-2.2,2.2);
    goodPhotonSR_etabackground_copy__5->SetMinimum(0);
-   goodPhotonSR_etabackground_copy__5->SetMaximum(35);
+   goodPhotonSR_etabackground_copy__5->SetMaximum(37);
    goodPhotonSR_etabackground_copy__5->SetDirectory(0);
    goodPhotonSR_etabackground_copy__5->SetStats(0);
    goodPhotonSR_etabackground_copy__5->SetLineStyle(0);
@@ -432,7 +403,7 @@ void plot_fig_6_c()
    ratio_goodPhotonSR_eta_stack_1->GetZaxis()->SetTitleOffset(1);
    ratio_goodPhotonSR_eta_stack_1->GetZaxis()->SetTitleFont(42);
    ratio_stack_goodPhotonSR_eta->Add(ratio_goodPhotonSR_eta_stack_1,"");
-   ratio_stack_goodPhotonSR_eta->Draw("p");
+   ratio_stack_goodPhotonSR_eta->Draw("pe1");
    TLine *line = new TLine(-2.2,1,2.2,1);
    line->SetLineStyle(2);
    line->Draw();
@@ -468,7 +439,8 @@ void plot_fig_6_c()
    ratio_uncertainty_goodPhotonSR_eta__6->Draw("same e2");
    goodPhotonSR_eta_2->Modified();
    goodPhotonSR_eta->cd();
-     auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");
+     // auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");
+  auto tex = new TLatex(0.16, 0.95, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
   tex->SetTextSize(0.04);

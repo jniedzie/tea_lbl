@@ -47,11 +47,11 @@ void plot_fig_6_d() {
   THStack *diphotonSR_rapiditybackground = new THStack();
   diphotonSR_rapiditybackground->SetName("diphotonSR_rapiditybackground");
   diphotonSR_rapiditybackground->SetTitle("");
-  diphotonSR_rapiditybackground->SetMaximum(15);
+  diphotonSR_rapiditybackground->SetMaximum(17);
 
   TH1F *diphotonSR_rapiditybackground_stack_13 = new TH1F("diphotonSR_rapiditybackground_stack_13", "", 7, -2.2, 2.2);
   diphotonSR_rapiditybackground_stack_13->SetMinimum(0);
-  diphotonSR_rapiditybackground_stack_13->SetMaximum(15);
+  diphotonSR_rapiditybackground_stack_13->SetMaximum(17);
   diphotonSR_rapiditybackground_stack_13->SetDirectory(0);
   diphotonSR_rapiditybackground_stack_13->SetStats(0);
   diphotonSR_rapiditybackground_stack_13->SetLineStyle(0);
@@ -223,76 +223,48 @@ void plot_fig_6_d() {
   diphotonSR_rapiditybackground->Add(diphotonSR_rapidity_stack_4, "");
   diphotonSR_rapiditybackground->Draw("hist");
 
-  auto diphotonSR_rapiditydata = new THStack();
-  diphotonSR_rapiditydata->SetName("diphotonSR_rapiditydata");
-  diphotonSR_rapiditydata->SetTitle("");
-  diphotonSR_rapiditydata->SetMaximum(15);
+  Double_t Graph0_fx3005[7] = {-1.885714, -1.257143, -0.6285714, -2.775558e-16, 0.6285714, 1.257143, 1.885714};
+  Double_t Graph0_fy3005[7] = {0, 5, 5, 8, 5, 2, 1};
+  Double_t Graph0_felx3005[7] = {0.3142857, 0.3142857, 0.3142857, 0.3142857, 0.3142857, 0.3142857, 0.3142857};
+  Double_t Graph0_fely3005[7] = {0, 2.159691, 2.159691, 2.768386, 2.159691, 1.291815, 0.8272462};
+  Double_t Graph0_fehx3005[7] = {0.3142857, 0.3142857, 0.3142857, 0.3142857, 0.3142857, 0.3142857, 0.3142857};
+  Double_t Graph0_fehy3005[7] = {1.841022, 3.382473, 3.382473, 3.945142, 3.382473, 2.63786, 2.299527};
+  TGraphAsymmErrors *grae =
+      new TGraphAsymmErrors(7, Graph0_fx3005, Graph0_fy3005, Graph0_felx3005, Graph0_fehx3005, Graph0_fely3005, Graph0_fehy3005);
+  grae->SetName("Graph0");
+  grae->SetTitle("Graph");
+  grae->SetFillStyle(1000);
+  grae->SetMarkerStyle(20);
 
-  TH1F *diphotonSR_rapiditydata_stack_14 = new TH1F("diphotonSR_rapiditydata_stack_14", "", 7, -2.2, 2.2);
-  diphotonSR_rapiditydata_stack_14->SetMinimum(0);
-  diphotonSR_rapiditydata_stack_14->SetMaximum(15);
-  diphotonSR_rapiditydata_stack_14->SetDirectory(0);
-  diphotonSR_rapiditydata_stack_14->SetStats(0);
-  diphotonSR_rapiditydata_stack_14->SetLineStyle(0);
-  diphotonSR_rapiditydata_stack_14->GetXaxis()->SetTitle("y^{#gamma#gamma}");
-  diphotonSR_rapiditydata_stack_14->GetXaxis()->SetLabelFont(42);
-  diphotonSR_rapiditydata_stack_14->GetXaxis()->SetLabelOffset(0.007);
-  diphotonSR_rapiditydata_stack_14->GetXaxis()->SetLabelSize(0.06);
-  diphotonSR_rapiditydata_stack_14->GetXaxis()->SetTitleSize(0.06);
-  diphotonSR_rapiditydata_stack_14->GetXaxis()->SetTitleOffset(1.7);
-  diphotonSR_rapiditydata_stack_14->GetXaxis()->SetTitleFont(42);
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->SetTitle("Events / 0.63");
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->CenterTitle(true);
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->SetNdivisions(505);
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->SetLabelFont(42);
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->SetLabelOffset(0.007);
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->SetLabelSize(0.06);
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->SetTitleSize(0.05);
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->SetTitleOffset(1.0);
+  TH1F *Graph_Graph03005 = new TH1F("Graph_Graph03005", "Graph", 100, -2.262857, 2.262857);
+  Graph_Graph03005->SetMinimum(0);
+  Graph_Graph03005->SetMaximum(13.13966);
+  Graph_Graph03005->SetDirectory(0);
+  Graph_Graph03005->SetStats(0);
+  Graph_Graph03005->SetLineStyle(0);
+  Graph_Graph03005->GetXaxis()->SetLabelFont(42);
+  Graph_Graph03005->GetXaxis()->SetLabelOffset(0.007);
+  Graph_Graph03005->GetXaxis()->SetLabelSize(0.05);
+  Graph_Graph03005->GetXaxis()->SetTitleSize(0.06);
+  Graph_Graph03005->GetXaxis()->SetTitleOffset(0.9);
+  Graph_Graph03005->GetXaxis()->SetTitleFont(42);
+  Graph_Graph03005->GetYaxis()->SetLabelFont(42);
+  Graph_Graph03005->GetYaxis()->SetLabelOffset(0.007);
+  Graph_Graph03005->GetYaxis()->SetLabelSize(0.05);
+  Graph_Graph03005->GetYaxis()->SetTitleSize(0.06);
+  Graph_Graph03005->GetYaxis()->SetTitleOffset(1.25);
+  Graph_Graph03005->GetYaxis()->SetTitleFont(42);
+  Graph_Graph03005->GetZaxis()->SetLabelFont(42);
+  Graph_Graph03005->GetZaxis()->SetLabelOffset(0.007);
+  Graph_Graph03005->GetZaxis()->SetLabelSize(0.05);
+  Graph_Graph03005->GetZaxis()->SetTitleSize(0.06);
+  Graph_Graph03005->GetZaxis()->SetTitleOffset(1);
+  Graph_Graph03005->GetZaxis()->SetTitleFont(42);
+  grae->SetHistogram(Graph_Graph03005);
+
+  grae->Draw("pe");
+
   
-  diphotonSR_rapiditydata_stack_14->GetYaxis()->SetTitleFont(42);
-  diphotonSR_rapiditydata_stack_14->GetZaxis()->SetLabelFont(42);
-  diphotonSR_rapiditydata_stack_14->GetZaxis()->SetLabelOffset(0.007);
-  diphotonSR_rapiditydata_stack_14->GetZaxis()->SetLabelSize(0.05);
-  diphotonSR_rapiditydata_stack_14->GetZaxis()->SetTitleSize(0.06);
-  diphotonSR_rapiditydata_stack_14->GetZaxis()->SetTitleOffset(1);
-  diphotonSR_rapiditydata_stack_14->GetZaxis()->SetTitleFont(42);
-  diphotonSR_rapiditydata->SetHistogram(diphotonSR_rapiditydata_stack_14);
-
-  diphotonSR_rapidity_stack_1 = new TH1D("diphotonSR_rapidity_stack_1", "diphotonSR_rapidity", 7, -2.2, 2.2);
-  diphotonSR_rapidity_stack_1->SetBinContent(2, 5);
-  diphotonSR_rapidity_stack_1->SetBinContent(3, 5);
-  diphotonSR_rapidity_stack_1->SetBinContent(4, 8);
-  diphotonSR_rapidity_stack_1->SetBinContent(5, 5);
-  diphotonSR_rapidity_stack_1->SetBinContent(6, 2);
-  diphotonSR_rapidity_stack_1->SetBinContent(7, 1);
-  diphotonSR_rapidity_stack_1->SetBinError(2, 2.236068);
-  diphotonSR_rapidity_stack_1->SetBinError(3, 2.236068);
-  diphotonSR_rapidity_stack_1->SetBinError(4, 2.828427);
-  diphotonSR_rapidity_stack_1->SetBinError(5, 2.236068);
-  diphotonSR_rapidity_stack_1->SetBinError(6, 1.414214);
-  diphotonSR_rapidity_stack_1->SetBinError(7, 1);
-  diphotonSR_rapidity_stack_1->SetEntries(26);
-  diphotonSR_rapidity_stack_1->SetDirectory(0);
-
-  ci = 1490;
-  color = new TColor(ci, 0, 1, 0, " ", 0);
-  diphotonSR_rapidity_stack_1->SetFillColor(ci);
-
-  ci = TColor::GetColor("#000000");
-  diphotonSR_rapidity_stack_1->SetLineColor(ci);
-  diphotonSR_rapidity_stack_1->SetMarkerStyle(20);
-  diphotonSR_rapidity_stack_1->GetXaxis()->SetRange(1, 7);
-  diphotonSR_rapidity_stack_1->GetXaxis()->SetLabelFont(42);
-  diphotonSR_rapidity_stack_1->GetXaxis()->SetTitleOffset(1);
-  diphotonSR_rapidity_stack_1->GetXaxis()->SetTitleFont(42);
-  diphotonSR_rapidity_stack_1->GetYaxis()->SetLabelFont(42);
-  diphotonSR_rapidity_stack_1->GetYaxis()->SetTitleFont(42);
-  diphotonSR_rapidity_stack_1->GetZaxis()->SetLabelFont(42);
-  diphotonSR_rapidity_stack_1->GetZaxis()->SetTitleOffset(1);
-  diphotonSR_rapidity_stack_1->GetZaxis()->SetTitleFont(42);
-  diphotonSR_rapiditydata->Add(diphotonSR_rapidity_stack_1, "");
-  diphotonSR_rapiditydata->Draw("nostack pe0 same");
 
   TH1D *backgrounds_unc_diphotonSR_rapidity__13 = new TH1D("backgrounds_unc_diphotonSR_rapidity__13", "diphotonSR_rapidity", 7, -2.2, 2.2);
   backgrounds_unc_diphotonSR_rapidity__13->SetBinContent(1, 0.5549351);
@@ -333,7 +305,7 @@ void plot_fig_6_d() {
 
   TH1F *diphotonSR_rapiditybackground_copy__14 = new TH1F("diphotonSR_rapiditybackground_copy__14", "", 7, -2.2, 2.2);
   diphotonSR_rapiditybackground_copy__14->SetMinimum(0);
-  diphotonSR_rapiditybackground_copy__14->SetMaximum(15);
+  diphotonSR_rapiditybackground_copy__14->SetMaximum(17);
   diphotonSR_rapiditybackground_copy__14->SetDirectory(0);
   diphotonSR_rapiditybackground_copy__14->SetStats(0);
   diphotonSR_rapiditybackground_copy__14->SetLineStyle(0);
@@ -450,7 +422,7 @@ void plot_fig_6_d() {
   ratio_diphotonSR_rapidity_stack_1->GetZaxis()->SetTitleOffset(1);
   ratio_diphotonSR_rapidity_stack_1->GetZaxis()->SetTitleFont(42);
   ratio_stack_diphotonSR_rapidity->Add(ratio_diphotonSR_rapidity_stack_1, "");
-  ratio_stack_diphotonSR_rapidity->Draw("p");
+  ratio_stack_diphotonSR_rapidity->Draw("pe1");
   TLine *line = new TLine(-2.2, 1, 2.2, 1);
   line->SetLineStyle(2);
   line->Draw();
@@ -491,7 +463,8 @@ void plot_fig_6_d() {
   ratio_uncertainty_diphotonSR_rapidity__15->Draw("same e2");
   diphotonSR_rapidity_2->Modified();
   diphotonSR_rapidity->cd();
-  auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");
+  // auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");
+  auto tex = new TLatex(0.16, 0.95, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
   tex->SetTextSize(0.04);

@@ -165,7 +165,8 @@ void plot_fig_3() {
   entry->SetTextFont(42);
   leg->Draw();
 
-  auto tex = new TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}");
+  // auto tex = new TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}");
+  auto tex = new TLatex(0.15, 0.92, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
   tex->SetTextSize(0.04);
