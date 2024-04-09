@@ -7,13 +7,16 @@ base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
 # for LbL analysis:
 applyTrigger = False
+
 applyTwoTracksTwoPhotons = False
 applyTwoPhotons = True
 applyTwoElectrons = False
-applyDiphotonPt = True
+
 applyChargedExclusivity = True
 applyNeutralExclusivity = True
+applyDiphotonPt = True
 applyZDC = True
+
 applyEtDelta = False
 
 

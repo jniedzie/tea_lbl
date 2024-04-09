@@ -34,7 +34,7 @@ processes = (
 
 # skim = "afterTrigger"
 
-# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n_1n0n_1n1n"
 
@@ -42,7 +42,13 @@ processes = (
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_noCHE"
 
 
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_ptgaga2p5"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_ptgaga2p5"
+
+# skim = "skimmed_lblSelections_final_twoPhotons"
+# skim = "skimmed_lblSelections_final_twoPhotons_CHE"
+# skim = "skimmed_lblSelections_final_twoPhotons_CHE_NEE"
+# skim = "skimmed_lblSelections_final_twoPhotons_CHE_NEE_diphotonPt"
+# skim = "skimmed_lblSelections_final_twoPhotons_CHE_NEE_diphotonPt_ZDC"
 
 # skim = "skimmed_lblSelections_finalXn0n"
 # skim = "skimmed_lblSelections_finalXn1n"

@@ -4,7 +4,8 @@ import ROOT
 import numpy as np
 
 nEvents = -1
-printEveryNevents = 1000
+eventsOffset = 0
+printEveryNevents = 100
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
@@ -16,22 +17,19 @@ sample = "collisionData"
 # sample = "emptyBeams"
 # sample = "qed_sc_noPhotos"
 
-
 # skim = "initial"
 # skim = "afterTrigger"
-
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC3n"
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
-
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+skim = "skimmed_lblSelections_final_twoPhotons"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_tracksPhotonsSelections"
 
-# inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
-inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
-
 # inputFilePath = "./renamed_test.root"
 # inputFilePath = "./skimmed_test.root"
+# inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
+inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
 
 histogramsOutputFilePath = f"../{skim}_{sample}_histograms.root"
 
@@ -301,13 +299,26 @@ visualizationParams = {
     # "towerColorR": 0.45,
     # "towerColorG": 0.97,
     # "towerColorB": 0.35,
+    # nice red-pink
     "towerColorR": 0.72,
     "towerColorG": 0.21,
     "towerColorB": 0.31,
-    "towerAlpha": 0.05,
+    # complemenatry green:
+    # "towerColorR": 0.53,
+    # "towerColorG": 0.88,
+    # "towerColorB": 0.13,
+    
+    
+    "towerAlpha": 0.2,
+    # "towerAlpha": 1.0,
     "towerFillStyle": 1001,
     "backgroundColor": ROOT.kWhite,
     "canvasSize": 8.0,
+    "trackColor": -1,
+    "trackColorR": 0.72,
+    "trackColorG": 0.21,
+    "trackColorB": 0.31,
+    "trackWidth": 1,
 }
 
 extraEventCollections = {

@@ -82,29 +82,24 @@ vector<unique_ptr<TGraph>> getTrapezoids(const vector<pair<float, float>> &phiAn
   return trapezoids;
 }
 
-int getTowerColor(const map<string, float> &visualizationParams) {
-  int towerColor;
-  if (visualizationParams.at("towerColor") < 0) {
-    towerColor = 10;
-    auto color = gROOT->GetColor(towerColor);
-    color->SetRGB(visualizationParams.at("towerColorR"), visualizationParams.at("towerColorG"), visualizationParams.at("towerColorB"));
-  } else {
-    towerColor = visualizationParams.at("towerColor");
-  }
-  return towerColor;
+int getColor(const map<string, float> &visualizationParams, bool track = false) {
+  string object = track ? "track" : "tower";
+
+  if (visualizationParams.at(object+"Color") >= 0) return visualizationParams.at(object+"Color");
+  int colorIndex = 10;
+  auto color = gROOT->GetColor(colorIndex);
+  color->SetRGB(visualizationParams.at(object+"ColorR"), visualizationParams.at(object+"ColorG"), visualizationParams.at(object+"ColorB"));
+  return colorIndex;
 }
 
-
-
-void addShapesToCanvas(const vector<pair<float, float>> &towersPhiAndEt, const vector<pair<float, float>> &photonsPhiAndEt, TCanvas *canvas,
-                const map<string, float> &visualizationParams) {
+void addShapesToCanvas(const vector<pair<float, float>> &towersPhiAndEt, TCanvas *canvas, const map<string, float> &visualizationParams) {
   canvas->cd();
 
   
   auto [maxTowerEt, refTowerPhi] = findRefEtandPhi(towersPhiAndEt);
   auto towersTrapezoids = getTrapezoids(towersPhiAndEt, visualizationParams, maxTowerEt, refTowerPhi);
 
-  int towerColor = getTowerColor(visualizationParams);
+  int towerColor = getColor(visualizationParams);
   for(auto &trapezoid : towersTrapezoids) {
     trapezoid->SetFillColorAlpha(towerColor, visualizationParams.at("towerAlpha"));
     trapezoid->SetFillStyle(visualizationParams.at("towerFillStyle"));
@@ -114,8 +109,27 @@ void addShapesToCanvas(const vector<pair<float, float>> &towersPhiAndEt, const v
   canvas->Update();
 }
 
-void drawShapes(const vector<pair<float, float>> &towersPhiAndEt, const vector<pair<float, float>> &photonsPhiAndEt, string outputFileName,
-                const map<string, float> &visualizationParams) {
+void addTracksToCanvas(const vector<tuple<float, float, int>> &tracksPhiPtCharge, TCanvas *canvas, const map<string, float> &visualizationParams) {
+  canvas->cd();
+
+  for(auto &[phi, pt, charge] : tracksPhiPtCharge){
+    float circleRadius = visualizationParams.at("circleRadius");
+    // float trackRadius = pt / 3.8;
+
+    // auto track = new TArc(x, y, trackRadius, phiStart, phiEnd);
+    float x = charge * circleRadius/sqrt(1+pow(TMath::Tan(phi),2));
+    float y = x * TMath::Tan(phi);
+
+    auto track = new TLine(0, 0, x, y);
+    track->SetLineColor(getColor(visualizationParams, true));
+    track->SetLineWidth(visualizationParams.at("trackWidth"));
+    track->DrawClone("same");
+  }
+
+  canvas->Update();
+}
+
+void drawShapes(const vector<pair<float, float>> &towersPhiAndEt, string outputFileName, const map<string, float> &visualizationParams) {
   auto canvas = new TCanvas(outputFileName.c_str(), outputFileName.c_str(), 800, 800);
   canvas->SetFillColor(visualizationParams.at("backgroundColor"));
   float canvasSize = visualizationParams.at("canvasSize");
@@ -127,19 +141,12 @@ void drawShapes(const vector<pair<float, float>> &towersPhiAndEt, const vector<p
   circle->SetLineColor(visualizationParams.at("circleColor"));
   circle->Draw();
 
-  addShapesToCanvas(towersPhiAndEt, photonsPhiAndEt, canvas, visualizationParams);
+  addShapesToCanvas(towersPhiAndEt, canvas, visualizationParams);
 
   canvas->Update();
   string outputDir = outputFileName.substr(0, outputFileName.find_last_of("/"));
   gSystem->mkdir(outputDir.c_str());
   canvas->SaveAs(outputFileName.c_str());
-}
-
-void CheckArgs(int argc, char **argv) {
-  if (argc != 2) {
-    fatal() << "Usage: " << argv[0] << " config_path" << endl;
-    exit(1);
-  }
 }
 
 float getDiphotonAcoplanarity(const shared_ptr<PhysicsObjects> &photons) {
@@ -158,6 +165,15 @@ float getDiphotonAcoplanarity(const shared_ptr<PhysicsObjects> &photons) {
   return acoplanarity;
 }
 
+void CheckArgs(int argc, char **argv) {
+  if (argc != 2 && argc != 6) {
+    fatal() << "Usage: " << argv[0] << " config_path" << endl;
+    fatal() << "or" << endl;
+    fatal() << argv[0] << " config_path input_path output_path nEvents eventsOffset" << endl;
+    exit(1);
+  }
+}
+
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
 
@@ -165,23 +181,31 @@ int main(int argc, char **argv) {
   ConfigManager::Initialize(argv[1]);
   auto &config = ConfigManager::GetInstance();
 
+  int eventsOffset, nEvents;
+  config.GetValue("eventsOffset", eventsOffset);
+  config.GetValue("nEvents", nEvents);
+  string outputPath = "";
+
+  
+   if (argc == 6) {
+    config.SetInputPath(argv[2]);
+    outputPath = argv[3];
+    nEvents = stoi(argv[4]);
+    eventsOffset = stoi(argv[5]);
+  }
+
+  if(outputPath == ""){
+    outputPath = "../plots/visualizations/event_display_"+to_string(eventsOffset)+".pdf";
+  }
+
   map<string, float> visualizationParams;
   config.GetMap("visualizationParams", visualizationParams);
 
   info() << "Creating objects" << endl;
   auto eventReader = make_shared<EventReader>();
-
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  auto etaPhiMap = new TH2D("etaPhiMap", "etaPhiMap", 
-  100, -2.5, 2.5, 100, -TMath::Pi(), TMath::Pi());
-  auto etaPhiMapSR = new TH2D("etaPhiMapSR", "etaPhiMapSR", 
-  100, -2.5, 2.5, 100, -TMath::Pi(), TMath::Pi());
-  auto etaMap = new TH1D("etaMap", "etaMap", 50, 0, 2.5);
-
-  vector<float> etas;
-
-  auto overlapCanvas = new TCanvas("overlapCanvas", "overlapCanvas", 800, 800);
+  auto overlapCanvas = new TCanvas("overlapCanvas", "overlapCanvas", 2000, 2000);
   overlapCanvas->cd();
   overlapCanvas->SetFillColor(visualizationParams.at("backgroundColor"));
   float canvasSize = visualizationParams.at("canvasSize");
@@ -193,38 +217,30 @@ int main(int argc, char **argv) {
   circle->SetLineColor(visualizationParams.at("circleColor"));
   circle->Draw();
 
+  
+
   info() << "Starting event loop" << endl;
-  for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
+  for (int iEvent = eventsOffset; iEvent < nEvents+eventsOffset; iEvent++) {
+    if(iEvent > eventReader->GetNevents()) break;
     auto event = eventReader->GetEvent(iEvent);
 
     lblObjectsManager->InsertGoodPhotonsCollection(event);
+    lblObjectsManager->InsertGoodTracksCollection(event);
+    
+    
     auto photons = event->GetCollection("goodPhoton");
-
     float acoplanarity = getDiphotonAcoplanarity(photons);
-    if (acoplanarity > 0.01) continue;
+    // if (acoplanarity > 0.01) continue;
 
-    // vector<pair<float, float>> tracksPhiAndPt;
-    // auto tracks = event->GetCollection("track");
+    // vector<pair<float, float>> photonsPhiAndEt;
 
-    // for(auto track : *tracks){
-    //   tracksPhiAndPt.push_back({(float)track->Get("phi"), (float)track->Get("pt")});
+    // for (auto physicsObject : *photons) {
+    //   auto photon = asPhoton(physicsObject);
+    //   photonsPhiAndEt.push_back({(float)photon->Get("phi"), (float)photon->Get("et")});
     // }
-
-    // vector<pair<float, float>> photonsPhiAndEt = {{(float)photons->at(0)->Get("phi"), (float)photons->at(0)->Get("et")},
-    //                                               {(float)photons->at(1)->Get("phi"), (float)photons->at(1)->Get("et")}};
 
     auto towers = event->GetCollection("CaloTower");
     vector<pair<float, float>> towersPhiAndEt;
-
-    // auto photon1 = photons->at(0);
-    // auto photon2 = photons->at(1);
-
-    // float photon1Et = photon1->Get("et");
-    // float photon2Et = photon2->Get("et");
-
-    // float maxDeltaR = 1.5;
-    // float highestTowerEt1 = 0;
-    // float highestTowerEt2 = 0;
 
     for (auto physicsObject : *towers) {
       auto tower = asCaloTower(physicsObject);
@@ -232,90 +248,44 @@ int main(int argc, char **argv) {
       if (tower->IsEtaAboveLimit()) continue;
       if (tower->IsInHEM()) continue;
       if (tower->IsInElectromagneticCrack()) continue;
-
       //   if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
       //   if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
-
       //   if (!tower->IsElectromagneticEnergyAboveNoiseThreshold()) continue;
 
       float phi = tower->Get("phi");
       float et = tower->Get("et");
 
-      // if(sqrt(pow(phi - (float)photon1->Get("phi"), 2) + pow((float)tower->Get("eta") - (float)photon1->Get("eta"), 2)) < maxDeltaR) {
-      //   if(et > highestTowerEt1) highestTowerEt1 = et;
-      // }
-      // if(sqrt(pow(phi - (float)photon2->Get("phi"), 2) + pow((float)tower->Get("eta") - (float)photon2->Get("eta"), 2)) < maxDeltaR) {
-      //   if(et > highestTowerEt2) highestTowerEt2 = et;
-      // }
       towersPhiAndEt.push_back({phi, et});
     }
 
-    // float deltaEt1 = fabs(photon1Et - highestTowerEt1)/photon1Et;
-    // float deltaEt2 = fabs(photon2Et - highestTowerEt2)/photon2Et;
+    auto [maxTowerEt, refTowerPhi] = findRefEtandPhi(towersPhiAndEt);
 
-    // float maxDelta = max(deltaEt1, deltaEt2);
-    // info() << "Max delta: " << maxDelta << endl;
+    vector<tuple<float, float, int>> tracksPhiPtCharge;
+    auto tracks = event->GetCollection("goodTrack");
 
-    // auto etaPhiMapToFill = (acoplanarity > 0.01) ? etaPhiMap : etaPhiMapSR;
+    for(auto track : *tracks){
+      tracksPhiPtCharge.push_back({(float)track->Get("phi")-refTowerPhi, (float)track->Get("pt"), (int)track->Get("charge")});
+    }
 
-    // if(maxDelta > 0.65){
-    //   if(deltaEt1 > deltaEt2) {
-    //     info() << (float)photon1->Get("eta") << " " << (float)photon1->Get("phi") << endl;
-    //     etaPhiMapToFill->Fill((float)photon1->Get("eta"), (float)photon1->Get("phi"));
-    //     etaMap->Fill(fabs((float)photon1->Get("eta")));
-    //     etas.push_back(fabs((float)photon1->Get("eta")));
-    //   } else {
-    //     info() << (float)photon2->Get("eta") << " " << (float)photon2->Get("phi") << endl;
-    //     etaPhiMapToFill->Fill((float)photon2->Get("eta"), (float)photon2->Get("phi"));
-    //     etaMap->Fill(fabs((float)photon2->Get("eta")));
-    //     etas.push_back(fabs((float)photon2->Get("eta")));
-    //   }
-    // }
+    // drawShapes(towersPhiAndEt, "../plots/visualizations/event_" + to_string(iEvent) + ".pdf", visualizationParams);
+    
+    // int runNumber = event->Get("runNumber");
+    // int lumiSection = event->Get("lumiSection");
+    // int eventNumber = event->Get("eventNumber");
+    // info() << runNumber << ":" << lumiSection << ":" << eventNumber << endl;
 
-    // drawShapes(towersPhiAndEt, photonsPhiAndEt, "../plots/visualizations/event_" + to_string(iEvent) + ".pdf", visualizationParams);
-    // drawShapes(towersPhiAndEt, {}, "../plots/visualizations/event_" + to_string(iEvent) + ".pdf", visualizationParams);
-    // drawShapes(towersPhiAndEt, tracksPhiAndPt, "../plots/visualizations/event_" + to_string(iEvent) + ".pdf", visualizationParams);
-
-    int runNumber = event->Get("runNumber");
-    int lumiSection = event->Get("lumiSection");
-    int eventNumber = event->Get("eventNumber");
-    info() << runNumber << ":" << lumiSection << ":" << eventNumber << endl;
-
-    addShapesToCanvas(towersPhiAndEt, {}, overlapCanvas, visualizationParams);
+    addShapesToCanvas(towersPhiAndEt, overlapCanvas, visualizationParams);
+    // addShapesToCanvas(photonsPhiAndEt, overlapCanvas, visualizationParams);
+    addTracksToCanvas(tracksPhiPtCharge, overlapCanvas, visualizationParams);
 
   }
 
   overlapCanvas->Update();
   gSystem->mkdir("../plots/visualizations/");
-  overlapCanvas->SaveAs("../plots/visualizations/event_display.pdf");
+  overlapCanvas->SaveAs(outputPath.c_str());
 
   gStyle->SetOptStat(0);
-  auto canvas = new TCanvas("canvas", "canvas", 1600, 800);
-  canvas->Divide(2, 1);
-  canvas->cd(1);
-  etaPhiMap->SetMarkerSize(2);
-  etaPhiMap->SetMarkerColor(kRed);
-  etaPhiMap->SetMarkerStyle(20);
-  etaPhiMap->Draw("P");
-  etaPhiMap->GetXaxis()->SetTitle("#eta");
-  etaPhiMap->GetYaxis()->SetTitle("#phi");
-
-  etaPhiMapSR->SetMarkerSize(2);
-  etaPhiMapSR->SetMarkerColor(kBlue);
-  etaPhiMapSR->SetMarkerStyle(20);
-  etaPhiMapSR->Draw("P SAME");
-
-  canvas->cd(2);
-  etaMap->Draw();
-  etaMap->GetXaxis()->SetTitle("|#eta|");
-  etaMap->GetYaxis()->SetTitle("Events");
   
-  canvas->SaveAs("../plots/visualizations/etaPhiMap.pdf");
-
-  for(float eta : etas){
-    info() << eta << endl;
-  }
-
   info() << "Finishing up" << endl;
   auto &logger = Logger::GetInstance();
   logger.Print();
