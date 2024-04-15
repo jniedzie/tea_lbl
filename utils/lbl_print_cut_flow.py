@@ -10,7 +10,20 @@ def main():
     ROOT.gROOT.SetBatch(True)
 
     photon_sf, _ = get_scale_factor(photon=True)
-
+    print(f"{photon_sf=}")
+    
+    trigger_sf = 1.0089 * 0.8716
+    recoID_sf = 0.9758 * 0.9758 * 0.946 * 0.946
+    che_sf = 0.9252
+    nee_sf = 0.8487
+    
+    sf = photon_sf
+    # sf = 1
+    # sf = trigger_sf
+    # sf = trigger_sf * recoID_sf
+    # sf = trigger_sf * recoID_sf * che_sf
+    # sf = trigger_sf * recoID_sf * che_sf * nee_sf
+    
     for process in processes:
         input_path = f"{base_path}/{process}/merged_{skim}.root"
         print(f"Analyzing file: {input_path}")
@@ -20,7 +33,7 @@ def main():
         elif process == "collisionData":
             scale = 1
         else:
-            scale = luminosity*crossSections[process]*photon_sf
+            scale = luminosity*crossSections[process]*sf
             scale /= nGenEvents[process]
 
         file = ROOT.TFile(input_path, "READ")
