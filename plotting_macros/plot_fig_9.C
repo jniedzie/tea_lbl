@@ -26,7 +26,7 @@ void plot_fig_9() {
   myframe__1->GetXaxis()->SetLabelSize(0.05);
   myframe__1->GetXaxis()->SetTitleSize(0.05);
   myframe__1->GetXaxis()->SetTitleOffset(1.11);
-  myframe__1->GetYaxis()->SetTitle("g_{a#gamma} (TeV)^{-1}");
+  myframe__1->GetYaxis()->SetTitle("g_{a#gamma} (TeV^{-1})");
   myframe__1->GetYaxis()->SetLabelFont(42);
   myframe__1->GetYaxis()->SetLabelSize(0.05);
   myframe__1->GetYaxis()->SetTitleSize(0.05);
@@ -757,7 +757,7 @@ void plot_fig_9() {
   myframe_copy__2->GetXaxis()->SetLabelSize(0.05);
   myframe_copy__2->GetXaxis()->SetTitleSize(0.05);
   myframe_copy__2->GetXaxis()->SetTitleOffset(1.11);
-  myframe_copy__2->GetYaxis()->SetTitle("g_{a#gamma} (TeV)^{-1}");
+  myframe_copy__2->GetYaxis()->SetTitle("g_{a#gamma} (TeV^{-1})");
   myframe_copy__2->GetYaxis()->SetLabelFont(42);
   myframe_copy__2->GetYaxis()->SetLabelSize(0.05);
   myframe_copy__2->GetYaxis()->SetTitleSize(0.05);
@@ -872,7 +872,7 @@ void plot_fig_9() {
   tex->SetLineWidth(2);
   tex->Draw();
 
-  auto pad2 = new TPad("pad2", "pad2", 0.5, 0.15, 0.97, 0.53);
+  auto pad2 = new TPad("pad2", "pad2", 0.5, 0.15, 0.97, 0.52);
   pad2->Draw();
   pad2->cd();
   gPad->SetLogx();
@@ -896,7 +896,7 @@ void plot_fig_9() {
   graph->GetXaxis()->SetLimits(4, 90);
   graph->GetYaxis()->SetRangeUser(5e-2, 5e-1);
   graph->GetXaxis()->SetTitle("m_{a} (GeV)");
-  graph->GetYaxis()->SetTitle("g_{a#gamma} (TeV)^{-1}");
+  graph->GetYaxis()->SetTitle("g_{a#gamma} (TeV^{-1})");
   graph->GetXaxis()->SetTitleSize(0.07);
   graph->GetYaxis()->SetTitleSize(0.07);
 
@@ -918,5 +918,5 @@ void plot_fig_9() {
   tex->Draw();
 
   gStyle->SetLineScalePS(1);
-  ALPs_limits_ma_gagamma->SaveAs("~/Downloads/Figure_009.pdf");
+  ALPs_limits_ma_gagamma->SaveAs("figures/Figure_009.pdf");
 }
