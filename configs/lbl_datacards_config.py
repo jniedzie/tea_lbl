@@ -13,6 +13,7 @@ output_path = f"../datacards/{skim.replace('skimmed_', '')}/"
 
 scale_factor = get_scale_factor(True)[0]
 lbl_error = total_uncertainty_lbl_run2 - 1
+add_uncertainties_on_zero = False
 
 samples = [
     Sample(
