@@ -113,6 +113,8 @@ void plot_fig_3() {
   ratio_data__3->SetBinError(6, 0.000393379);
   ratio_data__3->SetEntries(7);
   ratio_data__3->SetMarkerStyle(20);
+  ratio_data__3->SetMarkerColor(kBlack);
+  ratio_data__3->SetLineColor(kBlack);
   ratio_data__3->GetXaxis()->SetLabelFont(42);
   ratio_data__3->GetXaxis()->SetTitleOffset(1);
   ratio_data__3->GetXaxis()->SetTitleFont(42);
