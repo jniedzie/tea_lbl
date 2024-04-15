@@ -135,6 +135,8 @@ histParams = (
 
     ("diphoton", "acoplanarity1040", 20, 0, 0.05, ""),
 
+    ("diphotonThreePhoton", "mass", 10, 0, 50, ""),
+
     ("diphoton", "acoplanarityTrack0to0p3", 400, 0, 1.0, ""),
     ("diphoton", "acoplanarityTrack0p3to0p65", 400, 0, 1.0, ""),
     ("diphoton", "acoplanarityTrack0p65to2p0", 400, 0, 1.0, ""),

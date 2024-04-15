@@ -40,9 +40,11 @@ int main(int argc, char **argv) {
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
   bool applyTrigger, applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons,
-      applyEtDelta, applyTwoTracksTwoPhotons;
+      applyEtDelta, applyTwoTracksTwoPhotons, applySinglePhoton, applyThreePhotons;
   config.GetValue("applyTrigger", applyTrigger);
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
+  config.GetValue("applySinglePhoton", applySinglePhoton);
+  config.GetValue("applyThreePhotons", applyThreePhotons);
   config.GetValue("applyTwoElectrons", applyTwoElectrons);
   config.GetValue("applyChargedExclusivity", applyChargedExclusivity);
   config.GetValue("applyNeutralExclusivity", applyNeutralExclusivity);
@@ -53,6 +55,8 @@ int main(int argc, char **argv) {
 
   info() << "applyTrigger: " << applyTrigger << endl;
   info() << "applyTwoPhotons: " << applyTwoPhotons << endl;
+  info() << "applySinglePhotons: " << applySinglePhoton << endl;
+  info() << "applyThreePhotons: " << applyThreePhotons << endl;
   info() << "applyTwoElectrons: " << applyTwoElectrons << endl;
   info() << "applyChargedExclusivity: " << applyChargedExclusivity << endl;
   info() << "applyNeutralExclusivity: " << applyNeutralExclusivity << endl;
@@ -69,6 +73,12 @@ int main(int argc, char **argv) {
   if (applyTwoPhotons) {
     cutFlowManager->RegisterCut("twoGoodPhotons");
     cutFlowManager->RegisterCut("diphotonMass");
+  }
+  if (applySinglePhoton) {
+    cutFlowManager->RegisterCut("singlePhoton");
+  }
+  if (applyThreePhotons) {
+    cutFlowManager->RegisterCut("threePhotons");
   }
   if (applyTwoElectrons) {
     cutFlowManager->RegisterCut("twoGoodElectrons");
@@ -127,6 +137,12 @@ int main(int argc, char **argv) {
 
     if (applyTwoPhotons) {
       if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager)) continue;
+    }
+    if (applySinglePhoton) {
+      if (!lblSelections->PassesSinglePhotonSelection(event, cutFlowManager)) continue;
+    }
+    if (applyThreePhotons) {
+      if (!lblSelections->PassesThreePhotonsSelection(event, cutFlowManager)) continue;
     }
 
     if (applyTwoElectrons) {

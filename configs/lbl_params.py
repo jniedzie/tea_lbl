@@ -156,6 +156,7 @@ electronTrackMatching = {
 #  scaling parameters
 
 luminosity = 1647.180726  # μb^-1, with ZDC
+# luminosity = 1647.2  # μb^-1, without ZDC
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 
 reference_alp_cross_section = 10e-3  # μb
@@ -201,14 +202,8 @@ crossSections = {
 
 # photon ET > 2.0 GeV, diphoton pt < 1 GeV
 scale_factors = {
-    # with a bug in Ruchi's code:
-    # "photonReco": 0.957,
-    # "photonID": 0.984,
-    
-    # after bug fix
     "photonReco": 0.9758,
     "photonID": 0.946,
-    
     "electronRecoID": 0.943,
     "l1eg": 1.0089,
     "l1hf": 0.8716,
@@ -217,14 +212,8 @@ scale_factors = {
 }
 
 scale_factor_errors = {
-    # with a bug in Ruchi's code:
-    # "photonReco": 0.0433,
-    # "photonID": 0.0345,
-    
-    # after bug fix
     "photonReco": 0.0314,
     "photonID": 0.049,
-    
     "electronRecoID": 0.0085,
     "l1eg": 0.002,
     "l1hf": 0.054,

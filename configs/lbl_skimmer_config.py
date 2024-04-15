@@ -10,6 +10,8 @@ applyTrigger = False
 
 applyTwoTracksTwoPhotons = False
 applyTwoPhotons = True
+applySinglePhoton = False
+applyThreePhotons = False
 applyTwoElectrons = False
 
 applyChargedExclusivity = True

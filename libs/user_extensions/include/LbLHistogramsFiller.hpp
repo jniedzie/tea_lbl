@@ -29,6 +29,7 @@ class LbLHistogramsFiller {
   void FillGenLevelHistograms(const std::shared_ptr<Event> event);
   void FillElectronHistograms(const std::shared_ptr<Event> event);
   void FillEventLevelHistograms(const std::shared_ptr<Event> event);
+  void FillThreePhotonHistograms(const std::shared_ptr<Event> event);
 
   TF1 *acoplanarityFunction;
   TLorentzVector dielectron, genDielectron;

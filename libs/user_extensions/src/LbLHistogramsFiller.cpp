@@ -75,6 +75,35 @@ void LbLHistogramsFiller::FillCaloHistograms(const shared_ptr<Event> event) {
   }
 }
 
+void LbLHistogramsFiller::FillThreePhotonHistograms(const shared_ptr<Event> event) {
+  auto photons = event->GetCollection("goodPhoton");
+  if (photons->size() != 3) return;
+
+  auto photon1 = photons->at(0);
+  auto photon2 = photons->at(1);
+  TLorentzVector photon1vec, photon2vec;
+  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
+  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
+  auto diphoton = photon1vec + photon2vec;
+
+  histogramsHandler->Fill("diphotonThreePhoton_mass", diphoton.M(), GetWeight(event));
+
+  photon1 = photons->at(0);
+  photon2 = photons->at(2);
+  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
+  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
+  diphoton = photon1vec + photon2vec;
+  histogramsHandler->Fill("diphotonThreePhoton_mass", diphoton.M(), GetWeight(event));
+
+  photon1 = photons->at(1);
+  photon2 = photons->at(2);
+  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
+  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
+  diphoton = photon1vec + photon2vec;
+  histogramsHandler->Fill("diphotonThreePhoton_mass", diphoton.M(), GetWeight(event));
+
+}
+
 void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("goodPhoton");
   if (photons->size() != 2) return;
@@ -437,6 +466,7 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
 
   FillCaloHistograms(event);
   FillPhotonHistograms(event);
+  FillThreePhotonHistograms(event);
   FillElectronHistograms(event);
   FillEventLevelHistograms(event);
   FillGenLevelHistograms(event);

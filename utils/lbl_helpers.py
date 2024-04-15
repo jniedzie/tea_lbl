@@ -1,7 +1,7 @@
 import math
 import ROOT
 
-from Logger import info, warn, fatal
+from Logger import info, warn, error, fatal
 
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, uncertainty_on_zero
 from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity, n_mass_bins
@@ -127,6 +127,10 @@ def get_cep_scale(skim):
         input_aco_histograms["cep"].FindBin(cep_scaling_min_acoplanarity),
         input_aco_histograms["cep"].GetNbinsX()
     )
+
+    if integral_cep == 0:
+        error("Integral of CEP histogram is zero. Cannot scale to data.")
+        return 1e-3, 0
 
     cep_scale = integral_data / integral_cep
 

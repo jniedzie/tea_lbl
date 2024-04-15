@@ -38,10 +38,28 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   return true;
 }
 
+bool LbLSelections::PassesSinglePhotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  auto goodPhotons = event->GetCollection("goodPhoton");
+  int nPhotons = goodPhotons->size();
+  if (nPhotons != 1) return false;
+
+  cutFlowManager->UpdateCutFlow("singlePhoton");
+  return true;
+}
+
+bool LbLSelections::PassesThreePhotonsSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  auto goodPhotons = event->GetCollection("goodPhoton");
+  int nPhotons = goodPhotons->size();
+  if (nPhotons != 3) return false;
+
+  cutFlowManager->UpdateCutFlow("threePhotons");
+  return true;
+}
+
 bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   auto goodPhotons = event->GetCollection("goodPhoton");
   int nPhotons = goodPhotons->size();
-  if (nPhotons < eventCuts.at("min_Nphotons") || nPhotons > eventCuts.at("max_Nphotons")) return false;
+  if (nPhotons != 2) return false;
 
   cutFlowManager->UpdateCutFlow("twoGoodPhotons");
 

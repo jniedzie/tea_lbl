@@ -214,10 +214,15 @@ histograms = (
     Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "|cos #theta*|", "Events / 0.33", "", lbl_error),
 
 
-    Histogram("goodPhoton_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 30, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhoton_phi", "", False, False, NormalizationType.to_lumi, 1,   -3.14, 3.14, 0, 30, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhoton_et", "", False, False, NormalizationType.to_lumi, 1,   0, 10, 0, 50, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    # Histogram("goodPhoton_eta", "", False, True, NormalizationType.to_lumi, 1,   -2.2, 2.2, 1e-1, 1e5, "#eta^{#gamma}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_phi", "", False, True, NormalizationType.to_lumi, 1,   -3.14, 3.14, 1e-1, 1e6, "#phi^{#gamma}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_et", "", False, True, NormalizationType.to_lumi, 1,   0, 10, 1e-1, 1e4, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("goodPhoton_seedTime", "", False, True, NormalizationType.to_one, 1,   -5, 5, -1, -1, "Photon seed time", y_label, "", lbl_error),
+
+    Histogram("goodPhoton_et", "", False, False, NormalizationType.to_lumi, 1,   0, 10, 0, 15, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("goodPhoton_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 20, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhoton_phi", "", False, False, NormalizationType.to_lumi, 1,   -3.14, 3.14, 0, 20, "#phi^{#gamma}", y_label, "", lbl_error),
+    
 
     Histogram("diphoton_acoplanarity20", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_acoplanarity30", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
@@ -242,6 +247,7 @@ histograms = (
     Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
 
+    Histogram("diphotonThreePhoton_mass", "", False, False, NormalizationType.to_lumi, 1,   0, 50, 0, 30, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
 
     Histogram("diphotonSR_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("diphotonSR_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 10, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
@@ -287,7 +293,7 @@ histograms = (
 )
 
 
-
+histogramsRatio = []
 
 n_signal = len([s for s in samples if s.type ==
                SampleType.signal and s.custom_legend is None])
