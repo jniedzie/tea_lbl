@@ -65,7 +65,6 @@ bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<
 
   if (nPhotons < 2) {
     fatal() << "Requested diphoton selections, but <2 good photons found in event." << endl;
-    fatal() << "Consider adjusting min_Nphotons and max_Nphotons in the configuration file." << endl;
     exit(0);
   }
   auto photon1 = goodPhotons->at(0);
@@ -85,7 +84,7 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
 
   // check number of electrons
   int nElectrons = electrons->size();
-  if (nElectrons < eventCuts.at("min_Nelectrons") || nElectrons > eventCuts.at("max_Nelectrons")) return false;
+  if (nElectrons != 2) return false;
   cutFlowManager->UpdateCutFlow("twoGoodElectrons");
 
   // check electron charge
@@ -124,15 +123,6 @@ bool LbLSelections::PassesDielectronChargedExclusivity(shared_ptr<Event> event, 
   }
   if (nNonOverlappingTracks > eventCuts.at("max_Ntracks")) return false;
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
-
-  // auto photons = event->GetCollection("goodPhoton");
-  // int nNonOverlappingPhotons = 0;
-  // for (auto physicsObject : *photons) {
-  //   auto photon = asPhoton(physicsObject);
-  //   if (!photon->OverlapsWithOtherObjects(electrons)) nNonOverlappingPhotons++;
-  // }
-  // if (nNonOverlappingPhotons > eventCuts.at("max_Nphotons")) return false;
-  // cutFlowManager->UpdateCutFlow("nPhotons");
 
   return true;
 }

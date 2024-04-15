@@ -5,23 +5,17 @@ eventCuts = {
     # "max_ZDCenergyPerSide": 4000.0,  # <2n
     # "max_ZDCenergyPerSide": 1600.0,  # <1n
 
-    "min_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
-    "max_Nphotons": 2,  # 2 for LbL analysis, 0 for QED analysis
-
     "min_diphotonMass": 5.0,  # only used in LbL analysis
     "max_diphotonPt": 1.0,  # only used in LbL analysis
-
-    "min_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
-    "max_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
 
     "min_dielectronMass": 5.0,  # only used in QED analysis
     "max_dielectronPt": 1.0,  # only used in QED analysis
 
+    "max_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
     "max_Ntracks": 0,
     "max_Nmuons": 0,
     "max_Ntowers": 0,
 }
-
 
 # good object definitions
 photonCuts = {
