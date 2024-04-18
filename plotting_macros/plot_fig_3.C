@@ -23,11 +23,13 @@ void plot_fig_3() {
   ratio_superchic__1->SetBinContent(2, 0.186);
   ratio_superchic__1->SetBinContent(3, 0.0485);
   ratio_superchic__1->SetBinContent(4, 0.064);
+  ratio_superchic__1->SetBinContent(5, 0.0298);
   ratio_superchic__1->SetBinContent(6, 0.0045);
   ratio_superchic__1->SetBinError(1, 0.0096);
   ratio_superchic__1->SetBinError(2, 0.0022);
   ratio_superchic__1->SetBinError(3, 0.00061);
   ratio_superchic__1->SetBinError(4, 0.00078);
+  ratio_superchic__1->SetBinError(5, 0.00036);
   ratio_superchic__1->SetBinError(6, 6e-05);
   ratio_superchic__1->SetMinimum(0.001);
   ratio_superchic__1->SetMaximum(1);
