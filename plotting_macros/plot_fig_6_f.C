@@ -472,14 +472,14 @@ void plot_fig_6_f() {
   auto tex = new TLatex(0.16, 0.95, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
 
-  tex = new TLatex(0.52, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex = new TLatex(0.45, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
   diphotonSR_mass->Modified();

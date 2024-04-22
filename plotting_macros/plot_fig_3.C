@@ -2,6 +2,9 @@
 #pragma cling optimize(0)
 #endif
 void plot_fig_3() {
+
+  float markerSize = 1.5;
+
   gROOT->SetBatch(kTRUE);
   //=========Macro generated from canvas: ratios/ratios
   //=========  (Sun Mar 31 12:30:41 2024) by ROOT version 6.26/08
@@ -43,7 +46,7 @@ void plot_fig_3() {
   ci = TColor::GetColor("#990000");
   ratio_superchic__1->SetMarkerColor(ci);
   ratio_superchic__1->SetMarkerStyle(21);
-  ratio_superchic__1->SetMarkerSize(1.2);
+  ratio_superchic__1->SetMarkerSize(markerSize);
   ratio_superchic__1->GetXaxis()->SetTitle("Neutron multiplicity category");
   ratio_superchic__1->GetXaxis()->SetBinLabel(1, "0n0n");
   ratio_superchic__1->GetXaxis()->SetBinLabel(2, "0nXn + Xn0n");
@@ -86,8 +89,8 @@ void plot_fig_3() {
 
   ci = TColor::GetColor("#009900");
   ratio_starlight__2->SetMarkerColor(ci);
-  ratio_starlight__2->SetMarkerStyle(21);
-  ratio_starlight__2->SetMarkerSize(1.2);
+  ratio_starlight__2->SetMarkerStyle(22);
+  ratio_starlight__2->SetMarkerSize(markerSize);
   ratio_starlight__2->GetXaxis()->SetLabelFont(42);
   ratio_starlight__2->GetXaxis()->SetTitleOffset(1);
   ratio_starlight__2->GetXaxis()->SetTitleFont(42);
@@ -115,6 +118,7 @@ void plot_fig_3() {
   ratio_data__3->SetBinError(6, 0.000393379);
   ratio_data__3->SetEntries(7);
   ratio_data__3->SetMarkerStyle(20);
+  ratio_data__3->SetMarkerSize(markerSize);
   ratio_data__3->SetMarkerColor(kBlack);
   ratio_data__3->SetLineColor(kBlack);
   ratio_data__3->GetXaxis()->SetLabelFont(42);
@@ -141,7 +145,7 @@ void plot_fig_3() {
   entry->SetLineWidth(1);
   entry->SetMarkerColor(1);
   entry->SetMarkerStyle(20);
-  entry->SetMarkerSize(1);
+  entry->SetMarkerSize(1.2);
   entry->SetTextFont(42);
   entry = leg->AddEntry("ratio_superchic", "SUPERCHIC 4.2", "PEL");
 
@@ -164,7 +168,7 @@ void plot_fig_3() {
 
   ci = TColor::GetColor("#009900");
   entry->SetMarkerColor(ci);
-  entry->SetMarkerStyle(21);
+  entry->SetMarkerStyle(22);
   entry->SetMarkerSize(1.2);
   entry->SetTextFont(42);
   leg->Draw();

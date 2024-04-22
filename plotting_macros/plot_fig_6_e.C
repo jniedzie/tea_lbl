@@ -62,7 +62,7 @@ void plot_fig_6_e() {
   goodPhotonSR_phibackground_stack_7->GetXaxis()->SetTitleSize(fig_6_x_title_size);
   goodPhotonSR_phibackground_stack_7->GetXaxis()->SetTitleOffset(1.7);
   goodPhotonSR_phibackground_stack_7->GetXaxis()->SetTitleFont(42);
-  goodPhotonSR_phibackground_stack_7->GetYaxis()->SetTitle("Events / 1.57");
+  goodPhotonSR_phibackground_stack_7->GetYaxis()->SetTitle("Entries / 1.57");
   goodPhotonSR_phibackground_stack_7->GetYaxis()->CenterTitle(true);
   goodPhotonSR_phibackground_stack_7->GetYaxis()->SetNdivisions(505);
   goodPhotonSR_phibackground_stack_7->GetYaxis()->SetLabelFont(42);
@@ -318,7 +318,7 @@ void plot_fig_6_e() {
   goodPhotonSR_phibackground_copy__8->GetXaxis()->SetTitleSize(0.06);
   goodPhotonSR_phibackground_copy__8->GetXaxis()->SetTitleOffset(1.7);
   goodPhotonSR_phibackground_copy__8->GetXaxis()->SetTitleFont(42);
-  goodPhotonSR_phibackground_copy__8->GetYaxis()->SetTitle("Events / 1.57");
+  goodPhotonSR_phibackground_copy__8->GetYaxis()->SetTitle("Entries / 1.57");
   goodPhotonSR_phibackground_copy__8->GetYaxis()->CenterTitle(true);
   goodPhotonSR_phibackground_copy__8->GetYaxis()->SetNdivisions(505);
   goodPhotonSR_phibackground_copy__8->GetYaxis()->SetLabelFont(42);
@@ -469,14 +469,14 @@ void plot_fig_6_e() {
   auto tex = new TLatex(0.16, 0.95, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
 
-  tex = new TLatex(0.52, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex = new TLatex(0.45, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
   goodPhotonSR_phi->Modified();

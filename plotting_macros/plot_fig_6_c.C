@@ -63,7 +63,7 @@ void plot_fig_6_c()
    goodPhotonSR_etabackground_stack_4->GetXaxis()->SetTitleSize(fig_6_x_title_size);
    goodPhotonSR_etabackground_stack_4->GetXaxis()->SetTitleOffset(1.7);
    goodPhotonSR_etabackground_stack_4->GetXaxis()->SetTitleFont(42);
-   goodPhotonSR_etabackground_stack_4->GetYaxis()->SetTitle("Events / 0.88");
+   goodPhotonSR_etabackground_stack_4->GetYaxis()->SetTitle("Entries / 0.88");
    goodPhotonSR_etabackground_stack_4->GetYaxis()->CenterTitle(true);
    goodPhotonSR_etabackground_stack_4->GetYaxis()->SetNdivisions(505);
    goodPhotonSR_etabackground_stack_4->GetYaxis()->SetLabelFont(42);
@@ -298,7 +298,7 @@ void plot_fig_6_c()
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetTitleSize(0.06);
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetTitleOffset(1.7);
    goodPhotonSR_etabackground_copy__5->GetXaxis()->SetTitleFont(42);
-   goodPhotonSR_etabackground_copy__5->GetYaxis()->SetTitle("Events / 0.88");
+   goodPhotonSR_etabackground_copy__5->GetYaxis()->SetTitle("Entries / 0.88");
    goodPhotonSR_etabackground_copy__5->GetYaxis()->CenterTitle(true);
    goodPhotonSR_etabackground_copy__5->GetYaxis()->SetNdivisions(505);
    goodPhotonSR_etabackground_copy__5->GetYaxis()->SetLabelFont(42);
@@ -443,14 +443,14 @@ void plot_fig_6_c()
   auto tex = new TLatex(0.16, 0.95, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
 
-  tex = new TLatex(0.52, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex = new TLatex(0.45, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
    goodPhotonSR_eta->Modified();

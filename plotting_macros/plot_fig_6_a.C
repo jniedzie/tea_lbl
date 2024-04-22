@@ -62,7 +62,7 @@ void plot_fig_6_a() {
   goodPhotonSR_etbackground_stack_1->GetXaxis()->SetTitleSize(fig_6_x_title_size);
   goodPhotonSR_etbackground_stack_1->GetXaxis()->SetTitleOffset(1.7);
   goodPhotonSR_etbackground_stack_1->GetXaxis()->SetTitleFont(42);
-  goodPhotonSR_etbackground_stack_1->GetYaxis()->SetTitle("Events / 1.2 (GeV^{-1})");
+  goodPhotonSR_etbackground_stack_1->GetYaxis()->SetTitle("Entries / 1.2 (GeV^{-1})");
   goodPhotonSR_etbackground_stack_1->GetYaxis()->CenterTitle(true);
   goodPhotonSR_etbackground_stack_1->GetYaxis()->SetNdivisions(505);
   goodPhotonSR_etbackground_stack_1->GetYaxis()->SetLabelFont(42);
@@ -301,7 +301,7 @@ Double_t Graph0_fx3001[5] = {2.6, 3.8, 5, 6.2, 7.4};
   goodPhotonSR_etbackground_copy__2->GetXaxis()->SetTitleSize(0.06);
   goodPhotonSR_etbackground_copy__2->GetXaxis()->SetTitleOffset(1.7);
   goodPhotonSR_etbackground_copy__2->GetXaxis()->SetTitleFont(42);
-  goodPhotonSR_etbackground_copy__2->GetYaxis()->SetTitle("Events / 1.2 (GeV^{-1})");
+  goodPhotonSR_etbackground_copy__2->GetYaxis()->SetTitle("Entries / 1.2 (GeV^{-1})");
   goodPhotonSR_etbackground_copy__2->GetYaxis()->CenterTitle(true);
   goodPhotonSR_etbackground_copy__2->GetYaxis()->SetNdivisions(505);
   goodPhotonSR_etbackground_copy__2->GetYaxis()->SetLabelFont(42);
@@ -445,14 +445,14 @@ Double_t Graph0_fx3001[5] = {2.6, 3.8, 5, 6.2, 7.4};
   auto tex = new TLatex(0.16, 0.95, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
 
-  tex = new TLatex(0.52, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex = new TLatex(0.45, 0.95, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
   tex->SetNDC();
   tex->SetTextFont(42);
-  tex->SetTextSize(0.04);
+  tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
 

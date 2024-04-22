@@ -1,6 +1,109 @@
 #ifdef __CLING__
 #pragma cling optimize(0)
 #endif
+
+#include <TGraphAsymmErrors.h>
+#include <TMath.h>
+
+#include <vector>
+
+TGraphAsymmErrors *AverageVariableNPoints(const TGraphAsymmErrors *original, const std::vector<int> &aggregationLengths) {
+  // Prepare vectors to hold averaged points and errors
+  std::vector<double> x_avg, y_avg, exl_avg, exh_avg, eyl_avg, eyh_avg;
+
+  int nPoints = original->GetN();
+  double x, y, exl, exh, eyl, eyh;
+
+  // Index for aggregation lengths
+  size_t aggIndex = 0;
+  int pointsToAggregate = aggregationLengths[aggIndex];
+
+  // Temporary variables to accumulate values
+  double x_sum = 0, y_sum = 0, exl_sum = 0, exh_sum = 0, eyl_sum2 = 0, eyh_sum2 = 0;
+  int count = 0;
+
+  Double_t binEdges[41] = {0.001, 0.0025, 0.005, 0.0075, 0.01,  0.0125, 0.015, 0.0175, 0.02,  0.0225, 0.025, 0.0275, 0.03,  0.0325,
+                         0.035, 0.0375, 0.04,  0.0425, 0.045, 0.0475, 0.05,  0.0525, 0.055, 0.0575, 0.06,  0.0625, 0.065, 0.0675,
+                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.1};
+
+      int currentBinEdgeIndex = 0;
+
+  for (int i = 0; i < nPoints; ++i) {
+    original->GetPoint(i, x, y);
+    exl = original->GetErrorXlow(i);
+    exh = original->GetErrorXhigh(i);
+    eyl = original->GetErrorYlow(i);
+    eyh = original->GetErrorYhigh(i);
+
+    // Accumulate sums
+    x_sum += x;
+    if (y > 0) y_sum += y;
+    exl_sum += exl;
+    exh_sum += exh;
+    if (y > 0)
+      eyl_sum2 += eyl * eyl;
+    else
+      eyl_sum2 += 1.84;
+    if (y > 0)
+      eyh_sum2 += eyh * eyh;
+    else
+      eyh_sum2 += 1.84;
+    count++;
+
+    // Check if we reached the number of points to aggregate
+    if (count == pointsToAggregate) {
+      double logLowerEdge = std::log(binEdges[currentBinEdgeIndex]);
+      double logUpperEdge = std::log(binEdges[currentBinEdgeIndex + count]);
+      double avg_log_x = (logLowerEdge + logUpperEdge) / 2;
+      double avg_x = std::exp(avg_log_x);  // Convert back to linear scale
+
+      // double avg_x = x_sum / pointsToAggregate;
+
+      x_avg.push_back(avg_x);
+      y_avg.push_back(y_sum / pointsToAggregate);
+      // exl_avg.push_back(exl_sum / pointsToAggregate);
+      // exh_avg.push_back(exh_sum / pointsToAggregate);
+
+      exl_avg.push_back(avg_x - binEdges[currentBinEdgeIndex]);
+      exh_avg.push_back(binEdges[currentBinEdgeIndex + count] - avg_x);
+
+      eyl_avg.push_back(TMath::Sqrt(eyl_sum2) / pointsToAggregate);
+      eyh_avg.push_back(TMath::Sqrt(eyh_sum2) / pointsToAggregate);
+
+       currentBinEdgeIndex += count;
+      // Reset for next batch
+      x_sum = y_sum = exl_sum = exh_sum = eyl_sum2 = eyh_sum2 = 0;
+      count = 0;
+
+      // Move to the next aggregation length
+      if (aggIndex < aggregationLengths.size() - 1) {
+        aggIndex++;
+        pointsToAggregate = aggregationLengths[aggIndex];
+      }
+    }
+  }
+
+  // Check if there are leftover points that did not reach the full aggregate count
+  if (count > 0) {
+    x_avg.push_back(x_sum / count);
+    y_avg.push_back(y_sum / count);
+    exl_avg.push_back(exl_sum / count);
+    exh_avg.push_back(exh_sum / count);
+    eyl_avg.push_back(TMath::Sqrt(eyl_sum2) / count);
+    eyh_avg.push_back(TMath::Sqrt(eyh_sum2) / count);
+  }
+
+  // Create a new graph with averaged data
+  TGraphAsymmErrors *averagedGraph = new TGraphAsymmErrors(x_avg.size());
+  for (size_t i = 0; i < x_avg.size(); ++i) {
+    cout << "Setting point: " << x_avg[i] << "\t" << y_avg[i] << endl;
+    averagedGraph->SetPoint(i, x_avg[i], y_avg[i]);
+    averagedGraph->SetPointError(i, exl_avg[i], exh_avg[i], eyl_avg[i], eyh_avg[i]);
+  }
+
+  return averagedGraph;
+}
+
 void plot_fig_5() {
   gROOT->SetBatch(kTRUE);
   //=========Macro generated from canvas: canvas/canvas
@@ -34,7 +137,7 @@ void plot_fig_5() {
   stack->SetMaximum(24);
   Double_t xAxis1[41] = {0.001, 0.0025, 0.005, 0.0075, 0.01,  0.0125, 0.015, 0.0175, 0.02,  0.0225, 0.025, 0.0275, 0.03,  0.0325,
                          0.035, 0.0375, 0.04,  0.0425, 0.045, 0.0475, 0.05,  0.0525, 0.055, 0.0575, 0.06,  0.0625, 0.065, 0.0675,
-                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.1};
+                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.105};
 
   TH1F *stack_stack_1 = new TH1F("stack_stack_1", "", 40, xAxis1);
   stack_stack_1->SetMinimum(0);
@@ -63,7 +166,7 @@ void plot_fig_5() {
 
   Double_t xAxis2[41] = {0.001, 0.0025, 0.005, 0.0075, 0.01,  0.0125, 0.015, 0.0175, 0.02,  0.0225, 0.025, 0.0275, 0.03,  0.0325,
                          0.035, 0.0375, 0.04,  0.0425, 0.045, 0.0475, 0.05,  0.0525, 0.055, 0.0575, 0.06,  0.0625, 0.065, 0.0675,
-                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.1};
+                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.105};
 
   TH1D *cep_stack_1 = new TH1D("cep_stack_1", "diphoton_acoplanarity40", 40, xAxis2);
   cep_stack_1->SetBinContent(1, 2.659694);
@@ -164,7 +267,7 @@ void plot_fig_5() {
   stack->Add(cep_stack_1, "");
   Double_t xAxis3[41] = {0.001, 0.0025, 0.005, 0.0075, 0.01,  0.0125, 0.015, 0.0175, 0.02,  0.0225, 0.025, 0.0275, 0.03,  0.0325,
                          0.035, 0.0375, 0.04,  0.0425, 0.045, 0.0475, 0.05,  0.0525, 0.055, 0.0575, 0.06,  0.0625, 0.065, 0.0675,
-                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.1};
+                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.105};
 
   TH1D *qed_stack_2 = new TH1D("qed_stack_2", "diphoton_acoplanarity40", 40, xAxis3);
   qed_stack_2->SetBinContent(1, 0.2945051);
@@ -261,7 +364,7 @@ void plot_fig_5() {
   stack->Add(qed_stack_2, "");
   Double_t xAxis4[41] = {0.001, 0.0025, 0.005, 0.0075, 0.01,  0.0125, 0.015, 0.0175, 0.02,  0.0225, 0.025, 0.0275, 0.03,  0.0325,
                          0.035, 0.0375, 0.04,  0.0425, 0.045, 0.0475, 0.05,  0.0525, 0.055, 0.0575, 0.06,  0.0625, 0.065, 0.0675,
-                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.1};
+                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.105};
 
   TH1D *qed_starlight_stack_3 = new TH1D("qed_starlight_stack_3", "diphoton_acoplanarity40", 40, xAxis4);
   qed_starlight_stack_3->SetBinContent(1, 0.2443617);
@@ -356,7 +459,7 @@ void plot_fig_5() {
   stack->Add(qed_starlight_stack_3, "");
   Double_t xAxis5[41] = {0.001, 0.0025, 0.005, 0.0075, 0.01,  0.0125, 0.015, 0.0175, 0.02,  0.0225, 0.025, 0.0275, 0.03,  0.0325,
                          0.035, 0.0375, 0.04,  0.0425, 0.045, 0.0475, 0.05,  0.0525, 0.055, 0.0575, 0.06,  0.0625, 0.065, 0.0675,
-                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.1};
+                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.105};
 
   TH1D *lbl_stack_4 = new TH1D("lbl_stack_4", "diphoton_acoplanarity40", 40, xAxis5);
   lbl_stack_4->SetBinContent(1, 9.0721);
@@ -444,7 +547,7 @@ void plot_fig_5() {
   stack->Draw("hist");
   Double_t xAxis6[41] = {0.001, 0.0025, 0.005, 0.0075, 0.01,  0.0125, 0.015, 0.0175, 0.02,  0.0225, 0.025, 0.0275, 0.03,  0.0325,
                          0.035, 0.0375, 0.04,  0.0425, 0.045, 0.0475, 0.05,  0.0525, 0.055, 0.0575, 0.06,  0.0625, 0.065, 0.0675,
-                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.1};
+                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.105};
 
   TH1D *cep__1 = new TH1D("cep__1", "diphoton_acoplanarity40", 40, xAxis6);
   cep__1->SetBinContent(1, 12.27066);
@@ -568,6 +671,7 @@ void plot_fig_5() {
   grae->SetTitle("Graph");
   grae->SetFillStyle(3004);
   grae->SetMarkerStyle(20);
+  grae->SetMarkerSize(1.2);
 
   TH1F *Graph_Graph03001 = new TH1F("Graph_Graph03001", "Graph", 100, 0.001423025, 0.1084582);
   Graph_Graph03001->SetMinimum(-1100.9);
@@ -602,7 +706,7 @@ void plot_fig_5() {
   entry->SetLineWidth(1);
   entry->SetMarkerColor(1);
   entry->SetMarkerStyle(20);
-  entry->SetMarkerSize(1);
+  entry->SetMarkerSize(1.2);
   entry->SetTextFont(42);
   entry = leg->AddEntry("lbl_stack_4", "#gamma#gamma #rightarrow #gamma#gamma (SUPERCHIC 3.03)", "F");
 
@@ -681,7 +785,7 @@ void plot_fig_5() {
   pad2->SetFrameBorderMode(0);
   Double_t xAxis7[41] = {0.001, 0.0025, 0.005, 0.0075, 0.01,  0.0125, 0.015, 0.0175, 0.02,  0.0225, 0.025, 0.0275, 0.03,  0.0325,
                          0.035, 0.0375, 0.04,  0.0425, 0.045, 0.0475, 0.05,  0.0525, 0.055, 0.0575, 0.06,  0.0625, 0.065, 0.0675,
-                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.1};
+                         0.07,  0.0725, 0.075, 0.0775, 0.08,  0.0825, 0.085, 0.0875, 0.09,  0.0925, 0.095, 0.0975, 0.105};
 
   TH1D *cep__2 = new TH1D("cep__2", "", 40, xAxis7);
   cep__2->SetBinContent(1, 1);
@@ -787,13 +891,15 @@ void plot_fig_5() {
   cep__2->GetYaxis()->CenterTitle();
   cep__2->GetYaxis()->SetNdivisions(505);
   cep__2->GetYaxis()->SetLabelFont(43);
-  cep__2->GetYaxis()->SetLabelSize(15);
+  cep__2->GetYaxis()->SetLabelSize(20);
   cep__2->GetYaxis()->SetTitleSize(20);
   cep__2->GetYaxis()->SetTitleOffset(1.55);
   cep__2->GetYaxis()->SetTitleFont(43);
   cep__2->GetZaxis()->SetLabelFont(42);
   cep__2->GetZaxis()->SetTitleOffset(1);
   cep__2->GetZaxis()->SetTitleFont(42);
+  cep__2->SetMarkerSize(0);
+  cep__2->SetMarkerStyle(20);
   cep__2->Draw("e2");
 
   Double_t Graph0_fx3002[40] = {0.001581139, 0.003535534, 0.006123724, 0.008660254, 0.01118034, 0.01369306, 0.01620185, 0.01870829,
@@ -825,7 +931,7 @@ void plot_fig_5() {
   grae->SetTitle("Graph");
   grae->SetFillStyle(3004);
   grae->SetMarkerStyle(20);
-  grae->SetMarkerSize(0.8);
+  grae->SetMarkerSize(1.2);
 
   TH1F *Graph_Graph03002 = new TH1F("Graph_Graph03002", "Graph", 100, 0.001423025, 0.1084582);
   Graph_Graph03002->SetMinimum(-9799.963);
@@ -843,9 +949,18 @@ void plot_fig_5() {
   Graph_Graph03002->GetZaxis()->SetLabelFont(42);
   Graph_Graph03002->GetZaxis()->SetTitleOffset(1);
   Graph_Graph03002->GetZaxis()->SetTitleFont(42);
+
   grae->SetHistogram(Graph_Graph03002);
 
+  // go over grae graph and create a graph that has N times less points by averaging out N neighboring points.
+  // this is done to reduce the number of points in the graph and make it look smoother
+
+  auto grae2 = AverageVariableNPoints(grae, {1, 1, 1, 3, 4, 4, 5, 8, 13});
+  grae2->SetMarkerStyle(20);
+  grae2->SetMarkerSize(1.2);
+
   grae->Draw("pe0");
+
   pad2->Modified();
   canvas->cd();
   canvas->Modified();
