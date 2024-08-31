@@ -1,4 +1,6 @@
 import ROOT
+import math
+
 from lbl_params import reference_alp_cross_section
 from lbl_helpers import get_alp_coupling
 
@@ -150,7 +152,8 @@ cross_section_limits = {
     16: (0.8599, 0.3200, 0.5229, 0.9102, 1.5849, 2.5921, ),
     22: (0.5565, 0.2431, 0.3972, 0.6914, 1.2261, 2.0477, ),
     30: (0.4708, 0.1705, 0.2850, 0.5195, 0.9627, 1.5750, ),
-    90: (0.4746, 0.1409, 0.2478, 0.4746, 0.9173, 1.4391,  )
+    90: (0.4746, 0.1409, 0.2478, 0.4746, 0.9173, 1.4391, ),
+    100:(0.4746, 0.1409, 0.2478, 0.4746, 0.9173, 1.4391, ),
 }
 
 # 2015 + 2018, final, SC+SL, relaxed photon window, no CHE
@@ -189,7 +192,26 @@ cross_section_limits = {
 # ./findCoupling 00.05352 5000 50000 30 05.352
 # ./findCoupling 00.04453 5000 50000 90 04.453
 
+def get_xsec(mass, coupling):
+    slope = 0.498809
+    interstect = {
+        5.0: 1.3352627780449595e-05,
+        6.0: 1.459208443729578e-05,
+        9.0: 1.8432339658251058e-05,
+        11.0: 2.051773548082086e-05,
+        14.0: 2.4387325416686648e-05,
+        16.0: 2.643930742885861e-05,
+        22.0: 3.323868088097294e-05,
+        30.0: 4.4114845375054456e-05,
+        50.0: 7.817673899208805e-05,
+        90.0: 0.00019612635077675486,
+        100.0: 0.000235,
+    }
+  
+    cross_section = pow(10, (math.log10(coupling) - math.log10(interstect[mass]))/slope)
+    scale = 1e-6
 
+    return cross_section*scale
 
 def main():
     ROOT.gROOT.SetBatch(True)
@@ -264,7 +286,7 @@ def main():
 
     exp_graph_2sigma.GetXaxis().SetTitle("m_{a} (GeV)")
     exp_graph_2sigma.GetYaxis().SetTitle(
-        "#sigma_{#gamma #gamma #rightarrow a #rightarrow #gamma #gamma} (nb)")
+        "#sigma_{#gamma#gamma #rightarrow a #rightarrow #gamma#gamma} (nb)")
 
     exp_graph_2sigma.GetXaxis().SetMoreLogLabels()
 
@@ -272,6 +294,42 @@ def main():
     exp_graph_2sigma.GetXaxis().SetLimits(5, 100)
     exp_graph_2sigma.SetMaximum(4000)
     exp_graph_2sigma.SetMinimum(0.4)
+
+
+    theory_lines = {}
+    # line_styles = {
+    #     0.05: (ROOT.kRed, 1),
+    #     0.3: (ROOT.kMagenta, 1),
+    #     0.1: (ROOT.kBlue, 1),        
+    # }
+    line_styles = {
+        0.3: (ROOT.kRed, 2),
+        0.1: (ROOT.kRed, 1),        
+        0.05: (ROOT.kRed, 3),
+    }
+    
+
+    legend_theory = ROOT.TLegend(0.25, 0.70, 0.5, 0.9)
+    legend_theory.SetBorderSize(0)
+    legend_theory.SetFillStyle(0)
+    legend_theory.SetTextFont(42)
+    legend_theory.SetTextSize(0.04)
+    
+    for coupling in [0.3, 0.1, 0.05]:
+        theory_lines[coupling] = ROOT.TGraph()
+        
+        for i, mass in enumerate([5.0, 6.0, 9.0, 11.0, 14.0, 16.0, 22.0, 30.0, 50.0, 90., 100.]):
+            theory_lines[coupling].SetPoint(i, mass, get_xsec(mass, coupling))
+        
+        theory_lines[coupling].SetLineColor(line_styles[coupling][0])
+        theory_lines[coupling].SetLineStyle(line_styles[coupling][1])
+        theory_lines[coupling].SetLineWidth(2)
+        theory_lines[coupling].Draw("lsame")
+        
+        legend_theory.AddEntry(theory_lines[coupling], f"g_{{a#gamma}} = {coupling} (TeV^{{-1}})", "L")
+    
+
+    legend_theory.Draw()
 
     legend = ROOT.TLegend(0.55, 0.65, 0.9, 0.9)
     legend.SetBorderSize(0)
@@ -283,6 +341,10 @@ def main():
     legend.AddEntry(exp_graph_1sigma, "Expected #pm 1 #sigma", "F")
     legend.AddEntry(exp_graph_2sigma, "Expected #pm 2 #sigma", "F")
     legend.Draw()
+    
+    
+    
+    
 
     # tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}")
     tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS}")
