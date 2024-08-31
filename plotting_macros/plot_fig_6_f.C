@@ -308,7 +308,7 @@ void plot_fig_6_f() {
   backgrounds_unc_diphotonSR_mass__16->Draw("same e2");
 
   auto leg = get_lbl_legend();
-  leg->Draw();
+  // leg->Draw();
   TH1F *diphotonSR_massbackground_copy__17 = new TH1F("diphotonSR_massbackground_copy__17", "", 10, 0, 25);
   diphotonSR_massbackground_copy__17->SetMinimum(0.08512504);
   diphotonSR_massbackground_copy__17->SetMaximum(153.9794);
@@ -399,9 +399,11 @@ void plot_fig_6_f() {
   ratio_diphotonSR_mass_stack_1->SetBinContent(2, 1.077154);
   ratio_diphotonSR_mass_stack_1->SetBinContent(3, 1.266941);
   ratio_diphotonSR_mass_stack_1->SetBinContent(4, 0.7231755);
+  ratio_diphotonSR_mass_stack_1->SetBinContent(5, 0.0);
   ratio_diphotonSR_mass_stack_1->SetBinError(2, 0.2482314);
   ratio_diphotonSR_mass_stack_1->SetBinError(3, 0.5202867);
   ratio_diphotonSR_mass_stack_1->SetBinError(4, 0.7253287);
+  ratio_diphotonSR_mass_stack_1->SetBinError(5, 1.84);
   ratio_diphotonSR_mass_stack_1->SetEntries(10.95986);
 
   ci = 1492;

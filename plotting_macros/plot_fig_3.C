@@ -54,7 +54,7 @@ void plot_fig_3() {
   ratio_superchic__1->GetXaxis()->SetBinLabel(3, "XnXn");
   ratio_superchic__1->GetXaxis()->SetBinLabel(5, "1nXn + Xn1n");
   ratio_superchic__1->GetXaxis()->SetBinLabel(6, "1n1n");
-  ratio_superchic__1->GetXaxis()->CenterTitle(true);
+  ratio_superchic__1->GetXaxis()->CenterTitle(false);
   ratio_superchic__1->GetXaxis()->SetLabelFont(42);
   ratio_superchic__1->GetXaxis()->SetLabelOffset(0.01);
   ratio_superchic__1->GetXaxis()->SetLabelSize(0.06);
@@ -62,7 +62,7 @@ void plot_fig_3() {
   ratio_superchic__1->GetXaxis()->SetTitleOffset(1.8);
   ratio_superchic__1->GetXaxis()->SetTitleFont(42);
   ratio_superchic__1->GetYaxis()->SetTitle("Probability");
-  ratio_superchic__1->GetYaxis()->CenterTitle(true);
+  ratio_superchic__1->GetYaxis()->CenterTitle(false);
   ratio_superchic__1->GetYaxis()->SetLabelFont(42);
   ratio_superchic__1->GetYaxis()->SetLabelOffset(0.01);
   ratio_superchic__1->GetYaxis()->SetLabelSize(0.05);
@@ -181,7 +181,7 @@ void plot_fig_3() {
   tex->SetLineWidth(2);
   tex->Draw();
 
-  tex = new TLatex(0.55, 0.92, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex = new TLatex(0.585, 0.92, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
   tex->SetNDC();
   tex->SetTextFont(42);
   tex->SetTextSize(0.04);

@@ -62,7 +62,7 @@ void plot_fig_6_e() {
   goodPhotonSR_phibackground_stack_7->GetXaxis()->SetTitleSize(fig_6_x_title_size);
   goodPhotonSR_phibackground_stack_7->GetXaxis()->SetTitleOffset(1.7);
   goodPhotonSR_phibackground_stack_7->GetXaxis()->SetTitleFont(42);
-  goodPhotonSR_phibackground_stack_7->GetYaxis()->SetTitle("Entries / 1.57");
+  goodPhotonSR_phibackground_stack_7->GetYaxis()->SetTitle("Entries / 1.05");
   goodPhotonSR_phibackground_stack_7->GetYaxis()->CenterTitle(true);
   goodPhotonSR_phibackground_stack_7->GetYaxis()->SetNdivisions(505);
   goodPhotonSR_phibackground_stack_7->GetYaxis()->SetLabelFont(42);
@@ -303,7 +303,7 @@ void plot_fig_6_e() {
   backgrounds_unc_goodPhotonSR_phi__7->Draw("same e2");
 
   auto leg = get_lbl_legend();
-  leg->Draw();
+  // leg->Draw();
 
   TH1F *goodPhotonSR_phibackground_copy__8 = new TH1F("goodPhotonSR_phibackground_copy__8", "", 6, -3.14, 3.14);
   goodPhotonSR_phibackground_copy__8->SetMinimum(0);
@@ -318,7 +318,7 @@ void plot_fig_6_e() {
   goodPhotonSR_phibackground_copy__8->GetXaxis()->SetTitleSize(0.06);
   goodPhotonSR_phibackground_copy__8->GetXaxis()->SetTitleOffset(1.7);
   goodPhotonSR_phibackground_copy__8->GetXaxis()->SetTitleFont(42);
-  goodPhotonSR_phibackground_copy__8->GetYaxis()->SetTitle("Entries / 1.57");
+  goodPhotonSR_phibackground_copy__8->GetYaxis()->SetTitle("Entries / 1.05");
   goodPhotonSR_phibackground_copy__8->GetYaxis()->CenterTitle(true);
   goodPhotonSR_phibackground_copy__8->GetYaxis()->SetNdivisions(505);
   goodPhotonSR_phibackground_copy__8->GetYaxis()->SetLabelFont(42);

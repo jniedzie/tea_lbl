@@ -280,7 +280,7 @@ void plot_fig_6_b()
    backgrounds_unc_diphotonSR_pt__10->Draw("same e2");
    
   auto leg = get_lbl_legend();
-  leg->Draw();
+//   leg->Draw();
    
    TH1F *diphotonSR_ptbackground_copy__11 = new TH1F("diphotonSR_ptbackground_copy__11","",5,0,1);
    diphotonSR_ptbackground_copy__11->SetMinimum(0);

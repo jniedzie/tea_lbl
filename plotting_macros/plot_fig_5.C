@@ -693,13 +693,23 @@ void plot_fig_5() {
 
   grae->Draw("pe");
 
-  TLegend *leg = new TLegend(0.27, 0.5, 0.89, 0.89, NULL, "brNDC");
+  TLegend *leg = new TLegend(0.27, 0.49, 0.94, 0.915, NULL, "brNDC");
   leg->SetBorderSize(0);
   leg->SetLineColor(1);
   leg->SetLineStyle(1);
   leg->SetLineWidth(1);
   leg->SetFillColor(0);
-  leg->SetFillStyle(1001);
+  leg->SetFillStyle(0);
+
+  // reduce size of the legend markers, while increasing the size of the text
+  leg->SetMargin(0.1);
+  leg->SetTextSize(0.043);
+  leg->SetColumnSeparation(0.01);
+  leg->SetNColumns(1);
+
+  
+
+
   TLegendEntry *entry = leg->AddEntry("data_obs", "Data", "PE");
   entry->SetLineColor(1);
   entry->SetLineStyle(1);
@@ -760,7 +770,7 @@ void plot_fig_5() {
   tex->SetLineWidth(2);
   tex->Draw();
 
-  tex = new TLatex(0.55, 0.92, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex = new TLatex(0.565, 0.92, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
   tex->SetNDC();
   tex->SetTextFont(42);
   tex->SetTextSize(0.06);
@@ -901,6 +911,11 @@ void plot_fig_5() {
   cep__2->SetMarkerSize(0);
   cep__2->SetMarkerStyle(20);
   cep__2->Draw("e2");
+
+  // Draw a line at 1.0
+  TLine *line = new TLine(0.001, 1.0, 0.105, 1.0);
+  line->SetLineStyle(2);
+  line->Draw("same");
 
   Double_t Graph0_fx3002[40] = {0.001581139, 0.003535534, 0.006123724, 0.008660254, 0.01118034, 0.01369306, 0.01620185, 0.01870829,
                                 0.0212132,   0.02371708,  0.02622022,  0.02872281,  0.03122499, 0.03372684, 0.03622844, 0.03872983,

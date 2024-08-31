@@ -301,7 +301,7 @@ void plot_fig_6_d() {
   backgrounds_unc_diphotonSR_rapidity__13->Draw("same e2");
 
   auto leg = get_lbl_legend();
-  leg->Draw();
+  // leg->Draw();
 
   TH1F *diphotonSR_rapiditybackground_copy__14 = new TH1F("diphotonSR_rapiditybackground_copy__14", "", 7, -2.2, 2.2);
   diphotonSR_rapiditybackground_copy__14->SetMinimum(0);
@@ -391,12 +391,14 @@ void plot_fig_6_d() {
   ratio_stack_diphotonSR_rapidity->SetHistogram(ratio_stack_diphotonSR_rapidity_stack_15);
 
   TH1D *ratio_diphotonSR_rapidity_stack_1 = new TH1D("ratio_diphotonSR_rapidity_stack_1", "diphotonSR_rapidity", 7, -2.2, 2.2);
+  ratio_diphotonSR_rapidity_stack_1->SetBinContent(1, 0.0);
   ratio_diphotonSR_rapidity_stack_1->SetBinContent(2, 2.219455);
   ratio_diphotonSR_rapidity_stack_1->SetBinContent(3, 0.8904739);
   ratio_diphotonSR_rapidity_stack_1->SetBinContent(4, 1.058421);
   ratio_diphotonSR_rapidity_stack_1->SetBinContent(5, 0.9043247);
   ratio_diphotonSR_rapidity_stack_1->SetBinContent(6, 0.7643567);
   ratio_diphotonSR_rapidity_stack_1->SetBinContent(7, 1.423743);
+  ratio_diphotonSR_rapidity_stack_1->SetBinError(1, 1.84);
   ratio_diphotonSR_rapidity_stack_1->SetBinError(2, 1.002531);
   ratio_diphotonSR_rapidity_stack_1->SetBinError(3, 0.3997446);
   ratio_diphotonSR_rapidity_stack_1->SetBinError(4, 0.3756791);

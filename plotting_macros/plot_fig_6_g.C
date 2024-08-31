@@ -262,7 +262,7 @@ void plot_fig_6_g() {
   backgrounds_unc_eventSR3_cosThetaStar__19->Draw("same e2");
 
   auto leg = get_lbl_legend();
-  leg->Draw();
+  // leg->Draw();
 
   TH1F *eventSR3_cosThetaStarbackground_copy__20 = new TH1F("eventSR3_cosThetaStarbackground_copy__20", "", 3, 0, 1);
   eventSR3_cosThetaStarbackground_copy__20->SetMinimum(0);

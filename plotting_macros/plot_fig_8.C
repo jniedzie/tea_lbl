@@ -1,6 +1,34 @@
 #ifdef __CLING__
 #pragma cling optimize(0)
 #endif
+
+
+float get_xsec(float mass, float coupling){
+  
+
+
+  double slope = 0.498809;
+  map<float, float> interstect = {
+    {5.0, 1.3352627780449595e-05},
+    {6.0, 1.459208443729578e-05},
+    {9.0, 1.8432339658251058e-05},
+    {11.0, 2.051773548082086e-05},
+    {14.0, 2.4387325416686648e-05},
+    {16.0, 2.643930742885861e-05},
+    {22.0, 3.323868088097294e-05},
+    {30.0, 4.4114845375054456e-05},
+    {50.0, 7.817673899208805e-05},
+    {90.0, 0.00019612635077675486},
+  };
+
+  float  cross_section = pow(10, (log10(coupling) - log10(interstect[mass]))/slope);
+
+  // float scale = 10e-3 * 1e3;
+  float scale = 1e-6;
+
+  return cross_section*scale;
+}
+
 void plot_fig_8() {
   gROOT->SetBatch(kTRUE);
   //=========Macro generated from canvas: canvas/
@@ -157,6 +185,28 @@ void plot_fig_8() {
   graph->SetHistogram(Graph_Graph1);
 
   graph->Draw("l");
+
+  auto theory1 = new TGraph();
+  auto theory2 = new TGraph();
+  
+  int iPoint = 0;
+  for(float mass : {5.0, 6.0, 9.0, 11.0, 14.0, 16.0, 22.0, 30.0, 50.0, 90. }){
+    theory1->SetPoint(iPoint, mass, get_xsec(mass, 0.3));
+    theory2->SetPoint(iPoint, mass, get_xsec(mass, 0.1));
+
+    iPoint++;
+  }
+  
+  theory1->SetLineColor(kRed);
+  theory1->SetLineStyle(2);
+  theory1->SetLineWidth(2);
+
+  theory2->SetLineColor(kBlue);
+  theory2->SetLineStyle(2);
+  theory2->SetLineWidth(2);
+
+  theory1->Draw("l");
+  theory2->Draw("l");
 
   TLegend *leg = new TLegend(0.55, 0.65, 0.85, 0.89, NULL, "brNDC");
   leg->SetBorderSize(0);

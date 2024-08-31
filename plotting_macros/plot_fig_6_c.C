@@ -283,7 +283,7 @@ void plot_fig_6_c()
    backgrounds_unc_goodPhotonSR_eta__4->Draw("same e2");
    
    auto leg = get_lbl_legend();
-  leg->Draw();
+//   leg->Draw();
    
    TH1F *goodPhotonSR_etabackground_copy__5 = new TH1F("goodPhotonSR_etabackground_copy__5","",5,-2.2,2.2);
    goodPhotonSR_etabackground_copy__5->SetMinimum(0);

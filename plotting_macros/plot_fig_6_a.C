@@ -119,10 +119,15 @@ void plot_fig_6_a() {
   goodPhotonSR_et_stack_2->SetBinContent(2, 0.5174719);
   goodPhotonSR_et_stack_2->SetBinContent(3, 0.3449812);
   goodPhotonSR_et_stack_2->SetBinContent(4, 0.05749687);
+  // goodPhotonSR_et_stack_2->SetBinContent(5, 0.0);
+  // goodPhotonSR_et_stack_2->SetBinContent(6, 0.0);
+
   goodPhotonSR_et_stack_2->SetBinError(1, 0.1818211);
   goodPhotonSR_et_stack_2->SetBinError(2, 0.1724906);
   goodPhotonSR_et_stack_2->SetBinError(3, 0.140838);
   goodPhotonSR_et_stack_2->SetBinError(4, 0.05749687);
+  // goodPhotonSR_et_stack_2->SetBinError(5, 2.0);
+  // goodPhotonSR_et_stack_2->SetBinError(6, 2.0);
   goodPhotonSR_et_stack_2->SetEntries(26);
   goodPhotonSR_et_stack_2->SetDirectory(0);
 
@@ -286,7 +291,7 @@ Double_t Graph0_fx3001[5] = {2.6, 3.8, 5, 6.2, 7.4};
   backgrounds_unc_goodPhotonSR_et__1->Draw("same e2");
 
   auto leg = get_lbl_legend();
-  leg->Draw();
+  // leg->Draw();
 
   TH1F *goodPhotonSR_etbackground_copy__2 = new TH1F("goodPhotonSR_etbackground_copy__2", "", 5, 2, 8);
   goodPhotonSR_etbackground_copy__2->SetMinimum(0);
@@ -379,10 +384,12 @@ Double_t Graph0_fx3001[5] = {2.6, 3.8, 5, 6.2, 7.4};
   ratio_goodPhotonSR_et_stack_1->SetBinContent(2, 1.355745);
   ratio_goodPhotonSR_et_stack_1->SetBinContent(3, 0.7844391);
   ratio_goodPhotonSR_et_stack_1->SetBinContent(4, 2.405772);
+  ratio_goodPhotonSR_et_stack_1->SetBinContent(5, 0.0);
   ratio_goodPhotonSR_et_stack_1->SetBinError(1, 0.2214578);
   ratio_goodPhotonSR_et_stack_1->SetBinError(2, 0.2784389);
   ratio_goodPhotonSR_et_stack_1->SetBinError(3, 0.3214215);
   ratio_goodPhotonSR_et_stack_1->SetBinError(4, 0.9206343);
+  ratio_goodPhotonSR_et_stack_1->SetBinError(5, 1.84);
   ratio_goodPhotonSR_et_stack_1->SetEntries(27.06891);
 
   ci = 1482;
