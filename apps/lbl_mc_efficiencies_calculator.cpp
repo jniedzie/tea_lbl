@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
   auto &config = ConfigManager::GetInstance();
   if (argc == 4) {
     config.SetInputPath(argv[2]);
-    config.SetOutputPath(argv[3]);
+    config.SetHistogramsOutputPath(argv[3]);
   }
 
   auto eventReader = make_shared<EventReader>();
