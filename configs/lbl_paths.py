@@ -20,10 +20,10 @@ processes = (
     # "alps_6",
     # "alps_9",
     # "alps_11",
-    # "alps_14",
+    "alps_14",
     # "alps_16",
     # "alps_22",
-    # "alps_30",
+    "alps_30",
     # "alps_50",
     # "alps_90",
     

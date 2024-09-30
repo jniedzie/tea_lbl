@@ -185,12 +185,24 @@ crossSections = {
     "alps_6": reference_alp_cross_section,
     "alps_9": reference_alp_cross_section,
     "alps_11": reference_alp_cross_section,
-    "alps_14": reference_alp_cross_section,
+    # "alps_14": reference_alp_cross_section,
     "alps_16": reference_alp_cross_section,
     "alps_22": reference_alp_cross_section,
-    "alps_30": reference_alp_cross_section,
+    # "alps_30": reference_alp_cross_section,
     "alps_50": reference_alp_cross_section,
     "alps_90": reference_alp_cross_section,
+    
+    # nb -> μb, g = 0.2 TeV-1
+    # "alps_14": 70.21369385210362 * 1e-3, 
+    # "alps_30": 21.396925059153958 * 1e-3,
+    
+    # nb -> μb, g = 0.25 TeV-1
+    "alps_14": 109.82586410834259 * 1e-3, 
+    "alps_30": 33.46834007669329 * 1e-3,
+    
+    # nb -> μb, g = 0.3 TeV-1
+    # "alps_14": 158.28699751455125 * 1e-3, 
+    # "alps_30": 48.23638862799777 * 1e-3,
 }
 
 

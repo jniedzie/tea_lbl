@@ -8,8 +8,8 @@ from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, 
 from lbl_paths import base_path, processes, qed_superchic, skim, qed_starlight, qed_mg1gamma, qed_mg2gamma
 
 
-output_path = f"../plots/{skim.replace('skimmed_', '')}/"
-# output_path = f"../plots/{skim.replace('skimmed_', '')}_withALPs/"
+# output_path = f"../plots/{skim.replace('skimmed_', '')}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_withALPs/"
 
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_1gamma/"
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_2gamma/"
@@ -20,7 +20,7 @@ output_path = f"../plots/{skim.replace('skimmed_', '')}/"
 
 
 do_photons = True
-do_alps = False
+do_alps = True
 
 lbl_error = total_uncertainty_lbl_run2 - 1
 qed_error = total_uncertainty_qed - 1
@@ -144,15 +144,15 @@ if do_photons:
 custom_stacks_order = ["cep", qed_starlight, qed_superchic, "lbl", "data"]
 
 alp_colors = (
-    ROOT.kGray+2,
-    ROOT.kCyan+1,
-    ROOT.kCyan,
-    ROOT.kMagenta,
+    # ROOT.kGray+2,
+    # ROOT.kCyan+1,
+    # ROOT.kCyan,
+    # ROOT.kMagenta,
     ROOT.kViolet,
-    ROOT.kBlue,
-    ROOT.kGreen,
-    ROOT.kYellow+1,
-    ROOT.kOrange,
+    # ROOT.kBlue,
+    # ROOT.kGreen,
+    # ROOT.kYellow+1,
+    # ROOT.kOrange,
     ROOT.kRed,
 )
 
@@ -187,8 +187,9 @@ if do_alps:
                 line_color=alp_colors[alp_index],
                 line_style=ROOT.kSolid,
                 line_width=3,
-                fill_style=0,
-                fill_alpha=0.0,
+                # fill_style=0,
+                fill_color=alp_colors[alp_index],
+                fill_alpha=0.2,
                 marker_size=0.0,
                 legend_description=process.replace("alps_", "m_{a} = ")+" GeV",
                 custom_legend=Legend(legend_x_0, legend_y_0, legend_x_1, legend_y_1, "l")
@@ -245,7 +246,7 @@ histograms = (
     Histogram("diphoton_mass", "", False, False, NormalizationType.to_lumi, 1,   0, 50, 0, 70, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("diphoton_pt", "", False, False, NormalizationType.to_lumi, 1, 0, 1, 0, 30, "p_{T}^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("diphoton_mass100", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   4.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("diphoton_mass200", "", True, False, NormalizationType.to_lumi, 1,   5.0, 100, 0, 20, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
 
     Histogram("diphotonThreePhoton_mass", "", False, False, NormalizationType.to_lumi, 1,   0, 50, 0, 30, "m^{#gamma#gamma} (GeV)", y_label, "", lbl_error),
 
@@ -327,3 +328,5 @@ beam_label = " PbPb @ 5.02 TeV"
 lumi_unit = "nb"
 lumi_label_offset = -0.2
 # lumi_label_offset = 0.0
+
+output_formats = ["pdf", "C"]
