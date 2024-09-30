@@ -2,7 +2,6 @@
 #pragma cling optimize(0)
 #endif
 void plot_fig_3() {
-
   float markerSize = 1.5;
 
   gROOT->SetBatch(kTRUE);
@@ -34,7 +33,7 @@ void plot_fig_3() {
   ratio_superchic__1->SetBinError(4, 0.00078);
   ratio_superchic__1->SetBinError(5, 0.00036);
   ratio_superchic__1->SetBinError(6, 6e-05);
-  ratio_superchic__1->SetMinimum(0.001);
+  ratio_superchic__1->SetMinimum(0.002);
   ratio_superchic__1->SetMaximum(1);
   ratio_superchic__1->SetEntries(5);
 
@@ -62,6 +61,7 @@ void plot_fig_3() {
   ratio_superchic__1->GetXaxis()->SetTitleOffset(1.8);
   ratio_superchic__1->GetXaxis()->SetTitleFont(42);
   ratio_superchic__1->GetYaxis()->SetTitle("Probability");
+  ratio_superchic__1->GetYaxis()->SetTitleOffset(1.0);
   ratio_superchic__1->GetYaxis()->CenterTitle(false);
   ratio_superchic__1->GetYaxis()->SetLabelFont(42);
   ratio_superchic__1->GetYaxis()->SetLabelOffset(0.01);
@@ -100,6 +100,38 @@ void plot_fig_3() {
   ratio_starlight__2->GetZaxis()->SetTitleOffset(1);
   ratio_starlight__2->GetZaxis()->SetTitleFont(42);
   ratio_starlight__2->Draw("PE SAME");
+
+  TH1D *ratio_gammaUPC__3 = new TH1D("ratio_gammaUPC__3", "ratio_gammaUPC", 6, 0, 6);
+  ratio_gammaUPC__3->SetBinContent(0, 1);
+  ratio_gammaUPC__3->SetBinContent(1, 74.9 / 100);
+  ratio_gammaUPC__3->SetBinContent(2, 19.5317 / 100);
+  ratio_gammaUPC__3->SetBinContent(3, 5.56833 / 100);
+  ratio_gammaUPC__3->SetBinContent(4, 5.83101 / 100);
+  ratio_gammaUPC__3->SetBinContent(5, 3.00137 / 100);
+  ratio_gammaUPC__3->SetBinContent(6, 0.446717 / 100);
+
+  ratio_gammaUPC__3->SetBinError(0, 0.);
+  ratio_gammaUPC__3->SetBinError(1, 2.52234 / 100);
+  ratio_gammaUPC__3->SetBinError(2, 1.37711 / 100);
+  ratio_gammaUPC__3->SetBinError(3, 1.15401 / 100);
+  ratio_gammaUPC__3->SetBinError(4, 0.251254 / 100);
+  ratio_gammaUPC__3->SetBinError(5, 0.232552 / 100);
+  ratio_gammaUPC__3->SetBinError(6, 0.0325143 / 100);
+
+  ratio_gammaUPC__3->SetEntries(7);
+  ratio_gammaUPC__3->SetMarkerStyle(23);
+  ratio_gammaUPC__3->SetMarkerSize(markerSize);
+  ratio_gammaUPC__3->SetMarkerColor(kBlue);
+  ratio_gammaUPC__3->SetLineColor(kBlue);
+  ratio_gammaUPC__3->GetXaxis()->SetLabelFont(42);
+  ratio_gammaUPC__3->GetXaxis()->SetTitleOffset(1);
+  ratio_gammaUPC__3->GetXaxis()->SetTitleFont(42);
+  ratio_gammaUPC__3->GetYaxis()->SetLabelFont(42);
+  ratio_gammaUPC__3->GetYaxis()->SetTitleFont(42);
+  ratio_gammaUPC__3->GetZaxis()->SetLabelFont(42);
+  ratio_gammaUPC__3->GetZaxis()->SetTitleOffset(1);
+  ratio_gammaUPC__3->GetZaxis()->SetTitleFont(42);
+  ratio_gammaUPC__3->Draw("PE same");
 
   TH1D *ratio_data__3 = new TH1D("ratio_data__3", "ratio_data", 6, 0, 6);
   ratio_data__3->SetBinContent(0, 1);
@@ -171,6 +203,14 @@ void plot_fig_3() {
   entry->SetMarkerStyle(22);
   entry->SetMarkerSize(1.2);
   entry->SetTextFont(42);
+
+  entry = leg->AddEntry("ratio_gammaUPC", "gamma-UPC 1.6", "PEL");
+  entry->SetMarkerColor(kBlue);
+  entry->SetLineColor(kBlue);
+  entry->SetMarkerStyle(23);
+  entry->SetMarkerSize(1.2);
+  entry->SetTextFont(42);
+
   leg->Draw();
 
   // auto tex = new TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}");
@@ -187,6 +227,87 @@ void plot_fig_3() {
   tex->SetTextSize(0.04);
   tex->SetLineWidth(2);
   tex->Draw();
+
+  gPad->SetBottomMargin(0.405);
+
+  // add a Data/MC ratio panel below the main plot
+  TPad *ratioPad = new TPad("ratioPad", "ratioPad", 0, 0, 1, 0.4);
+  ratioPad->SetTopMargin(0.01);
+  ratioPad->SetBottomMargin(0.6);
+  ratioPad->SetLeftMargin(0.15);
+  // ratioPad->SetRightMargin(0.05);
+
+  ratioPad->Draw();
+  ratioPad->cd();
+  ratioPad->SetSelected(ratioPad);
+  ratioPad->SetLogy(0);
+
+  auto dummy = new TH1D("dummy", "", 6, 0, 6);
+
+  auto ratioSuperchic = (TH1D *)ratio_data__3->Clone("ratioSuperchic");
+  ratioSuperchic->Divide(ratio_superchic__1);
+
+  ratioSuperchic->SetMarkerStyle(ratio_superchic__1->GetMarkerStyle());
+  ratioSuperchic->SetMarkerSize(markerSize);
+  ratioSuperchic->SetMarkerColor(ratio_superchic__1->GetMarkerColor());
+  ratioSuperchic->SetLineColor(ratio_superchic__1->GetLineColor());
+
+  auto ratioStarlight = (TH1D *)ratio_data__3->Clone("ratioStarlight");
+  ratioStarlight->Divide(ratio_starlight__2);
+  ratioStarlight->SetMarkerStyle(ratio_starlight__2->GetMarkerStyle());
+  ratioStarlight->SetMarkerSize(markerSize);
+  ratioStarlight->SetMarkerColor(ratio_starlight__2->GetMarkerColor());
+  ratioStarlight->SetLineColor(ratio_starlight__2->GetLineColor());
+
+  auto ratioGammaUPC = (TH1D *)ratio_data__3->Clone("ratioGammaUPC");
+  ratioGammaUPC->Divide(ratio_gammaUPC__3);
+  ratioGammaUPC->SetMarkerStyle(ratio_gammaUPC__3->GetMarkerStyle());
+  ratioGammaUPC->SetMarkerSize(markerSize);
+  ratioGammaUPC->SetMarkerColor(ratio_gammaUPC__3->GetMarkerColor());
+  ratioGammaUPC->SetLineColor(ratio_gammaUPC__3->GetLineColor());
+
+  dummy->GetXaxis()->SetTitle("Neutron multiplicity category");
+  dummy->GetXaxis()->SetBinLabel(1, "0n0n");
+  dummy->GetXaxis()->SetBinLabel(2, "0nXn + Xn0n");
+  dummy->GetXaxis()->SetBinLabel(4, "0n1n + 1n0n");
+  dummy->GetXaxis()->SetBinLabel(3, "XnXn");
+  dummy->GetXaxis()->SetBinLabel(5, "1nXn + Xn1n");
+  dummy->GetXaxis()->SetBinLabel(6, "1n1n");
+  dummy->GetXaxis()->CenterTitle(false);
+  dummy->GetXaxis()->SetLabelFont(42);
+  dummy->GetXaxis()->SetTitleFont(42);
+  dummy->GetYaxis()->SetTitle("Data/MC");
+  dummy->GetYaxis()->CenterTitle(false);
+  dummy->GetYaxis()->SetLabelFont(42);
+  dummy->GetYaxis()->SetTitleFont(42);
+  dummy->GetYaxis()->SetNdivisions(505);
+
+  dummy->GetXaxis()->SetLabelOffset(0.05);
+  dummy->GetXaxis()->SetLabelSize(0.15);
+
+  dummy->GetXaxis()->SetTitleOffset(1.6);
+  dummy->GetXaxis()->SetTitleSize(0.15);
+
+  dummy->GetYaxis()->SetLabelOffset(0.01);
+  dummy->GetYaxis()->SetLabelSize(0.10);
+
+  dummy->GetYaxis()->SetTitleSize(0.15);
+  dummy->GetYaxis()->SetTitleOffset(0.4);
+
+  dummy->Draw();
+
+  dummy->SetMinimum(0.3);
+  dummy->SetMaximum(1.7);
+
+  // draw a line at 1.0
+  TLine *line = new TLine(0, 1, 6, 1);
+  line->SetLineColor(kBlack);
+  line->SetLineStyle(2);
+  line->Draw();
+
+  ratioSuperchic->Draw("PE SAME");
+  ratioStarlight->Draw("PE SAME");
+  ratioGammaUPC->Draw("PE SAME");
 
   ratios->Modified();
   ratios->cd();
