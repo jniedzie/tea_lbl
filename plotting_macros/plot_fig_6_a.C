@@ -79,6 +79,7 @@ void plot_fig_6_a() {
   goodPhotonSR_etbackground_stack_1->GetZaxis()->SetTitleFont(42);
   goodPhotonSR_etbackground->SetHistogram(goodPhotonSR_etbackground_stack_1);
 
+  // CEP
   TH1D *goodPhotonSR_et_stack_1 = new TH1D("goodPhotonSR_et_stack_1", "goodPhotonSR_et", 5, 2, 8);
   goodPhotonSR_et_stack_1->SetBinContent(1, 7.885605);
   goodPhotonSR_et_stack_1->SetBinContent(2, 7.472914);
@@ -114,6 +115,7 @@ void plot_fig_6_a() {
   goodPhotonSR_et_stack_1->GetZaxis()->SetTitleFont(42);
   goodPhotonSR_etbackground->Add(goodPhotonSR_et_stack_1, "");
 
+  // QED 1
   TH1D *goodPhotonSR_et_stack_2 = new TH1D("goodPhotonSR_et_stack_2", "goodPhotonSR_et", 5, 2, 8);
   goodPhotonSR_et_stack_2->SetBinContent(1, 0.5749687);
   goodPhotonSR_et_stack_2->SetBinContent(2, 0.5174719);
@@ -149,6 +151,7 @@ void plot_fig_6_a() {
   goodPhotonSR_et_stack_2->GetZaxis()->SetTitleFont(42);
   goodPhotonSR_etbackground->Add(goodPhotonSR_et_stack_2, "");
 
+  // QED 2
   TH1D *goodPhotonSR_et_stack_3 = new TH1D("goodPhotonSR_et_stack_3", "goodPhotonSR_et", 5, 2, 8);
   goodPhotonSR_et_stack_3->SetBinContent(1, 0.7218262);
   goodPhotonSR_et_stack_3->SetBinContent(2, 0.8661914);
@@ -183,6 +186,7 @@ void plot_fig_6_a() {
   goodPhotonSR_et_stack_3->GetZaxis()->SetTitleFont(42);
   goodPhotonSR_etbackground->Add(goodPhotonSR_et_stack_3, "");
 
+  // LbL
   TH1D *goodPhotonSR_et_stack_4 = new TH1D("goodPhotonSR_et_stack_4", "goodPhotonSR_et", 5, 2, 8);
   goodPhotonSR_et_stack_4->SetBinContent(1, 8.370766);
   goodPhotonSR_et_stack_4->SetBinContent(2, 8.845863);
@@ -217,7 +221,8 @@ void plot_fig_6_a() {
   goodPhotonSR_etbackground->Add(goodPhotonSR_et_stack_4, "");
   goodPhotonSR_etbackground->Draw("hist");
 
-Double_t Graph0_fx3001[5] = {2.6, 3.8, 5, 6.2, 7.4};
+  // Data points
+  Double_t Graph0_fx3001[5] = {2.6, 3.8, 5, 6.2, 7.4};
   Double_t Graph0_fy3001[5] = {15, 24, 6, 7, 0};
   Double_t Graph0_felx3001[5] = {0.6, 0.6, 0.6, 0.6, 0.6};
   Double_t Graph0_fely3001[5] = {3.82938, 4.864612, 2.379931, 2.58147, 0};
@@ -445,6 +450,15 @@ Double_t Graph0_fx3001[5] = {2.6, 3.8, 5, 6.2, 7.4};
   ratio_uncertainty_goodPhotonSR_et__3->GetZaxis()->SetTitleOffset(1);
   ratio_uncertainty_goodPhotonSR_et__3->GetZaxis()->SetTitleFont(42);
   ratio_uncertainty_goodPhotonSR_et__3->Draw("same e2");
+  
+  auto fake_ratio_graph = new TGraphAsymmErrors();
+  fake_ratio_graph->SetPoint(0, 6.2, 1.9999999);
+  fake_ratio_graph->SetPointError(0, 0, 0, 2-1.5185675177, 0);
+  fake_ratio_graph->SetMarkerStyle(20);
+  fake_ratio_graph->SetMarkerSize(0);
+  fake_ratio_graph->SetLineColor(kBlack);
+  fake_ratio_graph->Draw("same e");
+
   goodPhotonSR_et_2->Modified();
   goodPhotonSR_et->cd();
 

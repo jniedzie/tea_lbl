@@ -80,6 +80,7 @@ void plot_fig_6_d() {
   diphotonSR_rapiditybackground_stack_13->GetZaxis()->SetTitleFont(42);
   diphotonSR_rapiditybackground->SetHistogram(diphotonSR_rapiditybackground_stack_13);
 
+  // CEP
   TH1D *diphotonSR_rapidity_stack_1 = new TH1D("diphotonSR_rapidity_stack_1", "diphotonSR_rapidity", 7, -2.2, 2.2);
   diphotonSR_rapidity_stack_1->SetBinContent(1, 0.2668898);
   diphotonSR_rapidity_stack_1->SetBinContent(2, 0.9514126);
@@ -117,6 +118,7 @@ void plot_fig_6_d() {
   diphotonSR_rapidity_stack_1->GetZaxis()->SetTitleFont(42);
   diphotonSR_rapiditybackground->Add(diphotonSR_rapidity_stack_1, "");
 
+  // QCD 1
   TH1D *diphotonSR_rapidity_stack_2 = new TH1D("diphotonSR_rapidity_stack_2", "diphotonSR_rapidity", 7, -2.2, 2.2);
   diphotonSR_rapidity_stack_2->SetBinContent(1, 0.05749687);
   diphotonSR_rapidity_stack_2->SetBinContent(2, 0.1149937);
@@ -151,6 +153,7 @@ void plot_fig_6_d() {
   diphotonSR_rapidity_stack_2->GetZaxis()->SetTitleFont(42);
   diphotonSR_rapiditybackground->Add(diphotonSR_rapidity_stack_2, "");
 
+  // QED 2
   TH1D *diphotonSR_rapidity_stack_3 = new TH1D("diphotonSR_rapidity_stack_3", "diphotonSR_rapidity", 7, -2.2, 2.2);
   diphotonSR_rapidity_stack_3->SetBinContent(1, 0.07218262);
   diphotonSR_rapidity_stack_3->SetBinContent(2, 0.07218262);
@@ -187,6 +190,7 @@ void plot_fig_6_d() {
   diphotonSR_rapidity_stack_3->GetZaxis()->SetTitleFont(42);
   diphotonSR_rapiditybackground->Add(diphotonSR_rapidity_stack_3, "");
 
+  // LbL
   TH1D *diphotonSR_rapidity_stack_4 = new TH1D("diphotonSR_rapidity_stack_4", "diphotonSR_rapidity", 7, -2.2, 2.2);
   diphotonSR_rapidity_stack_4->SetBinContent(1, 0.1583658);
   diphotonSR_rapidity_stack_4->SetBinContent(2, 1.114217);
@@ -463,6 +467,15 @@ void plot_fig_6_d() {
   ratio_uncertainty_diphotonSR_rapidity__15->GetZaxis()->SetTitleOffset(1);
   ratio_uncertainty_diphotonSR_rapidity__15->GetZaxis()->SetTitleFont(42);
   ratio_uncertainty_diphotonSR_rapidity__15->Draw("same e2");
+
+  auto fake_ratio_graph = new TGraphAsymmErrors();
+  fake_ratio_graph->SetPoint(0, -1.257143, 1.9999999);
+  fake_ratio_graph->SetPointError(0, 0, 0, 2-1.2607872586, 0);
+  fake_ratio_graph->SetMarkerStyle(20);
+  fake_ratio_graph->SetMarkerSize(0);
+  fake_ratio_graph->SetLineColor(kBlack);
+  fake_ratio_graph->Draw("same e");
+
   diphotonSR_rapidity_2->Modified();
   diphotonSR_rapidity->cd();
   // auto tex = new TLatex(0.16, 0.95, "#bf{CMS} #it{Preliminary}");

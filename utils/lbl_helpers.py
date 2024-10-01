@@ -158,6 +158,7 @@ def get_alp_coupling(mass, cross_section):
         30.0: 4.4114845375054456e-05,
         50.0: 7.817673899208805e-05,
         90.0: 0.00019612635077675486,
+        100.0: 0.000235,
     }
 
     return 10**(slope * math.log10(cross_section) + math.log10(interstect[mass]))

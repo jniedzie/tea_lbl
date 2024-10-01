@@ -442,12 +442,9 @@ void plot_fig_8_a() {
   diphotonSR_mass100_stack_1->SetEntries(48);
   diphotonSR_mass100_stack_1->SetDirectory(0);
 
-  ci = 1828;
-  color = new TColor(ci, 0.8, 0, 1, " ", 0.2);
-  diphotonSR_mass100_stack_1->SetFillColor(ci);
+  diphotonSR_mass100_stack_1->SetFillColorAlpha(kGray+2, 0.2);
+  diphotonSR_mass100_stack_1->SetLineColor(kGray+2);
 
-  ci = TColor::GetColor("#cc00ff");
-  diphotonSR_mass100_stack_1->SetLineColor(ci);
   diphotonSR_mass100_stack_1->SetLineWidth(3);
   diphotonSR_mass100_stack_1->SetMarkerStyle(20);
   diphotonSR_mass100_stack_1->SetMarkerSize(0);

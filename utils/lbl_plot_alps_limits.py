@@ -338,14 +338,10 @@ def main():
     legend.SetTextSize(0.04)
     legend.AddEntry(obs_graph, "Observed", "L")
     legend.AddEntry(exp_graph, "Expected", "L")
-    legend.AddEntry(exp_graph_1sigma, "Expected #pm 1 #sigma", "F")
-    legend.AddEntry(exp_graph_2sigma, "Expected #pm 2 #sigma", "F")
+    legend.AddEntry(exp_graph_1sigma, "68% expected", "F")
+    legend.AddEntry(exp_graph_2sigma, "95% expected", "F")
     legend.Draw()
     
-    
-    
-    
-
     # tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}")
     tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS}")
     tex.SetNDC()
@@ -364,7 +360,7 @@ def main():
     canvas.Update()
     canvas.SaveAs("../plots/limits_cross_section.pdf")
     canvas.SaveAs("../plots/limits_cross_section.C")
-    canvas.SaveAs("../plotting_macros/figures/Figure_008.pdf")
+    canvas.SaveAs("../plotting_macros/figures/Figure_008_b.pdf")
 
 
 if __name__ == "__main__":
