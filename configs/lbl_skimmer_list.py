@@ -5,4 +5,4 @@ samples = processes
 sample_path = ""
 
 input_directory = f"{base_path}/ntuples/{sample_path}/initial/"
-output_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"
+output_trees_dir = f"{base_path}/ntuples/{sample_path}/{skim}/"

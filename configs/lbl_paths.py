@@ -20,10 +20,10 @@ processes = (
     # "alps_6",
     # "alps_9",
     # "alps_11",
-    "alps_14",
+    # "alps_14",
     # "alps_16",
     # "alps_22",
-    "alps_30",
+    # "alps_30",
     # "alps_50",
     # "alps_90",
     
@@ -36,6 +36,11 @@ processes = (
 
 # skim = "skimmed_1gammaSelections"
 # skim = "skimmed_3gammaSelections"
+
+# skim = "skimmed_lblSelections_photonIDtests"
+# skim = "skimmed_lblSelections_photonIDtests_10percentRelaxAll"
+# skim = "skimmed_lblSelections_photonIDtests_50percentRelaxAll"
+
 
 skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n"

@@ -8,8 +8,8 @@ from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, 
 from lbl_paths import base_path, processes, qed_superchic, skim, qed_starlight, qed_mg1gamma, qed_mg2gamma
 
 
-# output_path = f"../plots/{skim.replace('skimmed_', '')}/"
-output_path = f"../plots/{skim.replace('skimmed_', '')}_withALPs/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}/"
+# output_path = f"../plots/{skim.replace('skimmed_', '')}_withALPs/"
 
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_1gamma/"
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_2gamma/"
@@ -20,7 +20,7 @@ output_path = f"../plots/{skim.replace('skimmed_', '')}_withALPs/"
 
 
 do_photons = True
-do_alps = True
+do_alps = False
 
 lbl_error = total_uncertainty_lbl_run2 - 1
 qed_error = total_uncertainty_qed - 1
@@ -329,4 +329,5 @@ lumi_unit = "nb"
 lumi_label_offset = -0.2
 # lumi_label_offset = 0.0
 
-output_formats = ["pdf", "C"]
+# output_formats = ["pdf", "C"]
+output_formats = ["pdf"]
