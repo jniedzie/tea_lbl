@@ -281,8 +281,10 @@ def main():
     exp_graph_2sigma.GetXaxis().SetTitleOffset(1.1)
     exp_graph_2sigma.GetYaxis().SetTitleOffset(1.1)
     
-    ROOT.gPad.SetLeftMargin(0.15)
+    ROOT.gPad.SetLeftMargin(0.12)
+    ROOT.gPad.SetRightMargin(0.03)
     ROOT.gPad.SetBottomMargin(0.15)
+    ROOT.gPad.SetTopMargin(0.10)
 
     exp_graph_2sigma.GetXaxis().SetTitle("m_{a} (GeV)")
     exp_graph_2sigma.GetYaxis().SetTitle(
@@ -343,19 +345,26 @@ def main():
     legend.Draw()
     
     # tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS} #it{Preliminary}")
-    tex = ROOT.TLatex(0.15, 0.92, "#bf{CMS}")
+    tex = ROOT.TLatex(0.12, 0.92, "#bf{CMS}")
     tex.SetNDC()
     tex.SetTextFont(42)
-    tex.SetTextSize(0.045)
+    tex.SetTextSize(0.05)
     tex.SetLineWidth(2)
     tex.Draw()
 
-    tex2 = ROOT.TLatex(0.45, 0.92, "#scale[0.8]{PbPb, (1.65 + 0.39) nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}")
+    tex2 = ROOT.TLatex(0.48, 0.92, "#scale[0.8]{PbPb, (1.65 + 0.39) nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}")
     tex2.SetNDC()
     tex2.SetTextFont(42)
-    tex2.SetTextSize(0.045)
+    tex2.SetTextSize(0.05)
     tex2.SetLineWidth(2)
     tex2.Draw()
+    
+    canvas.cd()
+    
+    box = ROOT.TBox(75, 0.2, 85, 0.34)
+    box.SetFillColor(ROOT.kWhite)
+    # box.SetFillStyle(3004)
+    box.Draw()
 
     canvas.Update()
     canvas.SaveAs("../plots/limits_cross_section.pdf")

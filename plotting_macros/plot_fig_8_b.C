@@ -2,9 +2,9 @@
 #pragma cling optimize(0)
 #endif
 
-// this macro doesn't work very well. Y
+// this macro doesn't work very well. You can go to `bin` directory and run directly `python lbl_plot_alp_limits.py`.
 
-void limits_cross_section() {
+void plot_fig_8_b() {
   //=========Macro generated from canvas: canvas/
   //=========  (Tue Oct  1 15:00:35 2024) by ROOT version 6.26/08
   TCanvas *canvas = new TCanvas("canvas", "", 0, 0, 800, 600);
@@ -358,4 +358,5 @@ void limits_cross_section() {
   canvas->Modified();
   canvas->cd();
   canvas->SetSelected(canvas);
+  canvas->SaveAs("figures/Figure_008_b.pdf");
 }

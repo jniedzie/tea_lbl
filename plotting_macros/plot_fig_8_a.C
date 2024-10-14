@@ -20,10 +20,10 @@ void plot_fig_8_a() {
   canvas->SetBorderSize(2);
   canvas->SetTickx(1);
   canvas->SetTicky(1);
-  canvas->SetLeftMargin(0.16);
-  canvas->SetRightMargin(0.15);
-  canvas->SetTopMargin(0.06);
-  canvas->SetBottomMargin(0.3);
+  // canvas->SetLeftMargin(0.16);
+  // canvas->SetRightMargin(0.10);
+  // canvas->SetTopMargin(0.06);
+  // canvas->SetBottomMargin(0.3);
   canvas->SetFrameFillStyle(0);
   canvas->SetFrameBorderMode(0);
 
@@ -36,9 +36,10 @@ void plot_fig_8_a() {
   diphotonSR_mass100_1->SetBorderMode(0);
   diphotonSR_mass100_1->SetBorderSize(2);
   diphotonSR_mass100_1->SetLogx();
-  diphotonSR_mass100_1->SetLeftMargin(0.16);
-  diphotonSR_mass100_1->SetRightMargin(0.15);
-  diphotonSR_mass100_1->SetBottomMargin(0.2);
+  diphotonSR_mass100_1->SetLeftMargin(0.10);
+  diphotonSR_mass100_1->SetRightMargin(0.02);
+  diphotonSR_mass100_1->SetBottomMargin(0.15);
+  diphotonSR_mass100_1->SetTopMargin(0.10);
   diphotonSR_mass100_1->SetFrameFillStyle(0);
   diphotonSR_mass100_1->SetFrameBorderMode(0);
   diphotonSR_mass100_1->SetFrameFillStyle(0);
@@ -63,18 +64,19 @@ void plot_fig_8_a() {
   diphotonSR_mass100background_stack_88->GetXaxis()->SetTitle("m^{#gamma#gamma} (GeV)");
   diphotonSR_mass100background_stack_88->GetXaxis()->SetLabelFont(42);
   diphotonSR_mass100background_stack_88->GetXaxis()->SetLabelOffset(0.007);
-  diphotonSR_mass100background_stack_88->GetXaxis()->SetLabelSize(0.06);
-  diphotonSR_mass100background_stack_88->GetXaxis()->SetTitleSize(0.06);
-  diphotonSR_mass100background_stack_88->GetXaxis()->SetTitleOffset(1.2);
+  diphotonSR_mass100background_stack_88->GetXaxis()->SetLabelSize(0.04);
+  diphotonSR_mass100background_stack_88->GetXaxis()->SetTitleSize(0.05);
+  diphotonSR_mass100background_stack_88->GetXaxis()->SetTitleOffset(1.1);
   diphotonSR_mass100background_stack_88->GetXaxis()->SetTitleFont(42);
+  diphotonSR_mass100background_stack_88->GetXaxis()->SetMoreLogLabels();
   diphotonSR_mass100background_stack_88->GetYaxis()->SetTitle("Events / 2 (GeV^{-1})");
-  diphotonSR_mass100background_stack_88->GetYaxis()->CenterTitle(true);
+  diphotonSR_mass100background_stack_88->GetYaxis()->CenterTitle(false);
   diphotonSR_mass100background_stack_88->GetYaxis()->SetNdivisions(505);
   diphotonSR_mass100background_stack_88->GetYaxis()->SetLabelFont(42);
   diphotonSR_mass100background_stack_88->GetYaxis()->SetLabelOffset(0.007);
-  diphotonSR_mass100background_stack_88->GetYaxis()->SetLabelSize(0.06);
-  diphotonSR_mass100background_stack_88->GetYaxis()->SetTitleSize(0.06);
-  diphotonSR_mass100background_stack_88->GetYaxis()->SetTitleOffset(1.0);
+  diphotonSR_mass100background_stack_88->GetYaxis()->SetLabelSize(0.04);
+  diphotonSR_mass100background_stack_88->GetYaxis()->SetTitleSize(0.05);
+  diphotonSR_mass100background_stack_88->GetYaxis()->SetTitleOffset(1.1);
   diphotonSR_mass100background_stack_88->GetYaxis()->SetTitleFont(42);
   diphotonSR_mass100background_stack_88->GetZaxis()->SetLabelFont(42);
   diphotonSR_mass100background_stack_88->GetZaxis()->SetLabelOffset(0.007);
@@ -418,32 +420,21 @@ void plot_fig_8_a() {
   diphotonSR_mass100signal_stack_90->GetXaxis()->SetTitle("m^{#gamma#gamma} (GeV)");
   diphotonSR_mass100signal->SetHistogram(diphotonSR_mass100signal_stack_90);
 
-  Double_t xAxis357[49] = {4,  6,  8,  10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52,
-                           54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100};
+  Double_t xAxis357[8] = {8,  10, 12, 14, 16, 18, 20, 22};
 
   // ALP 14 GeV
-  diphotonSR_mass100_stack_1 = new TH1F("diphotonSR_mass100_stack_1", "diphotonSR_mass100", 48, xAxis357);
-  diphotonSR_mass100_stack_1->SetBinContent(2, 0.0001494944);
-  diphotonSR_mass100_stack_1->SetBinContent(3, 0.1046461);
-  diphotonSR_mass100_stack_1->SetBinContent(4, 0.5423657);
-  diphotonSR_mass100_stack_1->SetBinContent(5, 9.419194);
-  diphotonSR_mass100_stack_1->SetBinContent(6, 9.102266);
-  diphotonSR_mass100_stack_1->SetBinContent(7, 0.4016915);
-  diphotonSR_mass100_stack_1->SetBinContent(8, 0.07100984);
-  diphotonSR_mass100_stack_1->SetBinContent(9, 0.0005979777);
-  diphotonSR_mass100_stack_1->SetBinError(2, 0.0001494944);
-  diphotonSR_mass100_stack_1->SetBinError(3, 0.00395525);
-  diphotonSR_mass100_stack_1->SetBinError(4, 0.009004479);
-  diphotonSR_mass100_stack_1->SetBinError(5, 0.03752488);
-  diphotonSR_mass100_stack_1->SetBinError(6, 0.03688818);
-  diphotonSR_mass100_stack_1->SetBinError(7, 0.007749234);
-  diphotonSR_mass100_stack_1->SetBinError(8, 0.003258155);
-  diphotonSR_mass100_stack_1->SetBinError(9, 0.0002989888);
-  diphotonSR_mass100_stack_1->SetEntries(48);
-  diphotonSR_mass100_stack_1->SetDirectory(0);
+  diphotonSR_mass100_stack_1 = new TH1F("diphotonSR_mass100_stack_1", "diphotonSR_mass100", 7, xAxis357);
+  diphotonSR_mass100_stack_1->SetBinContent(1, 0.1046461);
+  diphotonSR_mass100_stack_1->SetBinContent(2, 0.5423657);
+  diphotonSR_mass100_stack_1->SetBinContent(3, 9.419194);
+  diphotonSR_mass100_stack_1->SetBinContent(4, 9.102266);
+  diphotonSR_mass100_stack_1->SetBinContent(5, 0.4016915);
+  diphotonSR_mass100_stack_1->SetBinContent(6, 0.07100984);
+  diphotonSR_mass100_stack_1->SetBinContent(7, 0.0005979777);
+  
 
-  diphotonSR_mass100_stack_1->SetFillColorAlpha(kGray+2, 0.2);
-  diphotonSR_mass100_stack_1->SetLineColor(kGray+2);
+  diphotonSR_mass100_stack_1->SetFillColorAlpha(kGray + 2, 0.2);
+  diphotonSR_mass100_stack_1->SetLineColor(kGray + 2);
 
   diphotonSR_mass100_stack_1->SetLineWidth(3);
   diphotonSR_mass100_stack_1->SetMarkerStyle(20);
@@ -468,32 +459,16 @@ void plot_fig_8_a() {
   diphotonSR_mass100_stack_1->GetZaxis()->SetTitleOffset(1);
   diphotonSR_mass100_stack_1->GetZaxis()->SetTitleFont(42);
   diphotonSR_mass100signal->Add(diphotonSR_mass100_stack_1, "");
-  Double_t xAxis358[49] = {4,  6,  8,  10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52,
-                           54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100};
+  
+  Double_t xAxis358[6] = {24, 26, 28, 30, 32, 34};
 
   // ALP 30 GeV
-  diphotonSR_mass100_stack_2 = new TH1F("diphotonSR_mass100_stack_2", "diphotonSR_mass100", 48, xAxis358);
-   diphotonSR_mass100_stack_2->SetBinContent(8,9.022681e-05);
-   diphotonSR_mass100_stack_2->SetBinContent(9,4.51134e-05);
-   diphotonSR_mass100_stack_2->SetBinContent(10,0.001488742);
-   diphotonSR_mass100_stack_2->SetBinContent(11,0.05481279);
-   diphotonSR_mass100_stack_2->SetBinContent(12,0.287598);
-   diphotonSR_mass100_stack_2->SetBinContent(13,4.15914);
-   diphotonSR_mass100_stack_2->SetBinContent(14,3.809376);
-   diphotonSR_mass100_stack_2->SetBinContent(15,0.2068901);
-   diphotonSR_mass100_stack_2->SetBinContent(16,0.03239143);
-   diphotonSR_mass100_stack_2->SetBinContent(17,0.0007218145);
-   diphotonSR_mass100_stack_2->SetBinError(8,6.379999e-05);
-   diphotonSR_mass100_stack_2->SetBinError(9,4.51134e-05);
-   diphotonSR_mass100_stack_2->SetBinError(10,0.0002591568);
-   diphotonSR_mass100_stack_2->SetBinError(11,0.001572511);
-   diphotonSR_mass100_stack_2->SetBinError(12,0.003602017);
-   diphotonSR_mass100_stack_2->SetBinError(13,0.01369792);
-   diphotonSR_mass100_stack_2->SetBinError(14,0.01310931);
-   diphotonSR_mass100_stack_2->SetBinError(15,0.00305508);
-   diphotonSR_mass100_stack_2->SetBinError(16,0.001208837);
-   diphotonSR_mass100_stack_2->SetBinError(17,0.0001804536);
-  diphotonSR_mass100_stack_2->SetEntries(48);
+  diphotonSR_mass100_stack_2 = new TH1F("diphotonSR_mass100_stack_2", "diphotonSR_mass100", 5, xAxis358);
+  diphotonSR_mass100_stack_2->SetBinContent(1, 0.05481279);
+  diphotonSR_mass100_stack_2->SetBinContent(2, 0.287598);
+  diphotonSR_mass100_stack_2->SetBinContent(3, 4.15914);
+  diphotonSR_mass100_stack_2->SetBinContent(4, 3.809376);
+  diphotonSR_mass100_stack_2->SetBinContent(5, 0.2068901);
   diphotonSR_mass100_stack_2->SetDirectory(0);
 
   ci = 1946;
@@ -769,14 +744,14 @@ void plot_fig_8_a() {
   diphotonSR_mass100_1->Modified();
   canvas->cd();
 
-  auto tex = new TLatex(0.17, 0.92, "#bf{CMS}");
+  auto tex = new TLatex(0.11, 0.92, "#bf{CMS}");
   tex->SetNDC();
   tex->SetTextFont(42);
   tex->SetTextSize(0.05);
   tex->SetLineWidth(2);
   tex->Draw();
 
-  tex = new TLatex(0.45, 0.92, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
+  tex = new TLatex(0.58, 0.92, "#scale[0.8]{PbPb, 1.65 nb^{-1} (#sqrt{s_{NN}} = 5.02 TeV)}");
   tex->SetNDC();
   tex->SetTextFont(42);
   tex->SetTextSize(0.05);
@@ -785,6 +760,21 @@ void plot_fig_8_a() {
 
   gPad->Modified();
   canvas->cd();
+
+  // place a white square on top of x-axis labels 7, 9, 50, 70 to cover them
+  TBox *box = new TBox(0.25, 0.0, 0.27, 0.14);
+  box->SetFillColor(10);
+  box->Draw();
+  box = new TBox(0.3, 0.0, 0.34, 0.14);
+  box->SetFillColor(10);
+  box->Draw();
+  box = new TBox(0.75, 0.0, 0.80, 0.14);
+  box->SetFillColor(10);
+  box->Draw();
+  box = new TBox(0.85, 0.1, 0.90, 0.14);
+  box->SetFillColor(10);
+  box->Draw();
+
 
   canvas->Modified();
   canvas->cd();
