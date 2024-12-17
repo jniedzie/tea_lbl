@@ -69,8 +69,9 @@ muonCuts = {
 
 # calorimeter cuts
 caloNoiseThresholds = {
-    "HFm": 6.0,
-    "HFp": 6.0,
+    "HFp": 9.1, # + 0.8 - 1.3
+    "HFm": 8.8, # + 0.7 - 1.0
+    
     "HB": 2.8,
     "HE": 1.0,
     "EB": 0.7,
@@ -89,9 +90,13 @@ caloNoiseVariables = {
 
 # detector parameters
 deadEtas = {
-    "HFp": (29, 30),
-    "HFm": (-29, -30),
-    "HE": (-16, 16),
+    # "HFp": (29, 30), # 2.853 -- 3.139
+    # "HFm": (-29, -30),
+    
+    "HFp": (29,), # 2.853 -- 3.000
+    "HFm": (-29,),
+
+    "HE": (-16, 16), #  1.305 -- 1.392
 }
 
 caloEtaEdges = {
@@ -212,7 +217,9 @@ scale_factors = {
     "l1eg": 1.0089,
     "l1hf": 0.8716,
     "che": 0.9252,
-    "nee": 0.8487,
+    
+    # "nee": 0.8487,
+    "nee": 0.953,
 }
 
 scale_factor_errors = {
