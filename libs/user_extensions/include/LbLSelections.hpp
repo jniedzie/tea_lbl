@@ -7,6 +7,7 @@ class LbLSelections {
   LbLSelections();
   ~LbLSelections() = default;
 
+  bool PassesZeroPhotonAndElectronSelection(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager=nullptr);
   bool PassesNeutralExclusivity(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager=nullptr);
   bool PassesDiphotonSelection(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager=nullptr);
   bool PassesSinglePhotonSelection(std::shared_ptr<Event> event, std::shared_ptr<CutFlowManager> cutFlowManager=nullptr);

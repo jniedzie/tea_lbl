@@ -17,11 +17,17 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
 
   for (auto physicsObject : *towers) {
     auto tower = asCaloTower(physicsObject);
-    if (tower->IsDead()) continue;
-    if (tower->IsHadronicEnergyAboveNoiseThreshold() && !tower->IsInHadronicCrack()) {
-      nPassingTowers++;
+
+    string detectorType = tower->GetDetectorType();
+
+    if (detectorType == "HCAL"){
+      if (tower->IsDead()) continue;
+      if (tower->IsInHadronicCrack()) continue;
+      if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
-    } else {
+    }
+    if (detectorType == "ECAL") {
+      if (tower->IsDead()) continue;
       if (tower->IsEtaAboveLimit()) continue;
       if (tower->IsInHEM()) continue;
       if (tower->IsInElectromagneticCrack()) continue;
@@ -30,11 +36,33 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
       if (tower->IsElectromagneticEnergyAboveNoiseThreshold()) nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
     }
+    if (detectorType == "HF") {
+      if (tower->IsDead()) continue;
+      if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
+      if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
+      
+      // This for HF is actually equivalent to checking the EM energy:
+      if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++; 
+      if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
+    }
   }
   if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
 
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("neutralExclusivity");
 
+  return true;
+}
+
+bool LbLSelections::PassesZeroPhotonAndElectronSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  auto goodPhotons = event->GetCollection("goodPhoton");
+  int nPhotons = goodPhotons->size();
+  if (nPhotons != 0) return false;
+
+  auto electrons = event->GetCollection("goodElectron");
+  int nElectrons = electrons->size();
+  if (nElectrons != 0) return false;
+
+  cutFlowManager->UpdateCutFlow("zeroPhotonElectron");
   return true;
 }
 
@@ -199,7 +227,7 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
 
 bool LbLSelections::PassesTracksPlusPhotonsSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   if (!PassesDiphotonSelection(event, cutFlowManager)) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodPhotons");
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodPhotons");
 
   auto photons = event->GetCollection("goodPhoton");
   auto electrons = event->GetCollection("goodElectron");
@@ -223,7 +251,7 @@ bool LbLSelections::PassesTracksPlusPhotonsSelection(shared_ptr<Event> event, sh
   }
 
   if (track1 == nullptr || track2 == nullptr) return false;
-  if(cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodTracks");
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodTracks");
 
   return true;
 }
