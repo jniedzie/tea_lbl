@@ -16,6 +16,9 @@ class CaloTower {
   std::string GetOriginalCollection() { return physicsObject->GetOriginalCollection(); }
   void Reset() { physicsObject->Reset(); }
 
+  // Can return: ECAL, HCAL, HF, crack, unknown
+  std::string GetDetectorType();
+
   std::string GetHadronicSubdetectorName();
   std::string GetElectromagneticSubdetectorName();
 

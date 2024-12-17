@@ -28,9 +28,12 @@ processes = (
     # "alps_90",
     
     # "emptyBeams",
+    # "collisionDataZeroBias",
 )
 
 # skim = "initial"
+# skim = "skimmed_lblSelections_final_HF3p139"
+# skim = "allSelections_exceptHFnee"
 
 # skim = "afterTrigger"
 
@@ -41,8 +44,9 @@ processes = (
 # skim = "skimmed_lblSelections_photonIDtests_10percentRelaxAll"
 # skim = "skimmed_lblSelections_photonIDtests_50percentRelaxAll"
 
-
+# this is the final final skim:
 skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n_1n0n_1n1n"
 

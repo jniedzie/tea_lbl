@@ -27,6 +27,14 @@ CaloTower::CaloTower(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObj
   electromagneticSubdetector = GetElectromagneticSubdetectorName();
 }
 
+string CaloTower::GetDetectorType() {
+  if (hadronicSubdetector == "HFp" || hadronicSubdetector == "HFm") return "HF";
+  if (hadronicSubdetector == "HB" || hadronicSubdetector == "HE") return "HCAL";
+  if (electromagneticSubdetector == "EB" || electromagneticSubdetector == "EE") return "ECAL";
+  if (hadronicSubdetector == "HadronicCrack" || electromagneticSubdetector == "ElectromagneticCrack") return "crack";
+  return "unknown";
+}
+
 bool CaloTower::IsDead() {
   string hadronicSubdetector = GetHadronicSubdetectorName();
   if (deadEtas.find(hadronicSubdetector) == deadEtas.end()) return false;
@@ -89,7 +97,9 @@ bool CaloTower::OverlapsWithOtherObjects(shared_ptr<PhysicsObjects> otherObjects
   return false;
 }
 
-bool CaloTower::IsEtaAboveLimit() { return absEta > detectorParams["caloTower_etaMax"]; }
+bool CaloTower::IsEtaAboveLimit() {
+  return (absEta > detectorParams["caloTower_etaMax"] && hadronicSubdetector != "HFp" && hadronicSubdetector != "HFm");
+}
 
 bool CaloTower::IsHadronicEnergyAboveNoiseThreshold() {
   if (hadronicSubdetector == "HadronicCrack") return false;

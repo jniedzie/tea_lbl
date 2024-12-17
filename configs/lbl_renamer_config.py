@@ -1,19 +1,6 @@
 nEvents = -1
 printEveryNevents = 1000
 
-base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
-
-# sample = "collisionData"
-sample = "lbl"
-# sample = "lbl_noTrigger"
-# sample = "cep"
-# sample = "qed"
-# sample = "alps_11"
-# sample = "emptyBeams"
-
-inputFilePath = f"{base_path}/ntuples/{sample}/bad_names/ntuple_1.root"
-treeOutputFilePath = "./renamed_test.root"
-
 branchesNames = {
   "run"                   : ("runNumber"                  , "runNumber/I"  ),
   "lumis"                 : ("lumiSection"                , "lumiSection/I"),
@@ -141,7 +128,8 @@ branchesNames = {
   "channel"               : ("ZDC_channel"                , "ZDC_channel[nZDC]/I"),
   
   
-  "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v1": ("DoubleEG2"                , "DoubleEG2/I"),
+  "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v1": ("DoubleEG2"      , "DoubleEG2/I"),
+  "HLT_HIZeroBias_v1"                 : ("ZeroBias"       , "ZeroBias/I"),
 
   # "nCastorTower": ("nCastorTower", "vector<float>"),
   # "CastorTower_hadE": ("CastorTower_hadE", "vector<float>"),
