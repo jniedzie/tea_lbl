@@ -1,3 +1,4 @@
+#include "ArgsManager.hpp"
 #include "ConfigManager.hpp"
 #include "CutFlowManager.hpp"
 #include "EventProcessor.hpp"
@@ -11,7 +12,6 @@
 #include "Logger.hpp"
 #include "Profiler.hpp"
 #include "UserExtensionsHelpers.hpp"
-#include "ArgsManager.hpp"
 
 using namespace std;
 
@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
   bool applyTrigger, applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons,
-      applyEtDelta, applyTwoTracksTwoPhotons, applySinglePhoton, applyThreePhotons;
+      applyEtDelta, applyTwoTracksTwoPhotons, applySinglePhoton, applyThreePhotons, applyZeroPhotonElectron;
   config.GetValue("applyTrigger", applyTrigger);
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
   config.GetValue("applySinglePhoton", applySinglePhoton);
@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
   config.GetValue("applyZDC", applyZDC);
   config.GetValue("applyEtDelta", applyEtDelta);
   config.GetValue("applyTwoTracksTwoPhotons", applyTwoTracksTwoPhotons);
+  config.GetValue("applyZeroPhotonElectron", applyZeroPhotonElectron);
 
   info() << "applyTrigger: " << applyTrigger << endl;
   info() << "applyTwoPhotons: " << applyTwoPhotons << endl;
@@ -66,6 +67,7 @@ int main(int argc, char **argv) {
   info() << "applyZDC: " << applyZDC << endl;
   info() << "applyEtDelta: " << applyEtDelta << endl;
   info() << "applyTwoTracksTwoPhotons: " << applyTwoTracksTwoPhotons << endl;
+  info() << "applyZeroPhotonElectron: " << applyZeroPhotonElectron << endl;
 
   cutFlowManager->RegisterCut("initial");
 
@@ -88,6 +90,9 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("nTracks");
     cutFlowManager->RegisterCut("dielectronMass");
     cutFlowManager->RegisterCut("dielectronPt");
+  }
+  if (applyZeroPhotonElectron) {
+    cutFlowManager->RegisterCut("zeroPhotonElectron");
   }
   if (applyTwoTracksTwoPhotons) {
     cutFlowManager->RegisterCut("twoGoodPhotons");
@@ -124,16 +129,23 @@ int main(int argc, char **argv) {
     auto event = eventReader->GetEvent(iEvent);
     lblObjectsManager->InsertGoodPhotonsCollection(event);
     lblObjectsManager->InsertGoodElectronsCollection(event);
-    lblObjectsManager->InsertGoodTracksCollection(event);
-    lblObjectsManager->InsertGoodMuonsCollection(event);
+    if (!applyZeroPhotonElectron) {
+      lblObjectsManager->InsertGoodTracksCollection(event);
+      lblObjectsManager->InsertGoodMuonsCollection(event);
+    }
+    if (applyChargedExclusivity) {
+      lblObjectsManager->InsertGoodTracksCollection(event);
+      lblObjectsManager->InsertGoodMuonsCollection(event);
+    }
 
     cutFlowManager->UpdateCutFlow("initial");
 
     if (applyTrigger) {
       try {
         if (!(int)event->Get("DoubleEG2")) continue;
+      } catch (Exception &e) {
+        warn() << e.what() << endl;
       }
-      catch(Exception & e) { warn() << e.what() << endl; }
       cutFlowManager->UpdateCutFlow("trigger");
     }
 
@@ -149,6 +161,10 @@ int main(int argc, char **argv) {
 
     if (applyTwoElectrons) {
       if (!lblSelections->PassesDielectronSelection(event, cutFlowManager)) continue;
+    }
+
+    if (applyZeroPhotonElectron) {
+      if (!lblSelections->PassesZeroPhotonAndElectronSelection(event, cutFlowManager)) continue;
     }
 
     if (applyTwoTracksTwoPhotons) {

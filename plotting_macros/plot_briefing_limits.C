@@ -363,6 +363,11 @@ void plot_briefing_limits() {
   tex->SetLineWidth(2);
   tex->Draw();
 
+  tex = new TLatex(1.0, 10, "Excluded");
+  tex->SetTextColor(ci_other);
+  tex->SetTextSize(legend_text_size);
+  tex->SetLineWidth(2);
+  tex->Draw();
 
   tex = new TLatex(0.12, 0.95, "#bf{CMS}");
   tex->SetNDC();

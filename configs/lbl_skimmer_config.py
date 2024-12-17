@@ -13,6 +13,7 @@ applyTwoPhotons = True
 applySinglePhoton = False
 applyThreePhotons = False
 applyTwoElectrons = False
+applyZeroPhotonElectron = False
 
 applyChargedExclusivity = True
 applyNeutralExclusivity = True
