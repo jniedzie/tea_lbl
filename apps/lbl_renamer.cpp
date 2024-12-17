@@ -1,3 +1,4 @@
+#include "ArgsManager.hpp"
 #include "ConfigManager.hpp"
 #include "Helpers.hpp"
 
@@ -72,29 +73,37 @@ void MergeTrees(vector<TTree*> inputTrees, TTree* outputTree, map<string, vector
   }
 }
 
-void CheckArgs(int argc, char** argv) {
-  if (argc != 2 && argc != 4) {
-    fatal() << "Usage: " << argv[0] << " config_path" << endl;
-    fatal() << "or" << endl;
-    fatal() << argv[0] << " config_path input_path output_path" << endl;
+int main(int argc, char** argv) {
+  auto args = make_unique<ArgsManager>(argc, argv);
+
+  if (!args->GetString("config").has_value()) {
+    fatal() << "No config file provided" << endl;
     exit(1);
   }
-}
 
-int main(int argc, char** argv) {
-  // Initialize ConfigManager with the path passed as an argument to the app
-  ConfigManager::Initialize(argv[1]);
-
+  try {
+    ConfigManager::Initialize(args->GetString("config").value());
+  } catch (Exception& e) {
+    fatal() << "Error when retriving config path:" << e.what() << endl;
+    exit(1);
+  }
   auto& config = ConfigManager::GetInstance();
 
   string inputPath, outputPath;
 
-  if (argc == 4) {
-    inputPath = argv[2];
-    outputPath = argv[3];
-  } else {
-    config.GetValue("inputFilePath", inputPath);
-    config.GetValue("treeOutputFilePath", outputPath);
+  try {
+    inputPath = args->GetString("input_path").value();
+  } catch (Exception& e) {
+    fatal() << "Error when retriving input path:" << e.what() << endl;
+    exit(1);
+  }
+
+  try{
+    outputPath = args->GetString("output_path").value();
+  }
+  catch (Exception& e) {
+    fatal() << "Error when retriving output path:" << e.what() << endl;
+    exit(1);
   }
 
   // Open the input files and get the trees

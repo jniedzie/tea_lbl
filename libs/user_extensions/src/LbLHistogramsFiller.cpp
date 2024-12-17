@@ -17,6 +17,8 @@ LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogram
     info() << "Weights branch not specified -- will assume weight is 1 for all events" << endl;
   }
 
+  config.GetMap("caloEtaEdges", caloEtaEdges);
+
   eventProcessor = make_unique<EventProcessor>();
 
   acoplanarityFunction = new TF1("fit_fun", "[0] * exp([1]*x) + [2] * exp([3]*x)", 0, 0.1);
@@ -42,36 +44,67 @@ float LbLHistogramsFiller::GetWeight(const shared_ptr<Event> event) {
 }
 
 void LbLHistogramsFiller::FillCaloHistograms(const shared_ptr<Event> event) {
+  GetWeight(event);
   auto towers = event->GetCollection("CaloTower");
 
-  float maxEnergy = 0;
-  shared_ptr<PhysicsObject> leadingTower;
+  float maxEnergyHE = -1, maxEnergyHFplus = -1, maxEnergyHFminus = -1;
+  shared_ptr<CaloTower> leadingTowerHE, leadingTowerHFplus, leadingTowerHFminus;
 
+  // info() << "Event number: " << (int)event->Get("eventNumber") << "\trun: " << (int)event->Get("runNumber") << endl;
+  
   for (auto physicsObject : *towers) {
-    float eta = fabs((float)physicsObject->Get("eta"));
-    if (eta < 1.305 || eta > 3.0) continue;
+    auto tower = asCaloTower(physicsObject);
 
-    float energy = physicsObject->Get("et");
-    if (energy > maxEnergy) {
-      maxEnergy = energy;
-      leadingTower = physicsObject;
+    if (tower->IsDead()) continue;
+    if (tower->IsInHadronicCrack()) continue;
+    if (tower->IsInHEM()) continue;
+
+    float eta = (float)physicsObject->Get("eta");
+    float energy = physicsObject->Get("energy");
+
+    // HE
+    if ((fabs(eta) > caloEtaEdges["minHE"] && fabs(eta) < caloEtaEdges["maxHE"])){
+      if (energy > maxEnergyHE) {
+        maxEnergyHE = energy;
+        leadingTowerHE = tower;
+      }
+    }
+
+    // HF+
+    if (eta > caloEtaEdges["minHF"] && eta < caloEtaEdges["maxHF"]) {
+      if (energy > maxEnergyHFplus) {
+        maxEnergyHFplus = energy;
+        leadingTowerHFplus = tower;
+      }
+    }
+
+    // HF-
+    if (eta > -caloEtaEdges["maxHF"] && eta < -caloEtaEdges["minHF"]) {
+      if (energy > maxEnergyHFminus) {
+        maxEnergyHFminus = energy;
+        leadingTowerHFminus = tower;
+      }
     }
   }
 
-  auto tower = asCaloTower(leadingTower);
-  float hadEnergy = tower->Get("hadE");
-  float energy = tower->Get("energy");
-  float transverseEnergy = tower->Get("et");
+  if (maxEnergyHE > 0) {
+    histogramsHandler->Fill("goodCaloTowerHE_energyHad", leadingTowerHE->GetAsFloat("hadE"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHE_energyTransverse", leadingTowerHE->GetAsFloat("et"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHE_energy", leadingTowerHE->GetAsFloat("energy"), GetWeight(event));
+  }
+  
+  if (maxEnergyHFplus > 0) {
+    // info() << (int)event->Get("eventNumber") << "\t" << leadingTowerHFplus->GetAsFloat("eta") << "\t" << leadingTowerHFplus->GetAsFloat("energy") << endl;
+    histogramsHandler->Fill("goodCaloTowerHFplus_energyHad", leadingTowerHFplus->GetAsFloat("hadE"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHFplus_energyTransverse", leadingTowerHFplus->GetAsFloat("et"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHFplus_energy", leadingTowerHFplus->GetAsFloat("energy"), GetWeight(event));
+  }
 
-  if (hadEnergy > 0) {
-    histogramsHandler->Fill("caloTowerHE_energyHad", hadEnergy, GetWeight(event));
-    histogramsHandler->Fill("caloTowerHE_energyTransverse", transverseEnergy, GetWeight(event));
-    histogramsHandler->Fill("caloTowerHE_energy", energy, GetWeight(event));
-    if (!tower->IsDead() && !tower->IsInHadronicCrack() && !tower->IsInHEM()) {
-      histogramsHandler->Fill("goodCaloTowerHE_energyHad", hadEnergy, GetWeight(event));
-      histogramsHandler->Fill("goodCaloTowerHE_energyTransverse", transverseEnergy, GetWeight(event));
-      histogramsHandler->Fill("goodCaloTowerHE_energy", energy, GetWeight(event));
-    }
+  if (maxEnergyHFminus > 0) {
+    // info() << "Filling HF- tower with eta: " << leadingTowerHFminus->GetAsFloat("eta") << "\tenergy: " << leadingTowerHFminus->GetAsFloat("energy") << endl;
+    histogramsHandler->Fill("goodCaloTowerHFminus_energyHad", leadingTowerHFminus->GetAsFloat("hadE"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHFminus_energyTransverse", leadingTowerHFminus->GetAsFloat("et"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHFminus_energy", leadingTowerHFminus->GetAsFloat("energy"), GetWeight(event));
   }
 }
 

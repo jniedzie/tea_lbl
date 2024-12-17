@@ -5,31 +5,31 @@ import numpy as np
 
 nEvents = -1
 eventsOffset = 0
-printEveryNevents = 100
+printEveryNevents = 1000
 
 base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/"
 
-sample = "collisionData"
+# sample = "collisionData"
 # sample = "lbl"
 # sample = "cep"
 # sample = "qed"
 # sample = "qed_MG_ee_a"
-# sample = "emptyBeams"
+sample = "emptyBeams"
 # sample = "qed_sc_noPhotos"
 
-# skim = "initial"
+skim = "initial"
 # skim = "afterTrigger"
 # skim = "skimmed_lblSelections_final"
 # skim = "skimmed_lblSelections_final_andZDC3n"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
-skim = "skimmed_lblSelections_final_twoPhotons"
+# skim = "skimmed_lblSelections_final_twoPhotons"
 # skim = "skimmed_qedSelections"
 # skim = "skimmed_tracksPhotonsSelections"
 
 # inputFilePath = "./renamed_test.root"
 # inputFilePath = "./skimmed_test.root"
-# inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
-inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
+inputFilePath = f"{base_path}/ntuples/{sample}/{skim}/ntuple_0.root"
+# inputFilePath = f"{base_path}/ntuples/{sample}/merged_{skim}.root"
 
 histogramsOutputFilePath = f"../{skim}_{sample}_histograms.root"
 
@@ -193,6 +193,20 @@ histParams = (
     ("goodCaloTowerHE", "energyHad", 100, 0, 5, ""),
     ("goodCaloTowerHE", "energyTransverse", 100, 0, 5, ""),
     ("goodCaloTowerHE", "energy", 100, 0, 5, ""),
+    
+    ("caloTowerHFplus", "energyHad", 100, 0, 10, ""),
+    ("caloTowerHFplus", "energyTransverse", 100, 0, 10, ""),
+    ("caloTowerHFplus", "energy", 100, 0, 10, ""),
+    ("goodCaloTowerHFplus", "energyHad", 1000, 0, 100, ""),
+    ("goodCaloTowerHFplus", "energyTransverse", 1000, 0, 100, ""),
+    ("goodCaloTowerHFplus", "energy", 1000, 0, 100, ""),
+
+    ("caloTowerHFminus", "energyHad", 100, 0, 10, ""),
+    ("caloTowerHFminus", "energyTransverse", 100, 0, 10, ""),
+    ("caloTowerHFminus", "energy", 100, 0, 10, ""),
+    ("goodCaloTowerHFminus", "energyHad", 1000, 0, 100, ""),
+    ("goodCaloTowerHFminus", "energyTransverse", 1000, 0, 100, ""),
+    ("goodCaloTowerHFminus", "energy", 1000, 0, 100, ""),
 
     # gen-level
     ("genPhoton", "et", 200,    0,       10,     ""),
@@ -341,3 +355,5 @@ extraEventCollections = {
         "conversionVeto": True,
     },
 }
+
+

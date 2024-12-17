@@ -34,6 +34,8 @@ class LbLHistogramsFiller {
   TF1 *acoplanarityFunction;
   TLorentzVector dielectron, genDielectron;
   TH1D *genDielectronDeltaPt;
+
+  std::map<std::string, float> caloEtaEdges;
 };
 
 #endif /* LbLHistogramsFiller_hpp */
