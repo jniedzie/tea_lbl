@@ -29,7 +29,7 @@ processes = (
     # "alps_30",
     # "alps_50",
     # "alps_90",
-    
+
     # "emptyBeams",
     # "collisionDataZeroBias",
 )
@@ -87,5 +87,9 @@ acoplanarity_histogram_name = "diphoton_acoplanarity{}"
 # mass_histogram_name = "diphoton_mass{}"
 mass_histogram_name = "diphotonSR_mass{}"
 
-base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples/"
+if facility == "NAF":
+    base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples"
+elif facility == "lxplus":
+    base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples"
+
 merged_histograms_path = base_path + "/{}/merged_{}_histograms.root"

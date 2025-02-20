@@ -1,7 +1,7 @@
 from scale_factors_config import *
 from lbl_params import *
-import ROOT
 import numpy as np
+from numpy import pi
 
 nEvents = -1
 eventsOffset = 0
@@ -158,29 +158,29 @@ histParams = (
     ("dielectron", "mass", 200, 0, 200, ""),
     ("dielectron", "rapidity", 100, -2.2, 2.2, ""),
     
-    ("dielectron", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
-    ("electrons", "deltaPhi", 100, -2*ROOT.TMath.Pi(), 2*ROOT.TMath.Pi(), ""),
+    ("dielectron", "deltaPhi", 100, 0, pi, ""),
+    ("electrons", "deltaPhi", 100, -2*pi, 2*pi, ""),
     
     
-    ("dielectron", "deltaPhiPtGt6GeV", 100, 0, ROOT.TMath.Pi(), ""),
-    ("dielectron", "deltaPhiAcoWeighted", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectron", "deltaPhiPtGt6GeV", 100, 0, pi, ""),
+    ("dielectron", "deltaPhiAcoWeighted", 100, 0, pi, ""),
     ("dielectron", "acoplanarityAcoWeighted", 1000, 0, 1, ""),
     ("dielectron", "deltaPt", 100, 0, 10, ""),
 
     ("dielectronSR", "pt", 100, 0, 1, ""),
     ("dielectronSR", "mass", 200, 0, 200, ""),
     ("dielectronSR", "rapidity", 100, -2.2, 2.2, ""),
-    ("dielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectronSR", "deltaPhi", 100, 0, pi, ""),
     ("dielectronSR", "deltaPt", 100, 0, 10, ""),
     
-    ("dielectron", "theta", 100, -2*ROOT.TMath.Pi(), 2*ROOT.TMath.Pi(), ""),
+    ("dielectron", "theta", 100, -2*pi, 2*pi, ""),
     
-    ("dielectron", "deltaPhi0p01", 100, 0, ROOT.TMath.Pi(), ""),
-    ("dielectron", "deltaPhi0p005", 100, 0, ROOT.TMath.Pi(), ""),
-    ("dielectron", "deltaPhi0p001", 100, 0, ROOT.TMath.Pi(), ""),
+    ("dielectron", "deltaPhi0p01", 100, 0, pi, ""),
+    ("dielectron", "deltaPhi0p005", 100, 0, pi, ""),
+    ("dielectron", "deltaPhi0p001", 100, 0, pi, ""),
 
-    ("genDielectron", "deltaPhi", 400, -2*ROOT.TMath.Pi(), 2*ROOT.TMath.Pi(), ""),
-    ("genDielectronSR", "deltaPhi", 100, 0, ROOT.TMath.Pi(), ""),
+    ("genDielectron", "deltaPhi", 400, -2*pi, 2*pi, ""),
+    ("genDielectronSR", "deltaPhi", 100, 0, pi, ""),
     ("genDielectron", "deltaPt", 2000, -1, 1, ""),
     ("genDielectronSR", "deltaPt", 2000, -1, 1, ""),
 
@@ -308,7 +308,7 @@ visualizationParams = {
     "maxTowerHeight": 6.0,
     "normalizeRotation": True,
     "circleRadius": 1.0,
-    "circleColor": ROOT.kBlack,
+    "circleColor": 1,  # black
     "towerInnerWidth": 0.08,
     "towerOuterWidthScale": 0.05,
     "towerColor": -1,
@@ -328,7 +328,7 @@ visualizationParams = {
     "towerAlpha": 0.2,
     # "towerAlpha": 1.0,
     "towerFillStyle": 1001,
-    "backgroundColor": ROOT.kWhite,
+    "backgroundColor": 0,  # white
     "canvasSize": 8.0,
     "trackColor": -1,
     "trackColorR": 0.72,
@@ -356,4 +356,5 @@ extraEventCollections = {
     },
 }
 
+eventsTreeNames = ["Events",]
 
