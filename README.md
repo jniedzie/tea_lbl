@@ -27,9 +27,10 @@ To test things on lxplus, we share LbL MC ntuples that can be found here:
 
 The analysis involves a few steps:
 1. Preparing ntuples with names that `tea` can understand out of the HIForest ntuples.
-2. Creating histograms.
-3. Plotting.
-4. Statistical analysis.
+2. Skimming the ntuples (applying selections).
+3. Creating histograms.
+4. Plotting.
+5. Statistical analysis.
 
 All apps and configs are in the `bin` directory - that's where you should run all commands.
 
@@ -53,6 +54,22 @@ You can now check that new files have been created in the output directory, whic
 
 As an excercise, you can also replace the `--local` flag with `--condor` to see how to run things on the grid. It will automatically schedule 1 job per file and produce the same output files as a result.
 
-### Histogramming
+### Skimming
+
+Now we want to apply selections to skim out ntuples. There are a few files to look at:
+
+1. `lbl_skimmer_config.py`: here you decide which groups of selections to use (e.g. diphoton, neutral exclusivity, charged exclusivity, etc.). At first, no need to modify anything.
+2. `lbl_skimmer_list.py`: input and output paths, you may need to adjust those.
+3. `lbl_paths.py`: this is used in every step. In skimming what's especially important is that you'll define the skim name here (could be anything, just something that will explain which selections are applied).
+4. `lbl_params.py`: this is where values of different cuts, thresholds, etc. are defined. At first, no need to modify anything.
+
+Once you update your paths and give the skim some name, you can run the skimmer (you can also replace `--local` with `--condor` to run on the grid):
+
+```
+python3 submitter.py --app lbl_skimmer --config lbl_skimmer_config.py --files_config lbl_skimmer_list.py --local
+```
+
+If everything went well, you should now have ntuples in the output path, in a directory with your skim name.
+
 
 
