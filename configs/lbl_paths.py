@@ -6,12 +6,15 @@ qed_starlight = "qed_starlight"
 # qed_name = qed_superchic
 qed_names = [qed_superchic, qed_starlight]
 
+facility = "lxplus"
+# facility = "NAF"
+
 processes = (
-    "collisionData",
+    # "collisionData",
     "lbl",
-    "cep",
-    qed_superchic,
-    qed_starlight,
+    # "cep",
+    # qed_superchic,
+    # qed_starlight,
     # qed_mg1gamma,
     # qed_mg2gamma,
     # "qed_sc_noPhotos",
@@ -31,6 +34,9 @@ processes = (
     # "collisionDataZeroBias",
 )
 
+# this is the final final skim:
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+
 # skim = "initial"
 # skim = "skimmed_lblSelections_final_HF3p139"
 # skim = "allSelections_exceptHFnee"
@@ -44,16 +50,10 @@ processes = (
 # skim = "skimmed_lblSelections_photonIDtests_10percentRelaxAll"
 # skim = "skimmed_lblSelections_photonIDtests_50percentRelaxAll"
 
-# this is the final final skim:
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
-
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n_1n0n_1n1n"
-
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_noNEE"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_noCHE"
-
-
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_ptgaga2p5"
 
 # skim = "skimmed_lblSelections_final_twoPhotons"

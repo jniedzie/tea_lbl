@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
   }
 
   try{
-    outputPath = args->GetString("output_path").value();
+    outputPath = args->GetString("output_trees_path").value();
   }
   catch (Exception& e) {
     fatal() << "Error when retriving output path:" << e.what() << endl;
