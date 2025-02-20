@@ -58,10 +58,10 @@ As an excercise, you can also replace the `--local` flag with `--condor` to see 
 
 Now we want to apply selections to skim out ntuples. There are a few files to look at:
 
-1. `lbl_skimmer_config.py`: here you decide which groups of selections to use (e.g. diphoton, neutral exclusivity, charged exclusivity, etc.). At first, no need to modify anything.
-2. `lbl_skimmer_list.py`: input and output paths, you may need to adjust those.
-3. `lbl_paths.py`: this is used in every step. In skimming what's especially important is that you'll define the skim name here (could be anything, just something that will explain which selections are applied).
-4. `lbl_params.py`: this is where values of different cuts, thresholds, etc. are defined. At first, no need to modify anything.
+1. `lbl_skimmer_list.py`: input and output paths, you may need to adjust those.
+2. `lbl_skimmer_config.py`: here you decide which groups of selections to use (e.g. diphoton, neutral exclusivity, charged exclusivity, etc.). At first, no need to modify anything.
+4. `lbl_paths.py`: this is used in every step. In skimming what's especially important is that you'll define the skim name here (could be anything, just something that will explain which selections are applied).
+5. `lbl_params.py`: this is where values of different cuts, thresholds, etc. are defined. At first, no need to modify anything.
 
 Once you update your paths and give the skim some name, you can run the skimmer (you can also replace `--local` with `--condor` to run on the grid):
 
@@ -69,7 +69,30 @@ Once you update your paths and give the skim some name, you can run the skimmer 
 python3 submitter.py --app lbl_skimmer --config lbl_skimmer_config.py --files_config lbl_skimmer_list.py --local
 ```
 
-If everything went well, you should now have ntuples in the output path, in a directory with your skim name.
+If everything went well, you should now have skimmed ntuples (so with events passing all selections) in the output path, in a directory with your skim name.
+
+### Histogramming
+
+Now it's time to produce histograms. Have a look at these files:
+
+1. `lbl_histogramer_list.py`: update input/output paths here.
+2. `lbl_histogramer_config.py`: this is where histograms and their binning are defined - no need to change anything at first.
+
+
+With the updated paths, you can run histogramming (again, use `--condor` instead of `--local` to run on the grid):
+
+```
+python3 submitter.py --app lbl_histogramer --config lbl_histogramer_config.py --files_config lbl_histogramer_list.py --local
+```
+
+After this step, in your output directory, inside of the skim directory, a new one will be created called `histograms` - it contains root files with histograms.
+Usually it's good to merge these histograms at this stage:
+
+```
+python3 lbl_merge_tea_files.py
+```
+
+This will produce a histograms file in the main output directory like this: `merged_skimmed_lblSelections_histograms.root`
 
 
 
