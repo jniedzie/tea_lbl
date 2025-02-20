@@ -95,4 +95,14 @@ python3 lbl_merge_tea_files.py
 This will produce a histograms file in the main output directory like this: `merged_skimmed_lblSelections_histograms.root`
 
 
+### Plotting
 
+The last thing to do is to plot these histograms. Have a look at `lbl_plotter_config.py` to see where the style of the plots, legends, etc. is defined.
+Since you only produced LbL MC histograms for now, you will need to comment out all other samples in this config (otherwise it will complain that it cannot
+find histograms for collision data, etc.). Then, you can just run:
+
+```
+python3 plotter.py lbl_plotter_config.py
+```
+
+This will save plots in `plots/your_skim_name` directory, which is parallel to the `bin` directory. 
