@@ -51,3 +51,8 @@ python3 submitter.py --app lbl_renamer --config lbl_renamer_config.py --files_co
 
 You can now check that new files have been created in the output directory, which contain the `Events` tree with updated branch names.
 
+As an excercise, you can also replace the `--local` flag with `--condor` to see how to run things on the grid. It will automatically schedule 1 job per file and produce the same output files as a result.
+
+### Histogramming
+
+
