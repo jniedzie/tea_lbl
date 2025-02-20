@@ -88,23 +88,23 @@ void LbLHistogramsFiller::FillCaloHistograms(const shared_ptr<Event> event) {
   }
 
   if (maxEnergyHE > 0) {
-    histogramsHandler->Fill("goodCaloTowerHE_energyHad", leadingTowerHE->GetAsFloat("hadE"), GetWeight(event));
-    histogramsHandler->Fill("goodCaloTowerHE_energyTransverse", leadingTowerHE->GetAsFloat("et"), GetWeight(event));
-    histogramsHandler->Fill("goodCaloTowerHE_energy", leadingTowerHE->GetAsFloat("energy"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHE_energyHad", leadingTowerHE->GetAs<float>("hadE"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHE_energyTransverse", leadingTowerHE->GetAs<float>("et"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHE_energy", leadingTowerHE->GetAs<float>("energy"), GetWeight(event));
   }
   
   if (maxEnergyHFplus > 0) {
-    // info() << (int)event->Get("eventNumber") << "\t" << leadingTowerHFplus->GetAsFloat("eta") << "\t" << leadingTowerHFplus->GetAsFloat("energy") << endl;
-    histogramsHandler->Fill("goodCaloTowerHFplus_energyHad", leadingTowerHFplus->GetAsFloat("hadE"), GetWeight(event));
-    histogramsHandler->Fill("goodCaloTowerHFplus_energyTransverse", leadingTowerHFplus->GetAsFloat("et"), GetWeight(event));
-    histogramsHandler->Fill("goodCaloTowerHFplus_energy", leadingTowerHFplus->GetAsFloat("energy"), GetWeight(event));
+    // info() << (int)event->Get("eventNumber") << "\t" << leadingTowerHFplus->GetAs<float>("eta") << "\t" << leadingTowerHFplus->GetAs<float>("energy") << endl;
+    histogramsHandler->Fill("goodCaloTowerHFplus_energyHad", leadingTowerHFplus->GetAs<float>("hadE"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHFplus_energyTransverse", leadingTowerHFplus->GetAs<float>("et"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHFplus_energy", leadingTowerHFplus->GetAs<float>("energy"), GetWeight(event));
   }
 
   if (maxEnergyHFminus > 0) {
-    // info() << "Filling HF- tower with eta: " << leadingTowerHFminus->GetAsFloat("eta") << "\tenergy: " << leadingTowerHFminus->GetAsFloat("energy") << endl;
-    histogramsHandler->Fill("goodCaloTowerHFminus_energyHad", leadingTowerHFminus->GetAsFloat("hadE"), GetWeight(event));
-    histogramsHandler->Fill("goodCaloTowerHFminus_energyTransverse", leadingTowerHFminus->GetAsFloat("et"), GetWeight(event));
-    histogramsHandler->Fill("goodCaloTowerHFminus_energy", leadingTowerHFminus->GetAsFloat("energy"), GetWeight(event));
+    // info() << "Filling HF- tower with eta: " << leadingTowerHFminus->GetAs<float>("eta") << "\tenergy: " << leadingTowerHFminus->GetAs<float>("energy") << endl;
+    histogramsHandler->Fill("goodCaloTowerHFminus_energyHad", leadingTowerHFminus->GetAs<float>("hadE"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHFminus_energyTransverse", leadingTowerHFminus->GetAs<float>("et"), GetWeight(event));
+    histogramsHandler->Fill("goodCaloTowerHFminus_energy", leadingTowerHFminus->GetAs<float>("energy"), GetWeight(event));
   }
 }
 

@@ -9,7 +9,9 @@ class LbLEvent {
   LbLEvent(std::shared_ptr<Event> event_) : event(event_) {}
 
   auto Get(std::string branchName) { return event->Get(branchName); }
-  float GetAsFloat(std::string branchName) { return event->GetAsFloat(branchName); }
+  
+  template <typename T>
+  T GetAs(std::string branchName) { return event->GetAs<T>(branchName); }
   std::shared_ptr<PhysicsObjects> GetCollection(std::string name) const { return event->GetCollection(name); }
   void AddExtraCollections() { event->AddExtraCollections(); }
 

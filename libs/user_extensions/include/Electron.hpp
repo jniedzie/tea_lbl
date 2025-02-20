@@ -12,7 +12,9 @@ class Electron {
   Electron(std::shared_ptr<PhysicsObject> physicsObject_);
 
   auto Get(std::string branchName) { return physicsObject->Get(branchName); }
-  float GetAsFloat(std::string branchName) { return physicsObject->GetAsFloat(branchName); }
+
+  template <typename T>
+  T GetAs(std::string branchName) { return physicsObject->GetAs<float>(branchName); }
   std::string GetOriginalCollection() { return physicsObject->GetOriginalCollection(); }
   void Reset() { physicsObject->Reset(); }
 
