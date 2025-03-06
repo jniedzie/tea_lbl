@@ -50,6 +50,14 @@ skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_photonIDtests_10percentRelaxAll"
 # skim = "skimmed_lblSelections_photonIDtests_50percentRelaxAll"
 
+# this is the final final skim with updated NEE thresholds, SFs, and ranges:
+# skim = "skimmed_lblSelections_final_newNEE"
+# skim = "skimmed_lblSelections_final_newNEE_oldThresholds"
+# skim = "skimmed_lblSelections_final_newNEE_oldEtaRange"
+# skim = "skimmed_lblSelections_final_oldReproduce"
+# skim = "skimmed_lblSelections_final_oldReproduce_noEGammaOverlapInHF_fixed"
+# skim = "skimmed_lblSelections_final_reproduce"
+
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_0n0n_1n0n_1n1n"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_noNEE"
@@ -88,7 +96,7 @@ acoplanarity_histogram_name = "diphoton_acoplanarity{}"
 mass_histogram_name = "diphotonSR_mass{}"
 
 if facility == "NAF":
-    base_path = "/nfs/dust/cms/user/jniedzie/light_by_light/ntuples"
+    base_path = "/data/dust/user/jniedzie/light_by_light/ntuples"
 elif facility == "lxplus":
     base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples"
 
