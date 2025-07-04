@@ -128,7 +128,7 @@ branchesNames = {
   "channel"               : ("ZDC_channel"                , "ZDC_channel[nZDC]/I"),
   
   
-  "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v1": ("DoubleEG2"      , "DoubleEG2/I"),
+  "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v8": ("DoubleEG2"      , "DoubleEG2/I"),
   "HLT_HIZeroBias_v1"                 : ("ZeroBias"       , "ZeroBias/I"),
 
   # "nCastorTower": ("nCastorTower", "vector<float>"),

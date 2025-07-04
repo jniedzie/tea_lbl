@@ -12,7 +12,7 @@ applyTwoTracksTwoPhotons = False
 applyTwoPhotons = True
 applySinglePhoton = False
 applyThreePhotons = False
-applyTwoElectrons = False
+applyTwoElectrons = True
 applyZeroPhotonElectron = False
 
 applyChargedExclusivity = True
