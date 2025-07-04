@@ -502,5 +502,5 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
   FillThreePhotonHistograms(event);
   FillElectronHistograms(event);
   FillEventLevelHistograms(event);
-  FillGenLevelHistograms(event);
+  //FillGenLevelHistograms(event);
 }

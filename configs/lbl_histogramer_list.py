@@ -4,8 +4,8 @@ samples = processes
 sample_path = ""
 
 # condor:
-input_directory = f"{base_path}/{sample_path}/{skim}/"
-output_hists_dir = f"{base_path}/{sample_path}/{skim}/histograms/"
+input_directory = "/afs/cern.ch/user/j/jmbagwu/tea_lbl/tea_lbl/RootFiles/"
+output_hists_dir = "/afs/cern.ch/user/j/jmbagwu/CMSSW2024"
 
 
 # local:
