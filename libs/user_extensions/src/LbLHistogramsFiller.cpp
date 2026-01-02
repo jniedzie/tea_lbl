@@ -145,7 +145,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   // on the fly cuts (to be moved to selections)
   float horizontalOverCentralEnergy = photon->GetHorizontalOverCentralEnergy();
   float verticalOverCentralEnergy = photon->GetVerticalOverCentralEnergy();
-  float horizontalImbalance = photon->GetHorizontalImpalance();
+  float horizontalImbalance = photon->GetHorizontalImbalance();
   float verticalImbalance = photon->GetVerticalImbalance();
 
   // if (horizontalOverCentralEnergy < 0.005 || verticalOverCentralEnergy < 0.005) return;

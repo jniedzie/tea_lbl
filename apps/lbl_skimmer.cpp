@@ -41,89 +41,23 @@ int main(int argc, char** argv) {
   auto lblSelections = make_unique<LbLSelections>();
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  bool applyTrigger, applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons,
-      applyEtDelta, applyTwoTracksTwoPhotons, applySinglePhoton, applyThreePhotons, applyZeroPhotonElectron, sameChargeElectrons,
-      applyAcoplanarity;
+  bool applyTrigger;
   config.GetValue("applyTrigger", applyTrigger);
-  config.GetValue("applyTwoPhotons", applyTwoPhotons);
-  config.GetValue("applySinglePhoton", applySinglePhoton);
-  config.GetValue("applyThreePhotons", applyThreePhotons);
-  config.GetValue("applyTwoElectrons", applyTwoElectrons);
-  config.GetValue("applyChargedExclusivity", applyChargedExclusivity);
-  config.GetValue("applyNeutralExclusivity", applyNeutralExclusivity);
-  config.GetValue("applyDiphotonPt", applyDiphotonPt);
-  config.GetValue("applyZDC", applyZDC);
-  config.GetValue("applyEtDelta", applyEtDelta);
-  config.GetValue("applyTwoTracksTwoPhotons", applyTwoTracksTwoPhotons);
-  config.GetValue("applyZeroPhotonElectron", applyZeroPhotonElectron);
-  config.GetValue("sameChargeElectrons", sameChargeElectrons);
-  config.GetValue("applyAcoplanarity", applyAcoplanarity);
-
   info() << "applyTrigger: " << applyTrigger << endl;
-  info() << "applyTwoPhotons: " << applyTwoPhotons << endl;
-  info() << "applySinglePhotons: " << applySinglePhoton << endl;
-  info() << "applyThreePhotons: " << applyThreePhotons << endl;
-  info() << "applyTwoElectrons: " << applyTwoElectrons << "(same charge: " << sameChargeElectrons << ")" << endl;
-  info() << "applyChargedExclusivity: " << applyChargedExclusivity << endl;
-  info() << "applyNeutralExclusivity: " << applyNeutralExclusivity << endl;
-  info() << "applyDiphotonPt: " << applyDiphotonPt << endl;
-  info() << "applyZDC: " << applyZDC << endl;
-  info() << "applyEtDelta: " << applyEtDelta << endl;
-  info() << "applyTwoTracksTwoPhotons: " << applyTwoTracksTwoPhotons << endl;
-  info() << "applyZeroPhotonElectron: " << applyZeroPhotonElectron << endl;
-  info() << "applyAcoplanarity: " << applyAcoplanarity << endl;
-
+  
   cutFlowManager->RegisterCut("initial");
 
   if (applyTrigger) {
     cutFlowManager->RegisterCut("trigger");
   }
-  if (applyTwoPhotons) {
-    cutFlowManager->RegisterCut("twoGoodPhotons");
-    cutFlowManager->RegisterCut("diphotonMass");
-  }
-  if (applySinglePhoton) {
-    cutFlowManager->RegisterCut("singlePhoton");
-  }
-  if (applyThreePhotons) {
-    cutFlowManager->RegisterCut("threePhotons");
-  }
-  if (applyTwoElectrons) {
-    cutFlowManager->RegisterCut("twoGoodElectrons");
-    cutFlowManager->RegisterCut("electronCharge");
-    cutFlowManager->RegisterCut("nTracks");
-    cutFlowManager->RegisterCut("dielectronMass");
-    cutFlowManager->RegisterCut("dielectronPt");
-  }
-  if (applyZeroPhotonElectron) {
-    cutFlowManager->RegisterCut("zeroPhotonElectron");
-  }
-  if (applyTwoTracksTwoPhotons) {
-    cutFlowManager->RegisterCut("twoGoodPhotons");
-    cutFlowManager->RegisterCut("diphotonMass");
-    cutFlowManager->RegisterCut("twoGoodTracks");
-  }
-  if (applyChargedExclusivity) {
-    cutFlowManager->RegisterCut("nElectrons");
-    cutFlowManager->RegisterCut("nTracks");
-    cutFlowManager->RegisterCut("nMuons");
-  }
-  if (applyNeutralExclusivity) {
-    cutFlowManager->RegisterCut("neutralExclusivity");
-  }
-  if (applyDiphotonPt) {
-    cutFlowManager->RegisterCut("diphotonPt");
-  }
-  if (applyZDC) {
-    // cutFlowManager->RegisterCut("ZDC+");
-    // cutFlowManager->RegisterCut("ZDC-");
-    cutFlowManager->RegisterCut("ZDC");
-  }
-  if (applyEtDelta) cutFlowManager->RegisterCut("etDelta");
-  if (applyAcoplanarity) {
-    cutFlowManager->RegisterCut("diphotonAcoplanarity");
-  }
-
+  
+  cutFlowManager->RegisterCut("singlePhoton");
+  cutFlowManager->RegisterCut("nElectrons");
+  cutFlowManager->RegisterCut("nTracks");
+  cutFlowManager->RegisterCut("nMuons");
+  cutFlowManager->RegisterCut("neutralExclusivity");
+  cutFlowManager->RegisterCut("ZDC");
+  
   vector<string> eventsTreeNames;
   config.GetVector("eventsTreeNames", eventsTreeNames);
 
@@ -134,32 +68,25 @@ int main(int argc, char** argv) {
 
   auto singlePhotonCutFlow = make_shared<map<string, int>>(map<string, int>{
       {"00_initial", 0},
-      {"01_genMatched", 0},
-      {"02_conversionCuts", 0},
-      {"03_etCuts", 0},
-      {"04_swissCross", 0},
-      {"05_etaCuts", 0},
-      {"06_crackCuts", 0},
-      {"07_hotSpotCuts", 0},
-      {"08_HEMCuts", 0},
-      {"09_showerShape", 0},
-      {"10_hoverE", 0},
-      {"11_seedTime", 0},
+      {"01_conversionCuts", 0},
+      {"02_etCuts", 0},
+      {"03_swissCross", 0},
+      {"04_etaCuts", 0},
+      {"05_crackCuts", 0},
+      {"06_hotSpotCuts", 0},
+      {"07_HEMCuts", 0},
+      {"08_showerShape", 0},
+      {"09_hoverE", 0},
+      {"10_seedTime", 0},
   });
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
-    lblObjectsManager->InsertGoodPhotonsCollection(event);
+    lblObjectsManager->InsertGoodPhotonsCollection(event, singlePhotonCutFlow);
     lblObjectsManager->InsertGoodElectronsCollection(event);
-    if (!applyZeroPhotonElectron) {
-      lblObjectsManager->InsertGoodTracksCollection(event);
-      lblObjectsManager->InsertGoodMuonsCollection(event);
-    }
-    if (applyChargedExclusivity) {
-      lblObjectsManager->InsertGoodTracksCollection(event);
-      lblObjectsManager->InsertGoodMuonsCollection(event);
-    }
-
+    lblObjectsManager->InsertGoodTracksCollection(event);
+    lblObjectsManager->InsertGoodMuonsCollection(event);
+    
     cutFlowManager->UpdateCutFlow("initial");
 
     if (applyTrigger) {
@@ -171,54 +98,12 @@ int main(int argc, char** argv) {
       cutFlowManager->UpdateCutFlow("trigger");
     }
 
-    if (applyTwoPhotons) {
-      if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager, singlePhotonCutFlow)) continue;
-    }
-    if (applySinglePhoton) {
-      if (!lblSelections->PassesSinglePhotonSelection(event, cutFlowManager)) continue;
-    }
-    if (applyThreePhotons) {
-      if (!lblSelections->PassesThreePhotonsSelection(event, cutFlowManager)) continue;
-    }
-
-    if (applyTwoElectrons) {
-      if (!lblSelections->PassesDielectronSelection(event, cutFlowManager, sameChargeElectrons)) continue;
-    }
-
-    if (applyZeroPhotonElectron) {
-      if (!lblSelections->PassesZeroPhotonAndElectronSelection(event, cutFlowManager)) continue;
-    }
-
-    if (applyTwoTracksTwoPhotons) {
-      if (!lblSelections->PassesTracksPlusPhotonsSelection(event, cutFlowManager)) continue;
-    }
-
-    if (applyChargedExclusivity) {
-      if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
-    }
-
-    if (applyNeutralExclusivity) {
-      if (!lblSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;
-    }
-
-    if (applyDiphotonPt) {
-      if (!lblSelections->PassesDiphotonPt(event, cutFlowManager)) continue;
-    }
-
-    if (applyZDC) {
-      if (!lblSelections->PassesZDC(event, cutFlowManager)) continue;
-    }
-
-    if (applyEtDelta) {
-      auto lblEvent = asLbLEvent(event);
-      if (lblEvent->GetDeltaEt() > 0.65) continue;
-      cutFlowManager->UpdateCutFlow("etDelta");
-    }
-
-    if (applyAcoplanarity) {
-      if (!lblSelections->PassesAcoplanaritySelection(event, cutFlowManager)) continue;
-    }
-
+    
+    if (!lblSelections->PassesSinglePhotonSelection(event, cutFlowManager)) continue;
+    if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
+    if (!lblSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;
+    if (!lblSelections->PassesZDC(event, cutFlowManager)) continue;
+    
     for (string eventsTreeName : eventsTreeNames) {
       eventWriter->AddCurrentEvent(eventsTreeName);
     }
@@ -235,8 +120,8 @@ int main(int argc, char** argv) {
 
   info() << "Single photon cut flow:" << endl;
   for (const auto& [cutName, count] : *singlePhotonCutFlow) {
-    // info() << "  " << cutName << ": " << count << "\t" << count/(float)previousCount << endl;
-    info() << count << "\t" << count/(float)previousCount << endl;
+    info() << "  " << cutName << ": " << count << "\t" << count/(float)previousCount << endl;
+    // info() << count << "\t" << count/(float)previousCount << endl;
     previousCount = count;
   }
 

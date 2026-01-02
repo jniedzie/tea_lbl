@@ -12,26 +12,27 @@ LbLObjectsManager::LbLObjectsManager() {
 }
 
 bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon, shared_ptr<map<string, int>> cutFlow) {
+  if (cutFlow) cutFlow->at("00_initial")++;
   if (!photon->PassesConversionCuts()) return false;
-  if (cutFlow) cutFlow->at("02_conversionCuts")++;
+  if (cutFlow) cutFlow->at("01_conversionCuts")++;
   if (!photon->PassesEtCuts()) return false;
-  if (cutFlow) cutFlow->at("03_etCuts")++;
+  if (cutFlow) cutFlow->at("02_etCuts")++;
   if (!photon->PassesSwissCross()) return false;
-  if (cutFlow) cutFlow->at("04_swissCross")++;
+  if (cutFlow) cutFlow->at("03_swissCross")++;
   if (photon->IsEtaAboveLimit()) return false;
-  if (cutFlow) cutFlow->at("05_etaCuts")++;
+  if (cutFlow) cutFlow->at("04_etaCuts")++;
   if (photon->IsInCrack()) return false;
-  if (cutFlow) cutFlow->at("06_crackCuts")++;
+  if (cutFlow) cutFlow->at("05_crackCuts")++;
   if (photon->IsInHotSpot()) return false;
-  if (cutFlow) cutFlow->at("07_hotSpotCuts")++;
+  if (cutFlow) cutFlow->at("06_hotSpotCuts")++;
   if (photon->IsInHEM()) return false;
-  if (cutFlow) cutFlow->at("08_HEMCuts")++;
+  if (cutFlow) cutFlow->at("07_HEMCuts")++;
   if (!photon->PassesShowerShape()) return false;
-  if (cutFlow) cutFlow->at("09_showerShape")++;
+  if (cutFlow) cutFlow->at("08_showerShape")++;
   if (!photon->PassesHoverE()) return false;
-  if (cutFlow) cutFlow->at("10_hoverE")++;
+  if (cutFlow) cutFlow->at("09_hoverE")++;
   if (!photon->PassesSeedTimeCuts()) return false;
-  if (cutFlow) cutFlow->at("11_seedTime")++;
+  if (cutFlow) cutFlow->at("10_seedTime")++;
 
   return true;
 }
@@ -66,13 +67,13 @@ bool LbLObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) {
   return true;
 }
 
-void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event) {
+void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event, shared_ptr<map<string, int>> cutFlow) {
   auto photons = event->GetCollection("photon");
   auto goodPhotons = make_shared<PhysicsObjects>();
 
   for (auto physicsObject : *photons) {
     auto photon = asPhoton(physicsObject);
-    if (!IsGoodPhoton(photon)) continue;
+    if (!IsGoodPhoton(photon, cutFlow)) continue;
     goodPhotons->push_back(physicsObject);
   }
 

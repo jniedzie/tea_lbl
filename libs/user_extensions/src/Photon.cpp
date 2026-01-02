@@ -5,7 +5,7 @@
 using namespace std;
 
 Photon::Photon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(physicsObject_) {
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
   config.GetMap("photonCuts", photonCuts);
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
@@ -19,7 +19,7 @@ Photon::Photon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(ph
     etaSC = Get("SCEta");
     phiSC = Get("SCPhi");
     absEtaSC = fabs(etaSC);
-  } catch (const std::exception &e) {
+  } catch (const std::exception& e) {
     warn() << "No photon supercluster information found. Using regular eta and phi" << endl;
     etaSC = eta;
     phiSC = phi;
@@ -90,3 +90,54 @@ bool Photon::PassesEtCuts() { return (float)Get("et") > photonCuts["min_et"]; }
 bool Photon::PassesSeedTimeCuts() { return fabs((float)Get("seedTime")) < photonCuts["max_seedTime"]; }
 
 bool Photon::PassesConversionCuts() { return !(int)Get("hasConversionTracks"); }
+
+bool Photon::OverlapsWithOtherObjects(std::shared_ptr<PhysicsObjects> otherObjects) {
+  for (auto otherObject : *otherObjects) {
+    float deltaEta = fabs((float)otherObject->Get("SCEta") - etaSC);
+    float deltaPhi = fabs(TVector2::Phi_mpi_pi((float)otherObject->Get("SCPhi") - phiSC));
+    if (deltaEta < electronPhotonMatching.at("maxDeltaEta") && deltaPhi < electronPhotonMatching.at("maxDeltaPhi")) return true;
+  }
+  return false;
+}
+
+TLorentzVector Photon::GetFourMomentum() {
+  TLorentzVector fourMomentum;
+  fourMomentum.SetPtEtaPhiM(Get("et"), eta, phi, 0);
+  return fourMomentum;
+}
+
+float Photon::GetVerticalOverCentralEnergy() {
+  float energyTop = GetAs<float>("energyTop");
+  float energyBottom = GetAs<float>("energyBottom");
+  float energyCentral = GetAs<float>("maxEnergyCrystal");
+  return (energyTop + energyBottom) / (2 * energyCentral);
+}
+
+float Photon::GetHorizontalOverCentralEnergy() {
+  float energyLeft = GetAs<float>("energyLeft");
+  float energyRight = GetAs<float>("energyRight");
+  float energyCentral = GetAs<float>("maxEnergyCrystal");
+  return (energyLeft + energyRight) / (2 * energyCentral);
+}
+
+float Photon::GetHorizontalImbalance() {
+  float energyLeft = GetAs<float>("energyLeft");
+  float energyRight = GetAs<float>("energyRight");
+
+  float imbalance = (energyLeft - energyRight) / (energyLeft + energyRight);
+
+  if (energyLeft == 0 || energyRight == 0) imbalance = 1.5;
+  if (energyLeft == 0 && energyRight == 0) imbalance = -1.5;
+  return imbalance;
+}
+
+float Photon::GetVerticalImbalance() {
+  float energyTop = GetAs<float>("energyTop");
+  float energyBottom = GetAs<float>("energyBottom");
+
+  float imbalance = (energyTop - energyBottom) / (energyTop + energyBottom);
+
+  if (energyTop == 0 || energyBottom == 0) imbalance = 1.5;
+  if (energyTop == 0 && energyBottom == 0) imbalance = -1.5;
+  return imbalance;
+}
