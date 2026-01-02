@@ -6,36 +6,38 @@ qed_starlight = "qed_starlight"
 # qed_name = qed_superchic
 qed_names = [qed_superchic, qed_starlight]
 
-facility = "lxplus"
-# facility = "NAF"
+# facility = "lxplus"
+facility = "NAF"
 
 processes = (
-    # "collisionData",
+    "collisionData",
     "lbl",
-    # "cep",
-    # qed_superchic,
-    # qed_starlight,
-    # qed_mg1gamma,
-    # qed_mg2gamma,
-    # "qed_sc_noPhotos",
+    "cep",
+    qed_superchic,
+    qed_starlight,
+    # # # qed_mg1gamma,
+    # # # qed_mg2gamma,
+    # # # "qed_sc_noPhotos",
 
-    # "alps_5",
-    # "alps_6",
-    # "alps_9",
-    # "alps_11",
-    # "alps_14",
-    # "alps_16",
-    # "alps_22",
-    # "alps_30",
-    # "alps_50",
-    # "alps_90",
+    "alps_5",
+    "alps_6",
+    "alps_9",
+    "alps_11",
+    "alps_14",
+    "alps_16",
+    "alps_22",
+    "alps_30",
+    "alps_50",
+    "alps_90",
 
     # "emptyBeams",
     # "collisionDataZeroBias",
 )
 
 # this is the final final skim:
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+# input_skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_withAco"
 
 # skim = "initial"
 # skim = "skimmed_lblSelections_final_HF3p139"
@@ -45,6 +47,7 @@ skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 
 # skim = "skimmed_1gammaSelections"
 # skim = "skimmed_3gammaSelections"
+# skim = "skimmed_3gammaSelections_merged"
 
 # skim = "skimmed_lblSelections_photonIDtests"
 # skim = "skimmed_lblSelections_photonIDtests_10percentRelaxAll"
@@ -87,6 +90,9 @@ skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_qedSelections_noPtCut"
 # skim = "skimmed_qedSelections_noZDC"
 
+# skim = "skimmed_qedSelections_sameSign"
+# skim = "skimmed_qedSelections_sameSign_noPtCut"
+
 # skim = "skimmed_tracksPhotonsSelections"
 # skim = "skimmed_tracksPhotonsSelectionsWithDiphotonPt"
 # skim = "skimmed_tracksPhotonsSelectionsWithDiphotonPtNoNEE"
@@ -97,6 +103,7 @@ mass_histogram_name = "diphotonSR_mass{}"
 
 if facility == "NAF":
     base_path = "/data/dust/user/jniedzie/light_by_light/ntuples"
+    # base_path = "/data/dust/user/jniedzie/light_by_light/ntuples/mono_photon"
 elif facility == "lxplus":
     base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples"
 

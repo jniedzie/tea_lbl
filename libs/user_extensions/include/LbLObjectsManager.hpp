@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CutFlowManager.hpp"
 #include "Event.hpp"
 #include "Helpers.hpp"
@@ -16,8 +18,9 @@ class LbLObjectsManager {
   void InsertGenPhotonsCollection(std::shared_ptr<Event> event);
   void InsertGenElectronsCollection(std::shared_ptr<Event> event);
 
+  bool IsGoodPhoton(const std::shared_ptr<Photon> photon, std::shared_ptr<std::map<std::string, int>> cutFlow = nullptr);
+
  private:
-  bool IsGoodPhoton(const std::shared_ptr<Photon> photon);
   bool IsGoodElectron(const std::shared_ptr<Electron> electron);
   bool IsGoodTrack(const std::shared_ptr<Track> track);
   bool IsGoodMuon(const std::shared_ptr<Muon> track);

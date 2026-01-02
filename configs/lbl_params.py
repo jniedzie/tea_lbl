@@ -7,6 +7,8 @@ eventCuts = {
 
     "min_diphotonMass": 5.0,  # only used in LbL analysis
     "max_diphotonPt": 1.0,  # only used in LbL analysis
+    
+    "max_diphotonAcoplanarity": 0.01,
 
     "min_dielectronMass": 5.0,  # only used in QED analysis
     "max_dielectronPt": 1.0,  # only used in QED analysis
@@ -19,16 +21,45 @@ eventCuts = {
 
 # good object definitions
 photonCuts = {
+    # "min_et": 4.0,  # single gamma
     "min_et": 2.0,
+    # "max_absEta": 1.2,  # single gamma
     "max_absEta": 2.2,
     "max_swissCross": 0.95,
     "max_SCEtaWidth_barrel": 0.0106,
     "max_SCEtaWidth_endcap": 0.0272,
+    
+    # "min_SCEtaWidth": 0.002,
+    "min_SCEtaWidth": 0,
+    
+    # "min_SCPhiWidth": 0.001,
+    # "max_SCPhiWidth": 0.01,
+    "min_SCPhiWidth": 0,
+    "max_SCPhiWidth": 999999,
+    
     "max_hOverE_barrel": 0.04596,
     "max_hOverE_endcap": 0.0590,
+    
+    # "min_sigmaIEtaIEta_barrel": 0.009,
+    # "min_sigmaIEtaIEta_endcap": 0.009,  # ?
+    "min_sigmaIEtaIEta_barrel": 0,
+    "min_sigmaIEtaIEta_endcap": 0,
+    
     "max_sigmaIEtaIEta_barrel": 0.02,
     "max_sigmaIEtaIEta_endcap": 0.06,
     "max_seedTime": 3.0,
+    # "max_seedTime": 1.0,
+    
+    # shower shape variables
+    # "min_verticalOverCentral": 0.03,
+    # "max_horizontalOverCentral": 0.03,
+    "min_verticalOverCentral": 0,
+    "max_horizontalOverCentral": 999999,
+}
+
+dataBlinding = {
+  # "max_et": 10.0,  # blind data with photon ET > X GeV
+  "max_et": 999999,  # blind data with photon ET > X GeV
 }
 
 electronCuts = {
@@ -118,6 +149,7 @@ caloEtaEdges = {
 detectorParams = {
     "crack_start": 1.4442,
     "crack_end": 1.566,
+    # "crack_end": 1.65,  # to kill weird monophotons
 
     "crackHadron_start": 1.305,
     "crackHadron_end": 1.41,
@@ -177,15 +209,18 @@ lbl_scaling = 1.05  # inclusive
 # lbl_scaling = 1.05 * 0.74  # 0n0n
 # lbl_scaling = 1.05 * (0.74 + 0.046 + 0.006)  # 0n0n + 0n1n + 1n0n + 1n1n
 
+mc_scale = 1.0
+# mc_scale = 10
+
 crossSections = {
-    "lbl": 2.59 * lbl_scaling,  # μb
+    "lbl": mc_scale * 2.59 * lbl_scaling,  # μb
     
-    "qed": 8827.220 * qed_scaling,  # μb
-    "qed_starlight": 7920.0 * qed_scaling,  # μb
-    "qed_MG_ee_a": 13.45 * qed_scaling,  # μb
-    "qed_MG_ee_aa": 0.1945 * qed_scaling,  # μb
+    "qed": mc_scale * 8827.220 * qed_scaling,  # μb
+    "qed_starlight": mc_scale * 7920.0 * qed_scaling,  # μb
+    "qed_MG_ee_a": mc_scale * 13.45 * qed_scaling,  # μb
+    "qed_MG_ee_aa": mc_scale * 0.1945 * qed_scaling,  # μb
     
-    "cep": 5.8e-3,  # we scale it to data
+    "cep": mc_scale * 5.8e-3,  # we scale it to data
 
     "alps_5": reference_alp_cross_section,
     "alps_6": reference_alp_cross_section,
@@ -197,6 +232,12 @@ crossSections = {
     "alps_30": reference_alp_cross_section,
     "alps_50": reference_alp_cross_section,
     "alps_90": reference_alp_cross_section,
+    
+    
+    # "alps_5": mc_scale * 2e2 * 1e-3,  # nb -> μb, limit cross section
+    # "alps_11": mc_scale * 20 * 1e-3,  # nb -> μb, limit cross section
+    # "alps_30": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
+    # "alps_90": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
     
     # nb -> μb, g = 0.2 TeV-1
     # "alps_14": 70.21369385210362 * 1e-3, 

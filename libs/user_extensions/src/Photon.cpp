@@ -49,9 +49,27 @@ bool Photon::IsEtaAboveLimit() { return absEta > photonCuts["max_absEta"]; }
 
 bool Photon::IsInCrack() { return (absEtaSC > detectorParams["crack_start"] && absEtaSC < detectorParams["crack_end"]); }
 
+bool Photon::IsInHotSpot() {
+  if (phi > 2.20 && phi < 2.27 && eta > -1.87 && eta < -1.83) return true;
+  if (phi > -2.78 && phi < -2.70 && eta > -1.62 && eta < -1.58) return true;
+
+  if (phi > 2.17 && phi < 2.21 && eta > -1.60 && eta < -1.58) return true;
+  if (phi > 0.09 && phi < 0.13 && eta > 2.12 && eta < 2.14) return true;
+
+  return false;
+}
+
 bool Photon::PassesShowerShape() {
   if ((float)Get("SCEtaWidth") > photonCuts["max_SCEtaWidth_" + detRegion]) return false;
   if ((float)Get("sigmaIEtaIEta2012") > photonCuts["max_sigmaIEtaIEta_" + detRegion]) return false;
+  if ((float)Get("sigmaIEtaIEta2012") < photonCuts["min_sigmaIEtaIEta_" + detRegion]) return false;
+  if ((float)Get("SCEtaWidth") < photonCuts["min_SCEtaWidth"]) return false;
+  if ((float)Get("SCPhiWidth") < photonCuts["min_SCPhiWidth"]) return false;
+  if ((float)Get("SCPhiWidth") > photonCuts["max_SCPhiWidth"]) return false;
+
+  if (GetVerticalOverCentralEnergy() < photonCuts["min_verticalOverCentral"]) return false;
+  if (GetHorizontalOverCentralEnergy() < photonCuts["min_horizontalOverCentral"]) return false;
+
   return true;
 }
 

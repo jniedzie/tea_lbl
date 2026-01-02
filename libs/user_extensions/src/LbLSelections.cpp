@@ -9,6 +9,8 @@ using namespace std;
 LbLSelections::LbLSelections() {
   auto &config = ConfigManager::GetInstance();
   config.GetMap("eventCuts", eventCuts);
+
+  lblObjectsManager = make_shared<LbLObjectsManager>();
 }
 
 bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
@@ -84,7 +86,19 @@ bool LbLSelections::PassesThreePhotonsSelection(shared_ptr<Event> event, shared_
   return true;
 }
 
-bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, shared_ptr<map<string, int>> cutFlow) {
+  auto genMatchedPhotons = asLbLEvent(event)->GetGenMatchedRecoPhotons();
+  cutFlow->at("00_initial") += 2;
+  cutFlow->at("01_genMatched") += genMatchedPhotons.size();
+
+  if (genMatchedPhotons.size() != 2) {
+    warn() << "Number of gen-matched reco photons != 2" << endl;
+  }
+  else {
+    lblObjectsManager->IsGoodPhoton(asPhoton(genMatchedPhotons.at(0)), cutFlow);
+    lblObjectsManager->IsGoodPhoton(asPhoton(genMatchedPhotons.at(1)), cutFlow);
+  }
+  
   auto goodPhotons = event->GetCollection("goodPhoton");
   int nPhotons = goodPhotons->size();
   if (nPhotons != 2) return false;
@@ -107,7 +121,7 @@ bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<
   return true;
 }
 
-bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, bool sameCharge) {
   auto electrons = event->GetCollection("goodElectron");
 
   // check number of electrons
@@ -118,7 +132,8 @@ bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_pt
   // check electron charge
   auto electron1 = electrons->at(0);
   auto electron2 = electrons->at(1);
-  if ((int)electron1->Get("charge") * (int)electron2->Get("charge") > 0) return false;
+  if (((int)electron1->Get("charge") * (int)electron2->Get("charge") > 0) && !sameCharge) return false;
+  if (((int)electron1->Get("charge") * (int)electron2->Get("charge") < 0) && sameCharge) return false;
   cutFlowManager->UpdateCutFlow("electronCharge");
 
   // check charge exclusivity
@@ -211,12 +226,12 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
     }
   }
 
-  if (totalEnergyPlus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC+");
-  if (totalEnergyMinus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC-");
+  // if (totalEnergyPlus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC+");
+  // if (totalEnergyMinus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC-");
 
-  if (totalEnergyPlus > eventCuts.at("max_ZDCenergyPerSide") && totalEnergyMinus > eventCuts.at("max_ZDCenergyPerSide")) return false;
+  // if (totalEnergyPlus > eventCuts.at("max_ZDCenergyPerSide") && totalEnergyMinus > eventCuts.at("max_ZDCenergyPerSide")) return false;
 
-  // if (totalEnergyPlus > 1600 || totalEnergyMinus > 1600) return false; // 0n0n
+  if (totalEnergyPlus > 1600 || totalEnergyMinus > 1600) return false; // 0n0n
   // if (totalEnergyPlus > 4000 || totalEnergyMinus > 4000) return false; // 0n0n + 1n0n + 0n1n + 1n1n
 
 
@@ -252,6 +267,23 @@ bool LbLSelections::PassesTracksPlusPhotonsSelection(shared_ptr<Event> event, sh
 
   if (track1 == nullptr || track2 == nullptr) return false;
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodTracks");
+
+  return true;
+}
+
+bool LbLSelections::PassesAcoplanaritySelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (event->GetCollection("goodPhoton")->size() != 2) return false;
+
+  auto photon1 = event->GetCollection("goodPhoton")->at(0);
+  auto photon2 = event->GetCollection("goodPhoton")->at(1);
+  TLorentzVector photon1vec, photon2vec;
+  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
+  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
+
+  double deltaPhi = fabs(photon1vec.DeltaPhi(photon2vec));
+  double acoplanarity = 1 - (deltaPhi / TMath::Pi());
+  if (acoplanarity > eventCuts.at("max_diphotonAcoplanarity")) return false;
+  cutFlowManager->UpdateCutFlow("diphotonAcoplanarity");
 
   return true;
 }

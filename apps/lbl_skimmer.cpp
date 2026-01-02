@@ -15,7 +15,7 @@
 
 using namespace std;
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   auto args = make_unique<ArgsManager>(argc, argv);
 
   if (!args->GetString("config").has_value()) {
@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   }
 
   ConfigManager::Initialize(args->GetString("config").value());
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
 
   if (args->GetString("input_path").has_value()) {
     config.SetInputPath(args->GetString("input_path").value());
@@ -42,7 +42,8 @@ int main(int argc, char **argv) {
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
   bool applyTrigger, applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons,
-      applyEtDelta, applyTwoTracksTwoPhotons, applySinglePhoton, applyThreePhotons, applyZeroPhotonElectron;
+      applyEtDelta, applyTwoTracksTwoPhotons, applySinglePhoton, applyThreePhotons, applyZeroPhotonElectron, sameChargeElectrons,
+      applyAcoplanarity;
   config.GetValue("applyTrigger", applyTrigger);
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
   config.GetValue("applySinglePhoton", applySinglePhoton);
@@ -55,12 +56,14 @@ int main(int argc, char **argv) {
   config.GetValue("applyEtDelta", applyEtDelta);
   config.GetValue("applyTwoTracksTwoPhotons", applyTwoTracksTwoPhotons);
   config.GetValue("applyZeroPhotonElectron", applyZeroPhotonElectron);
+  config.GetValue("sameChargeElectrons", sameChargeElectrons);
+  config.GetValue("applyAcoplanarity", applyAcoplanarity);
 
   info() << "applyTrigger: " << applyTrigger << endl;
   info() << "applyTwoPhotons: " << applyTwoPhotons << endl;
   info() << "applySinglePhotons: " << applySinglePhoton << endl;
   info() << "applyThreePhotons: " << applyThreePhotons << endl;
-  info() << "applyTwoElectrons: " << applyTwoElectrons << endl;
+  info() << "applyTwoElectrons: " << applyTwoElectrons << "(same charge: " << sameChargeElectrons << ")" << endl;
   info() << "applyChargedExclusivity: " << applyChargedExclusivity << endl;
   info() << "applyNeutralExclusivity: " << applyNeutralExclusivity << endl;
   info() << "applyDiphotonPt: " << applyDiphotonPt << endl;
@@ -68,6 +71,7 @@ int main(int argc, char **argv) {
   info() << "applyEtDelta: " << applyEtDelta << endl;
   info() << "applyTwoTracksTwoPhotons: " << applyTwoTracksTwoPhotons << endl;
   info() << "applyZeroPhotonElectron: " << applyZeroPhotonElectron << endl;
+  info() << "applyAcoplanarity: " << applyAcoplanarity << endl;
 
   cutFlowManager->RegisterCut("initial");
 
@@ -111,19 +115,37 @@ int main(int argc, char **argv) {
     cutFlowManager->RegisterCut("diphotonPt");
   }
   if (applyZDC) {
-    cutFlowManager->RegisterCut("ZDC+");
-    cutFlowManager->RegisterCut("ZDC-");
+    // cutFlowManager->RegisterCut("ZDC+");
+    // cutFlowManager->RegisterCut("ZDC-");
     cutFlowManager->RegisterCut("ZDC");
   }
   if (applyEtDelta) cutFlowManager->RegisterCut("etDelta");
+  if (applyAcoplanarity) {
+    cutFlowManager->RegisterCut("diphotonAcoplanarity");
+  }
 
   vector<string> eventsTreeNames;
   config.GetVector("eventsTreeNames", eventsTreeNames);
 
-  auto &profiler = Profiler::GetInstance();
+  auto& profiler = Profiler::GetInstance();
   profiler.Start("total");
 
   info() << "N events: " << eventReader->GetNevents() << endl;
+
+  auto singlePhotonCutFlow = make_shared<map<string, int>>(map<string, int>{
+      {"00_initial", 0},
+      {"01_genMatched", 0},
+      {"02_conversionCuts", 0},
+      {"03_etCuts", 0},
+      {"04_swissCross", 0},
+      {"05_etaCuts", 0},
+      {"06_crackCuts", 0},
+      {"07_hotSpotCuts", 0},
+      {"08_HEMCuts", 0},
+      {"09_showerShape", 0},
+      {"10_hoverE", 0},
+      {"11_seedTime", 0},
+  });
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
@@ -143,14 +165,14 @@ int main(int argc, char **argv) {
     if (applyTrigger) {
       try {
         if (!(int)event->Get("DoubleEG2")) continue;
-      } catch (Exception &e) {
+      } catch (Exception& e) {
         warn() << e.what() << endl;
       }
       cutFlowManager->UpdateCutFlow("trigger");
     }
 
     if (applyTwoPhotons) {
-      if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager)) continue;
+      if (!lblSelections->PassesDiphotonSelection(event, cutFlowManager, singlePhotonCutFlow)) continue;
     }
     if (applySinglePhoton) {
       if (!lblSelections->PassesSinglePhotonSelection(event, cutFlowManager)) continue;
@@ -160,7 +182,7 @@ int main(int argc, char **argv) {
     }
 
     if (applyTwoElectrons) {
-      if (!lblSelections->PassesDielectronSelection(event, cutFlowManager)) continue;
+      if (!lblSelections->PassesDielectronSelection(event, cutFlowManager, sameChargeElectrons)) continue;
     }
 
     if (applyZeroPhotonElectron) {
@@ -193,6 +215,10 @@ int main(int argc, char **argv) {
       cutFlowManager->UpdateCutFlow("etDelta");
     }
 
+    if (applyAcoplanarity) {
+      if (!lblSelections->PassesAcoplanaritySelection(event, cutFlowManager)) continue;
+    }
+
     for (string eventsTreeName : eventsTreeNames) {
       eventWriter->AddCurrentEvent(eventsTreeName);
     }
@@ -204,7 +230,17 @@ int main(int argc, char **argv) {
   cutFlowManager->Print();
   eventWriter->Save();
 
-  auto &logger = Logger::GetInstance();
+  // print single photon cut flow
+  int previousCount = 0;
+
+  info() << "Single photon cut flow:" << endl;
+  for (const auto& [cutName, count] : *singlePhotonCutFlow) {
+    // info() << "  " << cutName << ": " << count << "\t" << count/(float)previousCount << endl;
+    info() << count << "\t" << count/(float)previousCount << endl;
+    previousCount = count;
+  }
+
+  auto& logger = Logger::GetInstance();
   logger.Print();
 
   profiler.Print();

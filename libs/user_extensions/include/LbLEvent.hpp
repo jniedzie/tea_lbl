@@ -18,6 +18,10 @@ class LbLEvent {
   float GetDeltaEt();
   float GetCosThetaStar(bool doElectrons=false);
   float GetDiphotonAcoplanarity();
+  std::vector<std::shared_ptr<PhysicsObject>> GetGenPhotons();
+  std::vector<std::shared_ptr<PhysicsObject>> GetGenMatchedRecoPhotons();
+
+  bool IsData() { return GetAs<int>("runNumber") != 1; }
 
  private:
   std::shared_ptr<Event> event;

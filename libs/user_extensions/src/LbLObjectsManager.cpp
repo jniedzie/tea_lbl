@@ -11,16 +11,27 @@ LbLObjectsManager::LbLObjectsManager() {
   config.GetMap("caloEtaEdges", caloEtaEdges);
 }
 
-bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon) {
+bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon, shared_ptr<map<string, int>> cutFlow) {
   if (!photon->PassesConversionCuts()) return false;
+  if (cutFlow) cutFlow->at("02_conversionCuts")++;
   if (!photon->PassesEtCuts()) return false;
+  if (cutFlow) cutFlow->at("03_etCuts")++;
   if (!photon->PassesSwissCross()) return false;
+  if (cutFlow) cutFlow->at("04_swissCross")++;
   if (photon->IsEtaAboveLimit()) return false;
+  if (cutFlow) cutFlow->at("05_etaCuts")++;
   if (photon->IsInCrack()) return false;
+  if (cutFlow) cutFlow->at("06_crackCuts")++;
+  if (photon->IsInHotSpot()) return false;
+  if (cutFlow) cutFlow->at("07_hotSpotCuts")++;
   if (photon->IsInHEM()) return false;
+  if (cutFlow) cutFlow->at("08_HEMCuts")++;
   if (!photon->PassesShowerShape()) return false;
+  if (cutFlow) cutFlow->at("09_showerShape")++;
   if (!photon->PassesHoverE()) return false;
+  if (cutFlow) cutFlow->at("10_hoverE")++;
   if (!photon->PassesSeedTimeCuts()) return false;
+  if (cutFlow) cutFlow->at("11_seedTime")++;
 
   return true;
 }
@@ -95,7 +106,14 @@ void LbLObjectsManager::InsertGoodTracksCollection(shared_ptr<Event> event) {
 }
 
 void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event) {
-  auto muons = event->GetCollection("muon");
+  shared_ptr<PhysicsObjects> muons;
+
+  try {
+    muons = event->GetCollection("muon");
+  } catch (const Exception& e) {
+    error() << "No muon collection found in event. Will not insert goodMuon collection." << endl;
+    return;
+  }
   auto goodMuons = make_shared<PhysicsObjects>();
 
   for (auto physicsObject : *muons) {

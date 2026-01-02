@@ -89,3 +89,55 @@ float LbLEvent::GetDiphotonAcoplanarity() {
 
   return acoplanarity;
 }
+
+vector<shared_ptr<PhysicsObject>> LbLEvent::GetGenPhotons() {
+  vector<shared_ptr<PhysicsObject>> genPhotons;
+
+  auto genParticles = GetCollection("genParticle");
+  
+  for (auto physicsObject : *genParticles) {
+    
+    int particlePid = physicsObject->Get("pid");
+    float *floatPtr = reinterpret_cast<float *>(&particlePid);
+    float floatValue = *floatPtr;
+    particlePid = round(floatValue);
+    
+    if (abs(particlePid) == 22) {
+      genPhotons.push_back(physicsObject);
+    }
+  }
+
+  return genPhotons;
+}
+
+vector<shared_ptr<PhysicsObject>> LbLEvent::GetGenMatchedRecoPhotons() {
+  vector<shared_ptr<PhysicsObject>> matchedPhotons;
+
+  auto genPhotons = GetGenPhotons();
+  auto recoPhotons = GetCollection("photon");
+
+  for (auto genPhoton : genPhotons) {
+    float genEta = genPhoton->Get("eta");
+    float genPhi = genPhoton->Get("phi");
+
+    shared_ptr<PhysicsObject> bestMatch = nullptr;
+    float bestDeltaR = 0.2; // matching cone
+
+    for (auto recoPhoton : *recoPhotons) {
+      float recoEta = recoPhoton->Get("eta");
+      float recoPhi = recoPhoton->Get("phi");
+
+      float deltaR = sqrt(pow(genEta - recoEta, 2) + pow(genPhi - recoPhi, 2));
+      if (deltaR < bestDeltaR) {
+        bestDeltaR = deltaR;
+        bestMatch = recoPhoton;
+      }
+    }
+
+    if (bestMatch != nullptr) {
+      matchedPhotons.push_back(bestMatch);
+    }
+  }
+
+  return matchedPhotons;
+}
