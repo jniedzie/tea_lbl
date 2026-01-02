@@ -12,25 +12,28 @@ eventCuts = {
 
 # good object definitions
 photonCuts = {
+  # Basic cuts
   "min_et": 4.0,  # was 2.0 in LbL
   "max_absEta": 1.2,  # was 2.2 in LbL
   "max_swissCross": 0.95,
+  "max_hOverE_barrel": 0.04596,
+  "max_hOverE_endcap": 0.0590,
+  "max_seedTime": 1.0,  # was 3.0 in LbL
+
+  # SC Eta
   "min_SCEtaWidth": 0.002,  # was 0.0 in LbL
   "max_SCEtaWidth_barrel": 0.0106,
   "max_SCEtaWidth_endcap": 0.0272,
-  "min_SCPhiWidth": 0.001,  # was 0.0 in LbL
-  # "max_SCPhiWidth": 0.01,
-  "max_SCPhiWidth": 999999,
-  "max_hOverE_barrel": 0.04596,
-  "max_hOverE_endcap": 0.0590,
 
-  # "min_sigmaIEtaIEta_barrel": 0.009,
-  # "min_sigmaIEtaIEta_endcap": 0.009,  # ?
-  "min_sigmaIEtaIEta_barrel": 0,
-  "min_sigmaIEtaIEta_endcap": 0,
+  # SC Phi
+  "min_SCPhiWidth": 0.001,  # was 0.0 in LbL, try 0.01
+  "max_SCPhiWidth": 999999,
+
+  # sigmaIEtaIEta
+  "min_sigmaIEtaIEta_barrel": 0,  # try 0.009
   "max_sigmaIEtaIEta_barrel": 0.02,
+  "min_sigmaIEtaIEta_endcap": 0,  # try 0.009
   "max_sigmaIEtaIEta_endcap": 0.06,
-  "max_seedTime": 1.0,  # was 3.0 in LbL
 
   # shower shape variables
   "min_verticalOverCentral": 0.03,  # was 0.0 in LbL
