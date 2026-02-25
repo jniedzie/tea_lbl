@@ -8,7 +8,7 @@ eventCuts = {
     "min_diphotonMass": 5.0,  # only used in LbL analysis
     "max_diphotonPt": 1.0,  # only used in LbL analysis
     
-    "max_diphotonAcoplanarity": 0.01,
+    # "max_diphotonAcoplanarity": 0.01,
 
     "min_dielectronMass": 5.0,  # only used in QED analysis
     "max_dielectronPt": 1.0,  # only used in QED analysis
@@ -19,42 +19,20 @@ eventCuts = {
     "max_Ntowers": 0,
 }
 
+# current version
+
 # good object definitions
 photonCuts = {
-    # "min_et": 4.0,  # single gamma
     "min_et": 2.0,
-    # "max_absEta": 1.2,  # single gamma
     "max_absEta": 2.2,
     "max_swissCross": 0.95,
     "max_SCEtaWidth_barrel": 0.0106,
     "max_SCEtaWidth_endcap": 0.0272,
-    
-    # "min_SCEtaWidth": 0.002,
-    "min_SCEtaWidth": 0,
-    
-    # "min_SCPhiWidth": 0.001,
-    # "max_SCPhiWidth": 0.01,
-    "min_SCPhiWidth": 0,
-    "max_SCPhiWidth": 999999,
-    
     "max_hOverE_barrel": 0.04596,
     "max_hOverE_endcap": 0.0590,
-    
-    # "min_sigmaIEtaIEta_barrel": 0.009,
-    # "min_sigmaIEtaIEta_endcap": 0.009,  # ?
-    "min_sigmaIEtaIEta_barrel": 0,
-    "min_sigmaIEtaIEta_endcap": 0,
-    
     "max_sigmaIEtaIEta_barrel": 0.02,
     "max_sigmaIEtaIEta_endcap": 0.06,
     "max_seedTime": 3.0,
-    # "max_seedTime": 1.0,
-    
-    # shower shape variables
-    # "min_verticalOverCentral": 0.03,
-    # "max_horizontalOverCentral": 0.03,
-    "min_verticalOverCentral": 0,
-    "max_horizontalOverCentral": 999999,
 }
 
 dataBlinding = {
@@ -149,7 +127,6 @@ caloEtaEdges = {
 detectorParams = {
     "crack_start": 1.4442,
     "crack_end": 1.566,
-    # "crack_end": 1.65,  # to kill weird monophotons
 
     "crackHadron_start": 1.305,
     "crackHadron_end": 1.41,
@@ -215,7 +192,7 @@ mc_scale = 1.0
 crossSections = {
     "lbl": mc_scale * 2.59 * lbl_scaling,  # μb
     
-    "qed": mc_scale * 8827.220 * qed_scaling,  # μb
+    "qed_superchic": mc_scale * 8827.220 * qed_scaling,  # μb
     "qed_starlight": mc_scale * 7920.0 * qed_scaling,  # μb
     "qed_MG_ee_a": mc_scale * 13.45 * qed_scaling,  # μb
     "qed_MG_ee_aa": mc_scale * 0.1945 * qed_scaling,  # μb
@@ -308,7 +285,7 @@ nGenEvents = {
 
     "qed_MG_ee_a": 10228329,
     "qed_MG_ee_aa": 6457150,
-    "qed": 59260000,
+    "qed_superchic": 59260000,
     "qed_starlight": 66750000,
 
     "alps_5": 754000,

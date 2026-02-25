@@ -5,11 +5,11 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from lbl_helpers import get_cep_scale
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, total_uncertainty_qed, total_uncertainty_lbl_run2
-from lbl_paths import base_path, processes, qed_superchic, skim, qed_starlight, qed_mg1gamma, qed_mg2gamma
+from lbl_paths import base_path, processes, skim
 
 
-# output_path = f"../plots/{skim.replace('skimmed_', '')}/"
-output_path = f"../plots/{skim.replace('skimmed_', '')}_withALPs_SingleEG5/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}/"
+# output_path = f"../plots/{skim.replace('skimmed_', '')}_withALPs_SingleEG5/"
 
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_1gamma/"
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_2gamma/"
@@ -31,12 +31,12 @@ print(f"{get_scale_factor(do_photons)=}")
 
 samples = [
     Sample(
-        name=qed_superchic,
-        file_path=f"{base_path}/{qed_superchic}/merged_{skim}_histograms.root",
+        name="qed_superchic",
+        file_path=f"{base_path}/qed_superchic/merged_{skim}_histograms.root",
         type=SampleType.background,
 
-        cross_section=scale*crossSections[qed_superchic]*get_scale_factor(do_photons)[0],
-        initial_weight_sum=nGenEvents[qed_superchic],
+        cross_section=scale*crossSections["qed_superchic"]*get_scale_factor(do_photons)[0],
+        initial_weight_sum=nGenEvents["qed_superchic"],
 
         # line_style=ROOT.kSolid,
         # line_color=ROOT.kRed,
@@ -52,12 +52,12 @@ samples = [
         # legend_description="QED"
     ),
     Sample(
-        name=qed_starlight,
-        file_path=f"{base_path}/{qed_starlight}/merged_{skim}_histograms.root",
+        name="qed_starlight",
+        file_path=f"{base_path}/qed_starlight/merged_{skim}_histograms.root",
         type=SampleType.background,
 
-        cross_section=scale*crossSections[qed_starlight]*get_scale_factor(do_photons)[0],
-        initial_weight_sum=nGenEvents[qed_starlight],
+        cross_section=scale*crossSections["qed_starlight"]*get_scale_factor(do_photons)[0],
+        initial_weight_sum=nGenEvents["qed_starlight"],
 
         # line_style=ROOT.kSolid,
         # line_color=ROOT.kBlue,
@@ -142,12 +142,12 @@ if do_photons:
         )
     )
 
-custom_stacks_order = ["cep", qed_starlight, qed_superchic, "lbl", "data"]
+custom_stacks_order = ["cep", "qed_starlight", "qed_superchic", "lbl", "data"]
 
 if "3gammaSelections" in skim:
-  custom_stacks_order = ["lbl", qed_starlight, qed_superchic, "cep", "data"]
+  custom_stacks_order = ["lbl", "qed_starlight", "qed_superchic", "cep", "data"]
 if "1gammaSelections" in skim:
-  custom_stacks_order = ["cep", "lbl", qed_starlight, qed_superchic, "data"]
+  custom_stacks_order = ["cep", "lbl", "qed_starlight", "qed_superchic", "data"]
 
 alp_colors = (
     ROOT.kGray+2,
@@ -265,10 +265,10 @@ histograms = (
 
 
     # Histogram("diphoton_acoplanarity35", "", False, False, NormalizationType.to_lumi, 1,   1e-4, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
-    # Histogram("diphoton_acoplanarity40", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity40", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     # Histogram("diphoton_acoplanarity60", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
 
-    # Histogram("diphoton_acoplanarity50", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity50", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     # Histogram("diphoton_acoplanarity1", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     # Histogram("diphoton_acoplanarity2", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     # Histogram("diphoton_acoplanarity3", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),

@@ -16,15 +16,6 @@ using namespace std;
 
 bool runForPhotons = false;
 
-void CheckArgs(int argc, char **argv) {
-  if (argc != 2 && argc != 4) {
-    fatal() << "Usage: " << argv[0] << " config_path" << endl;
-    fatal() << "or" << endl;
-    fatal() << argv[0] << " config_path input_path output_path" << endl;
-    exit(1);
-  }
-}
-
 float GetAcoplanarity(const TLorentzVector &vec1, const TLorentzVector &vec2) { return (1 - (fabs(vec1.DeltaPhi(vec2)) / TMath::Pi())); }
 
 bool GoodID(const shared_ptr<Photon> photon) {
@@ -101,14 +92,11 @@ pair<shared_ptr<PhysicsObject>, shared_ptr<PhysicsObject>> GetMatchedRecoParticl
 }
 
 int main(int argc, char **argv) {
-  CheckArgs(argc, argv);
-  ConfigManager::Initialize(argv[1]);
-  auto &config = ConfigManager::GetInstance();
-  if (argc == 4) {
-    config.SetInputPath(argv[2]);
-    config.SetHistogramsOutputPath(argv[3]);
-  }
-
+  vector<string> requiredArgs = {"config"};
+  vector<string> optionalArgs = {"input_path", "output_hists_path"};
+  auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
+  ConfigManager::Initialize(args);
+  
   auto eventReader = make_shared<EventReader>();
   auto eventProcessor = make_unique<EventProcessor>();
   auto lblSelections = make_unique<LbLSelections>();

@@ -165,20 +165,12 @@ float getDiphotonAcoplanarity(const shared_ptr<PhysicsObjects> &photons) {
   return acoplanarity;
 }
 
-void CheckArgs(int argc, char **argv) {
-  if (argc != 2 && argc != 6) {
-    fatal() << "Usage: " << argv[0] << " config_path" << endl;
-    fatal() << "or" << endl;
-    fatal() << argv[0] << " config_path input_path output_path nEvents eventsOffset" << endl;
-    exit(1);
-  }
-}
-
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
 
-  CheckArgs(argc, argv);
-  ConfigManager::Initialize(argv[1]);
+  vector<string> requiredArgs = {"config"};
+  vector<string> optionalArgs = {};
+  auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
   auto &config = ConfigManager::GetInstance();
 
   int eventsOffset, nEvents;

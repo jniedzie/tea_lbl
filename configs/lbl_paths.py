@@ -1,43 +1,39 @@
-qed_superchic = "qed"
-qed_mg1gamma = "qed_MG_ee_a"
-qed_mg2gamma = "qed_MG_ee_aa"
-qed_starlight = "qed_starlight"
-
-# qed_name = qed_superchic
-qed_names = [qed_superchic, qed_starlight]
-
-# facility = "lxplus"
-facility = "NAF"
+facility = "lxplus"
+# facility = "NAF"
 
 processes = (
     "collisionData",
     "lbl",
     "cep",
-    qed_superchic,
-    qed_starlight,
-    # # # qed_mg1gamma,
-    # # # qed_mg2gamma,
-    # # # "qed_sc_noPhotos",
+    "qed_superchic",
+    "qed_starlight",
+    "qed_MG_ee_a",
+    "qed_MG_ee_aa"
+    # "qed_sc_noPhotos",
 
-    "alps_5",
-    "alps_6",
-    "alps_9",
-    "alps_11",
-    "alps_14",
-    "alps_16",
-    "alps_22",
-    "alps_30",
-    "alps_50",
-    "alps_90",
+    # "alps_5",
+    # "alps_6",
+    # "alps_9",
+    # "alps_11",
+    # "alps_14",
+    # "alps_16",
+    # "alps_22",
+    # "alps_30",
+    # "alps_50",
+    # "alps_90",
 
     # "emptyBeams",
     # "collisionDataZeroBias",
 )
 
+qed_names = ["qed_superchic", "qed_starlight"]
+
 # this is the final final skim:
-# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+input_skim = "initial"
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+
 # input_skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_withAco"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_withAco"
 
 # skim = "initial"
 # skim = "skimmed_lblSelections_final_HF3p139"
