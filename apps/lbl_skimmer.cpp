@@ -224,8 +224,8 @@ int main(int argc, char** argv) {
 
   info() << "Single photon cut flow:" << endl;
   for (const auto& [cutName, count] : *singlePhotonCutFlow) {
-    // info() << "  " << cutName << ": " << count << "\t" << count/(float)previousCount << endl;
-    info() << count << "\t" << count/(float)previousCount << endl;
+    info() << "  " << cutName << ": " << count << "\t" << count/(float)previousCount << endl;
+    // info() << count << "\t" << count/(float)previousCount << endl;
     previousCount = count;
   }
 

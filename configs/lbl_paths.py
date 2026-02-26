@@ -7,8 +7,8 @@ processes = (
     "cep",
     "qed_superchic",
     "qed_starlight",
-    "qed_MG_ee_a",
-    "qed_MG_ee_aa"
+    # "qed_MG_ee_a",
+    # "qed_MG_ee_aa"
     # "qed_sc_noPhotos",
 
     # "alps_5",

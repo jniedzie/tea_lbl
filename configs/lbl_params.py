@@ -8,8 +8,8 @@ eventCuts = {
     "min_diphotonMass": 5.0,  # only used in LbL analysis
     "max_diphotonPt": 1.0,  # only used in LbL analysis
     
-    # "max_diphotonAcoplanarity": 0.01,
-
+    "max_diphotonAcoplanarity": 9999,
+    
     "min_dielectronMass": 5.0,  # only used in QED analysis
     "max_dielectronPt": 1.0,  # only used in QED analysis
 
@@ -33,6 +33,13 @@ photonCuts = {
     "max_sigmaIEtaIEta_barrel": 0.02,
     "max_sigmaIEtaIEta_endcap": 0.06,
     "max_seedTime": 3.0,
+    
+    "min_SCEtaWidth": 0.0,
+    "max_SCPhiWidth": 999999,
+    "min_sigmaIEtaIEta2012_barrel": 0.0,
+    "max_sigmaIEtaIEta2012_barrel": 999999,
+    "min_sigmaIEtaIEta2012_endcap": 0.0,
+    "max_sigmaIEtaIEta2012_endcap": 999999,
 }
 
 dataBlinding = {

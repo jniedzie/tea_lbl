@@ -19,7 +19,7 @@ applyNeutralExclusivity = True
 applyDiphotonPt = False
 applyZDC = True
 applyEtDelta = False
-applyAcoplanarity = True
+applyAcoplanarity = False
 
 # for QED analysis:
 # applyTrigger = False

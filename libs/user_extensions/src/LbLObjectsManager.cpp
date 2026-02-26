@@ -66,13 +66,13 @@ bool LbLObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) {
   return true;
 }
 
-void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event) {
+void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event, shared_ptr<map<string, int>> cutFlow) {
   auto photons = event->GetCollection("photon");
   auto goodPhotons = make_shared<PhysicsObjects>();
 
   for (auto physicsObject : *photons) {
     auto photon = asPhoton(physicsObject);
-    if (!IsGoodPhoton(photon)) continue;
+    if (!IsGoodPhoton(photon, cutFlow)) continue;
     goodPhotons->push_back(physicsObject);
   }
 
