@@ -129,11 +129,10 @@ int main(int argc, char** argv) {
       {"04_swissCross", 0},
       {"05_etaCuts", 0},
       {"06_crackCuts", 0},
-      {"07_hotSpotCuts", 0},
-      {"08_HEMCuts", 0},
-      {"09_showerShape", 0},
-      {"10_hoverE", 0},
-      {"11_seedTime", 0},
+      {"07_HEMCuts", 0},
+      {"08_showerShape", 0},
+      {"09_hoverE", 0},
+      {"10_seedTime", 0},
   });
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {

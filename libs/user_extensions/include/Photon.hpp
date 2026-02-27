@@ -23,7 +23,6 @@ class Photon {
   bool IsInHEM();
   bool IsEtaAboveLimit();
   bool IsInCrack();
-  bool IsInHotSpot();
   bool PassesShowerShape();
   bool PassesHoverE();
   bool PassesSwissCross();
