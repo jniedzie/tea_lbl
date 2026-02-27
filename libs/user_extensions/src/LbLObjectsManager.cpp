@@ -22,16 +22,14 @@ bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon, shared_ptr
   if (cutFlow) cutFlow->at("05_etaCuts")++;
   if (photon->IsInCrack()) return false;
   if (cutFlow) cutFlow->at("06_crackCuts")++;
-  if (photon->IsInHotSpot()) return false;
-  if (cutFlow) cutFlow->at("07_hotSpotCuts")++;
   if (photon->IsInHEM()) return false;
-  if (cutFlow) cutFlow->at("08_HEMCuts")++;
+  if (cutFlow) cutFlow->at("07_HEMCuts")++;
   if (!photon->PassesShowerShape()) return false;
-  if (cutFlow) cutFlow->at("09_showerShape")++;
+  if (cutFlow) cutFlow->at("08_showerShape")++;
   if (!photon->PassesHoverE()) return false;
-  if (cutFlow) cutFlow->at("10_hoverE")++;
+  if (cutFlow) cutFlow->at("09_hoverE")++;
   if (!photon->PassesSeedTimeCuts()) return false;
-  if (cutFlow) cutFlow->at("11_seedTime")++;
+  if (cutFlow) cutFlow->at("10_seedTime")++;
 
   return true;
 }

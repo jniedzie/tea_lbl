@@ -7,7 +7,7 @@
 using namespace std;
 
 LbLSelections::LbLSelections() {
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
   config.GetMap("eventCuts", eventCuts);
 
   lblObjectsManager = make_shared<LbLObjectsManager>();
@@ -17,19 +17,16 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   auto towers = event->GetCollection("CaloTower");
   int nPassingTowers = 0;
 
+  // old implementation
   for (auto physicsObject : *towers) {
     auto tower = asCaloTower(physicsObject);
-
     string detectorType = tower->GetDetectorType();
 
-    if (detectorType == "HCAL"){
-      if (tower->IsDead()) continue;
-      if (tower->IsInHadronicCrack()) continue;
-      if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++;
+    if (tower->IsDead()) continue;
+    if (tower->IsHadronicEnergyAboveNoiseThreshold() && !tower->IsInHadronicCrack()) {
+      nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
-    }
-    if (detectorType == "ECAL") {
-      if (tower->IsDead()) continue;
+    } else {
       if (tower->IsEtaAboveLimit()) continue;
       if (tower->IsInHEM()) continue;
       if (tower->IsInElectromagneticCrack()) continue;
@@ -38,16 +35,38 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
       if (tower->IsElectromagneticEnergyAboveNoiseThreshold()) nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
     }
-    if (detectorType == "HF") {
-      if (tower->IsDead()) continue;
-      if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
-      if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
-      
-      // This for HF is actually equivalent to checking the EM energy:
-      if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++; 
-      if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
-    }
   }
+
+  // new implementation
+  // for (auto physicsObject : *towers) {
+  //   auto tower = asCaloTower(physicsObject);
+  //   string detectorType = tower->GetDetectorType();
+  // if (detectorType == "HCAL") {
+  //   if (tower->IsDead()) continue;
+  //   if (tower->IsInHadronicCrack()) continue;
+  //   if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++;
+  //   if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
+  // }
+  // if (detectorType == "ECAL") {
+  //   if (tower->IsDead()) continue;
+  //   if (tower->IsEtaAboveLimit()) continue;
+  //   if (tower->IsInHEM()) continue;
+  //   if (tower->IsInElectromagneticCrack()) continue;
+  //   if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
+  //   if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
+  //   if (tower->IsElectromagneticEnergyAboveNoiseThreshold()) nPassingTowers++;
+  //   if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
+  // }
+  // if (detectorType == "HF") {
+  //   if (tower->IsDead()) continue;
+  //   if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
+  //   if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
+
+  //   // This for HF is actually equivalent to checking the EM energy:
+  //   if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++;
+  //   if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
+  // }
+  // }
   if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
 
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("neutralExclusivity");
@@ -86,19 +105,19 @@ bool LbLSelections::PassesThreePhotonsSelection(shared_ptr<Event> event, shared_
   return true;
 }
 
-bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, shared_ptr<map<string, int>> cutFlow) {
+bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager,
+                                            shared_ptr<map<string, int>> cutFlow) {
   auto genMatchedPhotons = asLbLEvent(event)->GetGenMatchedRecoPhotons();
   cutFlow->at("00_initial") += 2;
   cutFlow->at("01_genMatched") += genMatchedPhotons.size();
 
   if (genMatchedPhotons.size() != 2) {
     warn() << "Number of gen-matched reco photons != 2" << endl;
-  }
-  else {
+  } else {
     lblObjectsManager->IsGoodPhoton(asPhoton(genMatchedPhotons.at(0)), cutFlow);
     lblObjectsManager->IsGoodPhoton(asPhoton(genMatchedPhotons.at(1)), cutFlow);
   }
-  
+
   auto goodPhotons = event->GetCollection("goodPhoton");
   int nPhotons = goodPhotons->size();
   if (nPhotons != 2) return false;
@@ -207,7 +226,7 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
 
   try {
     zdcEnergies = event->GetCollection("ZDC");
-  } catch (Exception &e) {
+  } catch (Exception& e) {
     warn() << "No ZDC collection found in event. Will skip ZDC cuts." << endl;
     cutFlowManager->UpdateCutFlow("ZDC");
     return true;
@@ -229,11 +248,10 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
   // if (totalEnergyPlus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC+");
   // if (totalEnergyMinus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC-");
 
-  // if (totalEnergyPlus > eventCuts.at("max_ZDCenergyPerSide") && totalEnergyMinus > eventCuts.at("max_ZDCenergyPerSide")) return false;
+  if (totalEnergyPlus > eventCuts.at("max_ZDCenergyPerSide") && totalEnergyMinus > eventCuts.at("max_ZDCenergyPerSide")) return false;
 
-  if (totalEnergyPlus > 1600 || totalEnergyMinus > 1600) return false; // 0n0n
+  // if (totalEnergyPlus > 1600 || totalEnergyMinus > 1600) return false; // 0n0n
   // if (totalEnergyPlus > 4000 || totalEnergyMinus > 4000) return false; // 0n0n + 1n0n + 0n1n + 1n1n
-
 
   cutFlowManager->UpdateCutFlow("ZDC");
 
