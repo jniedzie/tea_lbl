@@ -4,8 +4,14 @@ import os
 
 from lbl_paths import base_path
 
-directory = f"{base_path}/collisionData/initial"
+# directory = f"{base_path}/collisionData/initial"
+directory = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune/"  # old Pranati
+# directory = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_23rdJan2024"  # new Pranati (4600642)
+# directory = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/collisionData/initial_unmerged"  # new Jeremi (4600642)
+directory = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/collisionData/initial"  # new Jeremi merged (4600642)
+
 pattern = "ntuple_*.root"
+# pattern = "ntuples_loose_selections_*.root"
 
 # tree_name = "ggHiNtuplizer/EventTree"
 tree_name = "Events"

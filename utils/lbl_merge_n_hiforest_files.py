@@ -4,10 +4,10 @@ import os
 # input_path = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune"
 # input_pattern = "ntuples_loose_selections_*.root"
 
-input_path = "/data/dust/user/jniedzie/light_by_light/ntuples/mono_photon/qed/skimmed_1gammaSelections_unmerged"
+input_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/collisionData/initial_unmerged"
 input_pattern = "ntuples_loose_selections_*.root"
 
-output_path = "/data/dust/user/jniedzie/light_by_light/ntuples/mono_photon/qed/skimmed_1gammaSelections"
+output_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/collisionData/initial/"
 output_pattern = "ntuple_{}.root"
 
 n_files_to_merge = 10

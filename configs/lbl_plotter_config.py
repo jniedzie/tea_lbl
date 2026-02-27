@@ -216,41 +216,41 @@ histograms = (
     # Histogram("goodPhotonSR_eta", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 35, "#eta^{#gamma}", "Events / 0.88", "", lbl_error),
     # Histogram("goodPhotonSR_phi", "", False, False, NormalizationType.to_lumi, 1,   -3.14, 3.14, 0, 20, "#phi^{#gamma}", "Events / 1.57", "", lbl_error),
 
-    # Histogram("diphotonSR_pt", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 18, "p_{T}^{#gamma#gamma} (GeV)", "Events / 0.2 GeV", "", lbl_error),
-    # Histogram("diphotonSR_rapidity", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 15, "y^{#gamma#gamma}", "Events / 0.63", "", lbl_error),
-    # Histogram("diphotonSR_mass", "", False, True, NormalizationType.to_lumi, 1,   0, 25, 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", "Events / 5 GeV", "", lbl_error),
+    Histogram("diphotonSR_pt", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 18, "p_{T}^{#gamma#gamma} (GeV)", "Events / 0.2 GeV", "", lbl_error),
+    Histogram("diphotonSR_rapidity", "", False, False, NormalizationType.to_lumi, 1,   -2.2, 2.2, 0, 15, "y^{#gamma#gamma}", "Events / 0.63", "", lbl_error),
+    Histogram("diphotonSR_mass", "", False, True, NormalizationType.to_lumi, 1,   0, 25, 2e-1, 1e2, "m^{#gamma#gamma} (GeV)", "Events / 5 GeV", "", lbl_error),
 
     # Histogram("eventSR3_cosThetaStar", "", False, False, NormalizationType.to_lumi, 1,   0, 1, 0, 25, "|cos #theta*|", "Events / 0.33", "", lbl_error),
 
-    Histogram("goodPhoton_et", "", False, True, default_lumi, 1,   0, 20, 1e-2, 5e3, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram("goodPhoton_logEt", "", False, True, default_lumi, 2,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
-    Histogram("goodPhoton_eta", "", False, False, default_lumi, 2,   -2.2, 2.2, 0, 100, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhoton_phi", "", False, False, default_lumi, 5,   -4, 4, 0, 20, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhoton_seedTime", "", False, True, default_lumi, 1,   -2, 2, 1e-2, 3e3, "Photon seed time", y_label, "", lbl_error),
+    # Histogram("goodPhoton_et", "", False, True, default_lumi, 1,   0, 20, 1e-2, 5e3, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    # Histogram("goodPhoton_logEt", "", False, True, default_lumi, 2,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
+    # Histogram("goodPhoton_eta", "", False, False, default_lumi, 2,   -2.2, 2.2, 0, 100, "#eta^{#gamma}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_phi", "", False, False, default_lumi, 5,   -4, 4, 0, 20, "#phi^{#gamma}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_seedTime", "", False, True, default_lumi, 1,   -2, 2, 1e-2, 3e3, "Photon seed time", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_topOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{top}/E_{max}", y_label, "", lbl_error),
-    Histogram("goodPhoton_bottomOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{bottom}/E_{max}", y_label, "", lbl_error),
-    Histogram("goodPhoton_leftOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{left}/E_{max}", y_label, "", lbl_error),
-    Histogram("goodPhoton_rightOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{right}/E_{max}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_topOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{top}/E_{max}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_bottomOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{bottom}/E_{max}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_leftOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{left}/E_{max}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_rightOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{right}/E_{max}", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_minOverCentral", "", False, True, default_lumi, 4,   0, 0.1, 1e-2, 3e3, "E_{min}/E_{max}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_minOverCentral", "", False, True, default_lumi, 4,   0, 0.1, 1e-2, 3e3, "E_{min}/E_{max}", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_verticalOverCentral", "", False, True, default_lumi, 5,   0, 0.1, 1e-1, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
-    Histogram("goodPhoton_horizontalOverCentral", "", False, True, default_lumi, 5,   0, 0.1, 1e-1, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
+    # Histogram("goodPhoton_verticalOverCentral", "", False, True, default_lumi, 5,   0, 0.1, 1e-1, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
+    # Histogram("goodPhoton_horizontalOverCentral", "", False, True, default_lumi, 5,   0, 0.1, 1e-1, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_verticalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 2e5, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
-    Histogram("goodPhoton_horizontalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 2e5, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_verticalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 2e5, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_horizontalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 2e5, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_SCEta"    , "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e3, "#eta^{SC}", y_label, "", lbl_error),
-    Histogram("goodPhoton_SCEtaWidth"    , "", False, True, default_lumi, 1,   0, 0.01, 1, 5e3, "#eta^{SC} width", y_label, "", lbl_error),
-    Histogram("goodPhoton_SCPhi"    , "", False, True, default_lumi, 5,   -4, 4, 1, 5e3, "#phi^{SC}", y_label, "", lbl_error),
-    Histogram("goodPhoton_SCPhiWidth"    , "", False, True, default_lumi, 10,   0, 0.1, 1e-1, 5e3, "#phi^{SC} width", y_label, "", lbl_error),
+    # Histogram("goodPhoton_SCEta"    , "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e3, "#eta^{SC}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_SCEtaWidth"    , "", False, True, default_lumi, 1,   0, 0.01, 1, 5e3, "#eta^{SC} width", y_label, "", lbl_error),
+    # Histogram("goodPhoton_SCPhi"    , "", False, True, default_lumi, 5,   -4, 4, 1, 5e3, "#phi^{SC}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_SCPhiWidth"    , "", False, True, default_lumi, 10,   0, 0.1, 1e-1, 5e3, "#phi^{SC} width", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_hOverE"    , "", False, True, default_lumi, 1,   0, 0.1, 1e-1, 5e3, "#phi^{SC} width", y_label, "", lbl_error),
-    Histogram("goodPhoton_hasConversionTracks"    , "", False, False, default_lumi, 1,   0, 1, 0, 400, "#phi^{SC} width", y_label, "", lbl_error),
+    # Histogram("goodPhoton_hOverE"    , "", False, True, default_lumi, 1,   0, 0.1, 1e-1, 5e3, "#phi^{SC} width", y_label, "", lbl_error),
+    # Histogram("goodPhoton_hasConversionTracks"    , "", False, False, default_lumi, 1,   0, 1, 0, 400, "#phi^{SC} width", y_label, "", lbl_error),
     
-    Histogram("goodPhoton_sigmaEta2012"    , "", False, True, default_lumi, 1,   0, 0.03, 1e-1, 1e3, "#sigma_{#eta, 2012}", y_label, "", lbl_error),
-    Histogram("goodPhoton_sigmaIEtaIEta2012"    , "", False, True, default_lumi, 1,   0, 0.03, 1e-1, 1e3, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_sigmaEta2012"    , "", False, True, default_lumi, 1,   0, 0.03, 1e-1, 1e3, "#sigma_{#eta, 2012}", y_label, "", lbl_error),
+    # Histogram("goodPhoton_sigmaIEtaIEta2012"    , "", False, True, default_lumi, 1,   0, 0.03, 1e-1, 1e3, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),
 
     # Histogram("goodPhoton_et", "", False, False, NormalizationType.to_lumi, 2,   0, 10, 0, 15, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
     # Histogram("goodPhoton_eta", "", False, False, NormalizationType.to_lumi, 2,   -2.2, 2.2, 0, 20, "#eta^{#gamma}", y_label, "", lbl_error),
@@ -266,9 +266,10 @@ histograms = (
 
     # Histogram("diphoton_acoplanarity35", "", False, False, NormalizationType.to_lumi, 1,   1e-4, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     Histogram("diphoton_acoplanarity40", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    Histogram("diphoton_acoplanarity40", "", True, False, NormalizationType.to_lumi, 1,   0.0001, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "logx", lbl_error),
     # Histogram("diphoton_acoplanarity60", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
 
-    Histogram("diphoton_acoplanarity50", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
+    # Histogram("diphoton_acoplanarity50", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 15, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     # Histogram("diphoton_acoplanarity1", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     # Histogram("diphoton_acoplanarity2", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),
     # Histogram("diphoton_acoplanarity3", "", False, False, NormalizationType.to_lumi, 1,   0, 0.1, 0, 25, "A_{#phi}^{#gamma#gamma}", y_label, "", lbl_error),

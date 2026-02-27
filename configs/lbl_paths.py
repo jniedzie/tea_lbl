@@ -1,5 +1,4 @@
-facility = "lxplus"
-# facility = "NAF"
+from teaHelpers import get_facility
 
 processes = (
     "collisionData",
@@ -30,7 +29,8 @@ qed_names = ["qed_superchic", "qed_starlight"]
 
 # this is the final final skim:
 input_skim = "initial"
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test"
 
 # input_skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_withAco"
@@ -97,9 +97,10 @@ acoplanarity_histogram_name = "diphoton_acoplanarity{}"
 # mass_histogram_name = "diphoton_mass{}"
 mass_histogram_name = "diphotonSR_mass{}"
 
-if facility == "NAF":
+facility = get_facility()
+
+if facility == "naf":
     base_path = "/data/dust/user/jniedzie/light_by_light/ntuples"
-    # base_path = "/data/dust/user/jniedzie/light_by_light/ntuples/mono_photon"
 elif facility == "lxplus":
     base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples"
 
