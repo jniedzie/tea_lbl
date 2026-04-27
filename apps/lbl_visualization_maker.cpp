@@ -8,6 +8,8 @@
 #include "LbLObjectsManager.hpp"
 #include "Logger.hpp"
 
+#include <TEllipse.h>
+
 using namespace std;
 
 tuple<float, float> findRefEtandPhi(const vector<pair<float, float>> &phiAndEt) {
