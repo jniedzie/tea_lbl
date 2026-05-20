@@ -19,9 +19,9 @@ eventCuts = {
     "max_Ntowers": 0,
 }
 
-# current version
-
 # good object definitions
+
+# original LbL cuts:
 photonCuts = {
     "min_et": 2.0,
     "max_absEta": 2.2,
@@ -32,7 +32,10 @@ photonCuts = {
     "max_hOverE_endcap": 0.0590,
     "max_sigmaIEtaIEta_barrel": 0.02,
     "max_sigmaIEtaIEta_endcap": 0.06,
-    "max_seedTime": 3.0,
+    # "max_seedTime": 3.0,
+    
+    "min_seedTime": -50.0,
+    "max_seedTime": 50.0,
     
     "min_SCEtaWidth": 0.0,
     "max_SCPhiWidth": 999999,
@@ -40,7 +43,68 @@ photonCuts = {
     "max_sigmaIEtaIEta2012_barrel": 999999,
     "min_sigmaIEtaIEta2012_endcap": 0.0,
     "max_sigmaIEtaIEta2012_endcap": 999999,
+    
+    "max_SCPhiWidth_barrel": 999999,
+    "max_SCPhiWidth_endcap": 999999,
+    "min_sigmaIEtaIEta_barrel": 0,
+    "min_sigmaIEtaIEta_endcap": 0,
+    "min_horizontalImbalance": -99999,
+    "min_verticalImbalance": -99999,
+    "max_horizontalImbalance": 99999,
+    "max_verticalImbalance": 99999,
+    "min_SCPhiWidth": 0.0,
+    "min_verticalOverCentral": 0.0,
+    "min_horizontalOverCentral": 0.0,
 }
+
+# from monophoton analysis:
+# photonCuts = {
+#   # Common cuts:
+#   "max_SCEtaWidth_barrel": 0.0106,
+#   "max_SCEtaWidth_endcap": 0.0272,
+#   "max_SCPhiWidth_barrel": 999999,
+#   "max_SCPhiWidth_endcap": 999999,
+#   "min_sigmaIEtaIEta_barrel": 0,  # try 0.009
+#   "max_sigmaIEtaIEta_barrel": 0.02,
+#   "min_sigmaIEtaIEta_endcap": 0,  # try 0.009
+#   "min_horizontalImbalance": -99999,
+#   "min_verticalImbalance": -99999,
+#   "max_horizontalImbalance": 99999,
+#   "max_verticalImbalance": 99999,
+
+#   # LbL cuts:
+#   # "max_hOverE_barrel": 0.04596,
+#   # "max_hOverE_endcap": 0.0590,
+#   # "max_swissCross": 0.95,
+#   # "min_et": 2.0,
+#   # "min_SCEtaWidth": 0.0,
+#   # "min_SCPhiWidth": 0.0,
+#   # "min_verticalOverCentral": 0.0,
+#   # "min_horizontalOverCentral": 0.0,
+#   "max_absEta": 2.2,
+#   "min_seedTime": -3.0,
+#   "max_seedTime": 3.0,
+#   "max_sigmaIEtaIEta_endcap": 0.06,
+
+#   # Tightened cuts:
+#   "max_hOverE_barrel": 0.001,
+#   "max_hOverE_endcap": 0.001,
+#   "max_swissCross": 0.87,
+#   "min_et": 4.0,
+#   "min_SCEtaWidth": 0.001,
+#   "min_SCPhiWidth": 0.001,
+#   "min_verticalOverCentral": 0.005,
+#   "min_horizontalOverCentral": 0.005,
+#   # "max_absEta": 1.2,
+#   # "min_seedTime": -1.2,
+#   # "max_seedTime": 0.8,
+#   # "max_sigmaIEtaIEta_endcap": 0.02,
+#   # "max_SCPhiWidth_barrel": 0.01,
+
+#   # loosened cuts:
+#   # "min_seedTime": -999,
+#   # "max_seedTime": 999,
+# }
 
 dataBlinding = {
   # "max_et": 10.0,  # blind data with photon ET > X GeV

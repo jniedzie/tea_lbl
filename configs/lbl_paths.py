@@ -30,7 +30,9 @@ qed_names = ["qed_superchic", "qed_starlight"]
 # this is the final final skim:
 input_skim = "initial"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test_tightCuts"
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test_noTimingCut"
 
 # input_skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_withAco"

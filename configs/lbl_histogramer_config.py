@@ -116,7 +116,10 @@ histParams = (
   ("unfoldingPhoton", "costhetastar4", 4, 0, 1, ""),
   ("goodPhotonSR", "et", 5, 2, 8, ""),
   ("goodPhotonSR", "eta", 5, -2.2, 2.2, ""),
-  ("goodPhotonSR", "phi", 6, -3.14, 3.14, ""),
+  # ("goodPhotonSR", "phi", 6, -3.14, 3.14, ""),
+  ("goodPhotonSR", "phi", 10, -3.14, 3.14, ""),
+  ("goodPhotonSR", "absPhi", 10, 0, 3.14, ""),
+  ("goodPhotonSR", "seedTime", 100, -50, 50, ""),
   ("diphoton", "pt", 5, 0, 1, ""),
   ("diphoton", "rapidity", 12, -2.2, 2.2, ""),
   ("diphoton", "mass", 10, 0, 50, ""),
@@ -152,6 +155,8 @@ histParams = (
   ("diphotonSR", "mass200", 200, 0, 200, ""),
   ("diphotonSR", "massNew", 100, 5, 205, ""),
   ("diphotonSR", "mass100", 100, 0, 200, ""),
+  ("diphotonSR", "phi", 100, -3.14, 3.14, ""),
+  ("diphotonSR", "absPhi", 100, 0, 3.14, ""),
   
   ("goodPhoton", "et", 2000, 0, 1000, ""),
   ("goodPhoton", "logEt", 200, -1, 3, ""),
@@ -324,6 +329,8 @@ histParams2D = (
   ("goodPhoton_eta_vs_phi_gt50GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
   
   ("egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""),
+  
+  ("goodPhotonSR_phi_vs_seedTime", 100, -3.14, 3.14, 100, -30, 30, "")
 )
 
 eventsTreeNames = [
