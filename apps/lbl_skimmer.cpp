@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 
   bool applyTrigger, applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons,
       applyEtDelta, applyTwoTracksTwoPhotons, applySinglePhoton, applyThreePhotons, applyZeroPhotonElectron, sameChargeElectrons,
-      applyAcoplanarity;
+      applyAcoplanarity, applyBeamHaloFilters;
   config.GetValue("applyTrigger", applyTrigger);
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
   config.GetValue("applySinglePhoton", applySinglePhoton);
@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
   config.GetValue("applyZeroPhotonElectron", applyZeroPhotonElectron);
   config.GetValue("sameChargeElectrons", sameChargeElectrons);
   config.GetValue("applyAcoplanarity", applyAcoplanarity);
+  config.GetValue("applyBeamHaloFilters", applyBeamHaloFilters);
 
   info() << "applyTrigger: " << applyTrigger << endl;
   info() << "applyTwoPhotons: " << applyTwoPhotons << endl;
@@ -61,11 +62,15 @@ int main(int argc, char** argv) {
   info() << "applyTwoTracksTwoPhotons: " << applyTwoTracksTwoPhotons << endl;
   info() << "applyZeroPhotonElectron: " << applyZeroPhotonElectron << endl;
   info() << "applyAcoplanarity: " << applyAcoplanarity << endl;
+  info() << "applyBeamHaloFilters: " << applyBeamHaloFilters << endl;
 
   cutFlowManager->RegisterCut("initial");
 
   if (applyTrigger) {
     cutFlowManager->RegisterCut("trigger");
+  }
+  if (applyBeamHaloFilters) {
+    cutFlowManager->RegisterCut("beamHaloFilters");
   }
   if (applyTwoPhotons) {
     cutFlowManager->RegisterCut("twoGoodPhotons");
@@ -157,6 +162,9 @@ int main(int argc, char** argv) {
         warn() << e.what() << endl;
       }
       cutFlowManager->UpdateCutFlow("trigger");
+    }
+    if (applyBeamHaloFilters) {
+      if (!lblSelections->PassesBeamHaloFilters(event, cutFlowManager)) continue;
     }
 
     if (applyTwoPhotons) {

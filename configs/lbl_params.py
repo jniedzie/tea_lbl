@@ -17,6 +17,8 @@ eventCuts = {
     "max_Ntracks": 0,
     "max_Nmuons": 0,
     "max_Ntowers": 0,
+    
+    "beamHaloFilter": 1  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
 }
 
 # good object definitions
@@ -32,10 +34,11 @@ photonCuts = {
     "max_hOverE_endcap": 0.0590,
     "max_sigmaIEtaIEta_barrel": 0.02,
     "max_sigmaIEtaIEta_endcap": 0.06,
-    # "max_seedTime": 3.0,
+    "min_seedTime": -3.0,
+    "max_seedTime": 3.0,
     
-    "min_seedTime": -50.0,
-    "max_seedTime": 50.0,
+    # "min_seedTime": -50.0,
+    # "max_seedTime": 50.0,
     
     "min_SCEtaWidth": 0.0,
     "max_SCPhiWidth": 999999,

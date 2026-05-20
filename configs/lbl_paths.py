@@ -1,11 +1,12 @@
 from teaHelpers import get_facility
 
 processes = (
-    "collisionData",
-    "lbl",
-    "cep",
-    "qed_superchic",
-    "qed_starlight",
+    # "collisionData",
+    "collisionDataNewNtuples",
+    # "lbl",
+    # "cep",
+    # "qed_superchic",
+    # "qed_starlight",
     # "qed_MG_ee_a",
     # "qed_MG_ee_aa"
     # "qed_sc_noPhotos",
@@ -32,7 +33,8 @@ input_skim = "initial"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test_tightCuts"
-skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test_noTimingCut"
+# skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test_noTimingCut"
+skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_testNewNtuples"
 
 # input_skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_withAco"

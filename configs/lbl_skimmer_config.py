@@ -20,6 +20,7 @@ applyDiphotonPt = True
 applyZDC = True
 applyEtDelta = False
 applyAcoplanarity = False
+applyBeamHaloFilters = False
 
 # for QED analysis:
 # applyTrigger = False
