@@ -18,11 +18,11 @@ samples = {
     "Empty Beams": (f"{base_path}/emptyBeams/{hist_file_name}_{suffix}.root",                       ROOT.kBlue),
     
     # "Zero Bias, Jeremi": (f"{base_path}/collisionDataZeroBias/{hist_file_name}_{suffix}.root", ROOT.kOrange),
-    "Zero Bias": (f"{lbl_base_path}/calo_towers_HF_TnP_data_zeroBias_{suffix}.root",                ROOT.kRed),
+    # "Zero Bias": (f"{lbl_base_path}/calo_towers_HF_TnP_data_zeroBias_{suffix}.root",                ROOT.kRed),
     
-    "B--W Data": (f"{lbl_base_path}/calo_towers_HF_TnP_bw_data_{suffix}.root",                      ROOT.kBlack),
-    "B--W Data, 0n0n": (f"{lbl_base_path}/calo_towers_HF_TnP_bw_data_0n0n_{suffix}.root",           ROOT.kMagenta),
-    "B--W MC": (f"{lbl_base_path}/calo_towers_HF_TnP_bw_mc_{suffix}.root",                          ROOT.kGreen+1),
+    # "B--W Data": (f"{lbl_base_path}/calo_towers_HF_TnP_bw_data_{suffix}.root",                      ROOT.kBlack),
+    # "B--W Data, 0n0n": (f"{lbl_base_path}/calo_towers_HF_TnP_bw_data_0n0n_{suffix}.root",           ROOT.kMagenta),
+    # "B--W MC": (f"{lbl_base_path}/calo_towers_HF_TnP_bw_mc_{suffix}.root",                          ROOT.kGreen+1),
 }
 
 variable_label = {
