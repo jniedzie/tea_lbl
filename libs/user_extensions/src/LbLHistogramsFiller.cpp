@@ -509,13 +509,20 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
     histogramsHandler->Fill("diphotonSR_mass100", diphoton.M());
     histogramsHandler->Fill("diphotonSR_mass200", diphoton.M());
     histogramsHandler->Fill("diphotonSR_rapidity", diphoton.Rapidity());
+    histogramsHandler->Fill("diphotonSR_phi", diphoton.Phi());
+    histogramsHandler->Fill("diphotonSR_absPhi", fabs(diphoton.Phi()));
 
     histogramsHandler->Fill("goodPhotonSR_et", photon1->Get("et"));
     histogramsHandler->Fill("goodPhotonSR_eta", photon1->Get("eta"));
     histogramsHandler->Fill("goodPhotonSR_phi", photon1->Get("phi"));
+    histogramsHandler->Fill("goodPhotonSR_absPhi", fabs(photon1->GetAs<float>("phi")));
+    histogramsHandler->Fill("goodPhotonSR_seedTime", photon1->Get("seedTime"));
+
     histogramsHandler->Fill("goodPhotonSR_et", photon2->Get("et"));
     histogramsHandler->Fill("goodPhotonSR_eta", photon2->Get("eta"));
     histogramsHandler->Fill("goodPhotonSR_phi", photon2->Get("phi"));
+    histogramsHandler->Fill("goodPhotonSR_absPhi", fabs(photon2->GetAs<float>("phi")));
+    histogramsHandler->Fill("goodPhotonSR_seedTime", photon2->Get("seedTime"));
 
     histogramsHandler->Fill("diphoton_seedTimeSR", photon1->Get("seedTime"), photon2->Get("seedTime"));
     histogramsHandler->Fill("unfoldingPhoton_pt", diphoton.Pt());
@@ -524,6 +531,9 @@ void LbLHistogramsFiller::FillPhotonHistograms(const shared_ptr<Event> event) {
     histogramsHandler->Fill("unfoldingPhoton_absRap3", fabs(diphoton.Rapidity()));
     histogramsHandler->Fill("unfoldingPhoton_rap3", diphoton.Rapidity());
     histogramsHandler->Fill("unfoldingPhoton_rap4", diphoton.Rapidity());
+
+    histogramsHandler->Fill("goodPhotonSR_phi_vs_seedTime", photon1->Get("phi"), photon1->Get("seedTime"));
+    histogramsHandler->Fill("goodPhotonSR_phi_vs_seedTime", photon2->Get("phi"), photon2->Get("seedTime"));
   }
 }
 
