@@ -21,6 +21,7 @@ applyZDC = True
 applyEtDelta = False
 applyAcoplanarity = False
 applyBeamHaloFilters = False
+applyStandaloneMuonFilters = False
 
 # for QED analysis:
 # applyTrigger = False

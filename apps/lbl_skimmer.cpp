@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 
   bool applyTrigger, applyTwoPhotons, applyChargedExclusivity, applyNeutralExclusivity, applyDiphotonPt, applyZDC, applyTwoElectrons,
       applyEtDelta, applyTwoTracksTwoPhotons, applySinglePhoton, applyThreePhotons, applyZeroPhotonElectron, sameChargeElectrons,
-      applyAcoplanarity, applyBeamHaloFilters;
+      applyAcoplanarity, applyBeamHaloFilters, applyStandaloneMuonFilters;
   config.GetValue("applyTrigger", applyTrigger);
   config.GetValue("applyTwoPhotons", applyTwoPhotons);
   config.GetValue("applySinglePhoton", applySinglePhoton);
@@ -48,6 +48,7 @@ int main(int argc, char** argv) {
   config.GetValue("sameChargeElectrons", sameChargeElectrons);
   config.GetValue("applyAcoplanarity", applyAcoplanarity);
   config.GetValue("applyBeamHaloFilters", applyBeamHaloFilters);
+  config.GetValue("applyStandaloneMuonFilters", applyStandaloneMuonFilters);
 
   info() << "applyTrigger: " << applyTrigger << endl;
   info() << "applyTwoPhotons: " << applyTwoPhotons << endl;
@@ -63,6 +64,7 @@ int main(int argc, char** argv) {
   info() << "applyZeroPhotonElectron: " << applyZeroPhotonElectron << endl;
   info() << "applyAcoplanarity: " << applyAcoplanarity << endl;
   info() << "applyBeamHaloFilters: " << applyBeamHaloFilters << endl;
+  info() << "applyStandaloneMuonFilters: " << applyStandaloneMuonFilters << endl;
 
   cutFlowManager->RegisterCut("initial");
 
@@ -101,6 +103,9 @@ int main(int argc, char** argv) {
     cutFlowManager->RegisterCut("nElectrons");
     cutFlowManager->RegisterCut("nTracks");
     cutFlowManager->RegisterCut("nMuons");
+  }
+  if (applyStandaloneMuonFilters) {
+    cutFlowManager->RegisterCut("nStandaloneMuons");
   }
   if (applyNeutralExclusivity) {
     cutFlowManager->RegisterCut("neutralExclusivity");
@@ -146,11 +151,14 @@ int main(int argc, char** argv) {
     lblObjectsManager->InsertGoodElectronsCollection(event);
     if (!applyZeroPhotonElectron) {
       lblObjectsManager->InsertGoodTracksCollection(event);
-      lblObjectsManager->InsertGoodMuonsCollection(event);
+      lblObjectsManager->InsertGoodMuonsCollection(event, false);
     }
     if (applyChargedExclusivity) {
       lblObjectsManager->InsertGoodTracksCollection(event);
-      lblObjectsManager->InsertGoodMuonsCollection(event);
+      lblObjectsManager->InsertGoodMuonsCollection(event, false);
+    }
+    if (applyStandaloneMuonFilters) {
+      lblObjectsManager->InsertGoodMuonsCollection(event, true);
     }
 
     cutFlowManager->UpdateCutFlow("initial");
@@ -191,6 +199,10 @@ int main(int argc, char** argv) {
 
     if (applyChargedExclusivity) {
       if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
+    }
+    
+    if (applyStandaloneMuonFilters) {
+      if (!lblSelections->PassesStandaloneMuonFilters(event, cutFlowManager)) continue;
     }
 
     if (applyNeutralExclusivity) {

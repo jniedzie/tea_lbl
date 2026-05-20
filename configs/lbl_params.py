@@ -16,6 +16,7 @@ eventCuts = {
     "max_Nelectrons": 0,  # 0 for LbL analysis, 2 for QED analysis
     "max_Ntracks": 0,
     "max_Nmuons": 0,
+    "max_NstandaloneMuons": 0,
     "max_Ntowers": 0,
     
     "beamHaloFilter": 1  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016

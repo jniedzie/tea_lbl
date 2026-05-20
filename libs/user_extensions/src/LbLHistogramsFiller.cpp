@@ -358,7 +358,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
       photonFile << "\n\nMuons information:" << endl;
       if (muons) {
         for (const auto &muonObj : *muons) {
-          auto muon = asMuon(muonObj);
+          auto muon = asMuon(muonObj, false);
           photonFile << "\nmuon_pt: " << muon->GetAs<float>("pt") << endl;
           photonFile << "muon_eta: " << muon->GetAs<float>("eta") << endl;
           photonFile << "muon_phi: " << muon->GetAs<float>("phi") << endl;

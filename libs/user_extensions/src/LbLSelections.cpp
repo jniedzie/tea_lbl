@@ -205,6 +205,14 @@ bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr
   return true;
 }
 
+bool LbLSelections::PassesStandaloneMuonFilters(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  int nStandaloneMuons = event->GetCollection("standaloneMuon")->size();
+  if (nStandaloneMuons > eventCuts.at("max_NstandaloneMuons")) return false;
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nStandaloneMuons");
+
+  return true;
+}
+
 bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   if (event->GetCollection("goodPhoton")->size() != 2) return false;
 
