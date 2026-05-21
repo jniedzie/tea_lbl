@@ -93,15 +93,21 @@ float LbLEvent::GetDiphotonAcoplanarity() {
 vector<shared_ptr<PhysicsObject>> LbLEvent::GetGenPhotons() {
   vector<shared_ptr<PhysicsObject>> genPhotons;
 
-  auto genParticles = GetCollection("genParticle");
-  
+  shared_ptr<PhysicsObjects> genParticles;
+
+  try {
+    genParticles = GetCollection("genParticle");
+  } catch (Exception& e) {
+    warn() << "Couldn't retrieve genParticle collection: " << e.what() << endl;
+    return genPhotons;
+  }
+
   for (auto physicsObject : *genParticles) {
-    
     int particlePid = physicsObject->Get("pid");
-    float *floatPtr = reinterpret_cast<float *>(&particlePid);
+    float* floatPtr = reinterpret_cast<float*>(&particlePid);
     float floatValue = *floatPtr;
     particlePid = round(floatValue);
-    
+
     if (abs(particlePid) == 22) {
       genPhotons.push_back(physicsObject);
     }
@@ -121,7 +127,7 @@ vector<shared_ptr<PhysicsObject>> LbLEvent::GetGenMatchedRecoPhotons() {
     float genPhi = genPhoton->Get("phi");
 
     shared_ptr<PhysicsObject> bestMatch = nullptr;
-    float bestDeltaR = 0.2; // matching cone
+    float bestDeltaR = 0.2;  // matching cone
 
     for (auto recoPhoton : *recoPhotons) {
       float recoEta = recoPhoton->Get("eta");
