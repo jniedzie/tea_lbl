@@ -1,12 +1,11 @@
 from teaHelpers import get_facility
 
 processes = (
-    # "collisionData",
-    "collisionDataNewNtuples",
-    # "lbl",
-    # "cep",
-    # "qed_superchic",
-    # "qed_starlight",
+    "collisionData",
+    "lbl",
+    "cep",
+    "qed_superchic",
+    "qed_starlight",
     # "qed_MG_ee_a",
     # "qed_MG_ee_aa"
     # "qed_sc_noPhotos",
@@ -29,7 +28,9 @@ processes = (
 qed_names = ["qed_superchic", "qed_starlight"]
 
 # this is the final final skim:
-input_skim = "initial"
+# input_skim = "initial"
+input_skim = "initial_doubleEG2"
+
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test"
 # skim = "skimmed_lblSelections_final_photonMatchingdeltaPhi0p15_test_tightCuts"
@@ -106,6 +107,7 @@ facility = get_facility()
 if facility == "naf":
     base_path = "/data/dust/user/jniedzie/light_by_light/ntuples"
 elif facility == "lxplus":
-    base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples"
+    # base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples"
+    base_path = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples"
 
 merged_histograms_path = base_path + "/{}/merged_{}_histograms.root"

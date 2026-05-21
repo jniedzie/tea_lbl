@@ -239,8 +239,9 @@ electronTrackMatching = {
 
 #  scaling parameters
 
-luminosity = 1647.180726  # μb^-1, with ZDC
+# luminosity = 1647.180726  # μb^-1, with ZDC
 # luminosity = 1647.2  # μb^-1, without ZDC
+luminosity = 1583.902  # μb^-1, brilcalc for 2026 ntuples with BH and SAmu
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 
 reference_alp_cross_section = 10e-3  # μb
@@ -360,7 +361,8 @@ nGenEvents = {
 
     "qed_MG_ee_a": 10228329,
     "qed_MG_ee_aa": 6457150,
-    "qed_superchic": 59260000,
+    # "qed_superchic": 59260000,  # original LbL ntuples
+    "qed_superchic": 65693200,  # 2026 ntuples with BH and SAmu
     "qed_starlight": 66750000,
 
     "alps_5": 754000,

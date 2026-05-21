@@ -7,7 +7,8 @@ from lbl_helpers import get_cep_scale
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, total_uncertainty_qed, total_uncertainty_lbl_run2
 from lbl_paths import base_path, processes, skim
 
-output_path = f"../plots/{skim.replace('skimmed_', '')}/"
+# output_path = f"../plots/{skim.replace('skimmed_', '')}/"
+output_path = f"../plots/{skim.replace('skimmed_', '')}_newNtuples/"
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_withALPs_SingleEG5/"
 
 # output_path = f"../plots/{skim.replace('skimmed_', '')}_1gamma/"
