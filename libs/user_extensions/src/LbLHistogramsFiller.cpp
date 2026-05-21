@@ -8,13 +8,13 @@ using namespace std;
 
 LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandler_) : histogramsHandler(histogramsHandler_) {
   // Create a config manager
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
 
   config.GetMap("caloEtaEdges", caloEtaEdges);
 
   try {
     config.GetMap("dataBlinding", dataBlinding);
-  } catch (const Exception &e) {
+  } catch (const Exception& e) {
     warn() << "No data blinding parameters found. Will not apply any data blinding." << endl;
     dataBlinding["max_et"] = 9999;
   }
@@ -170,11 +170,11 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
 
   float minEnergy = min({energyTop, energyBottom, energyLeft, energyRight});
 
-  histogramsHandler->Fill("goodPhoton_topOverCentral", energyTop/energyCentral);
-  histogramsHandler->Fill("goodPhoton_bottomOverCentral", energyBottom/energyCentral);
-  histogramsHandler->Fill("goodPhoton_leftOverCentral", energyLeft/energyCentral);
-  histogramsHandler->Fill("goodPhoton_rightOverCentral", energyRight/energyCentral);
-  histogramsHandler->Fill("goodPhoton_minOverCentral", minEnergy/energyCentral);
+  histogramsHandler->Fill("goodPhoton_topOverCentral", energyTop / energyCentral);
+  histogramsHandler->Fill("goodPhoton_bottomOverCentral", energyBottom / energyCentral);
+  histogramsHandler->Fill("goodPhoton_leftOverCentral", energyLeft / energyCentral);
+  histogramsHandler->Fill("goodPhoton_rightOverCentral", energyRight / energyCentral);
+  histogramsHandler->Fill("goodPhoton_minOverCentral", minEnergy / energyCentral);
   histogramsHandler->Fill("goodPhoton_verticalOverCentral", photon->GetVerticalOverCentralEnergy());
   histogramsHandler->Fill("goodPhoton_horizontalOverCentral", photon->GetHorizontalOverCentralEnergy());
   histogramsHandler->Fill("goodPhoton_horizontalImbalance", horizontalImbalance);
@@ -186,8 +186,6 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   float minDeltaR = 9999;
 
   if (eGammaObjects) {
-    
-
     for (int i = 0; i < eGammaObjects->size(); i++) {
       auto eGamma = eGammaObjects->at(i);
 
@@ -305,7 +303,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
       auto allPhotons = event->GetCollection("photon");
 
       photonFile << "\n\nAll photons information:" << endl;
-      for (const auto &photonObj : *allPhotons) {
+      for (const auto& photonObj : *allPhotons) {
         auto pho = asPhoton(photonObj);
         photonFile << "\nphoton_et: " << pho->GetAs<float>("et") << endl;
         photonFile << "photon_eta: " << pho->GetAs<float>("eta") << endl;
@@ -325,7 +323,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
       auto tracks = event->GetCollection("track");
       photonFile << "\n\nTracks information:" << endl;
       if (tracks) {
-        for (const auto &trackObj : *tracks) {
+        for (const auto& trackObj : *tracks) {
           auto track = asTrack(trackObj);
           photonFile << "\ntrack_pt: " << track->GetAs<float>("pt") << endl;
           photonFile << "track_eta: " << track->GetAs<float>("eta") << endl;
@@ -342,7 +340,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
       auto electrons = event->GetCollection("electron");
       photonFile << "\n\nElectrons information:" << endl;
       if (electrons) {
-        for (const auto &electronObj : *electrons) {
+        for (const auto& electronObj : *electrons) {
           auto electron = asElectron(electronObj);
           photonFile << "\nelectron_pt: " << electron->GetAs<float>("pt") << endl;
           photonFile << "electron_eta: " << electron->GetAs<float>("eta") << endl;
@@ -357,7 +355,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
       auto muons = event->GetCollection("muon");
       photonFile << "\n\nMuons information:" << endl;
       if (muons) {
-        for (const auto &muonObj : *muons) {
+        for (const auto& muonObj : *muons) {
           auto muon = asMuon(muonObj, false);
           photonFile << "\nmuon_pt: " << muon->GetAs<float>("pt") << endl;
           photonFile << "muon_eta: " << muon->GetAs<float>("eta") << endl;
@@ -372,7 +370,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
       auto eGammaObjects = event->GetCollection("egamma");
       photonFile << "\n\nEGamma objects information:" << endl;
       if (eGammaObjects) {
-        for (const auto &eGammaObj : *eGammaObjects) {
+        for (const auto& eGammaObj : *eGammaObjects) {
           photonFile << "\neGamma_et: " << eGammaObj->GetAs<float>("et") << endl;
           photonFile << "eGamma_eta: " << eGammaObj->GetAs<float>("eta") << endl;
           photonFile << "eGamma_phi: " << eGammaObj->GetAs<float>("phi") << endl;
@@ -546,8 +544,16 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
   float leadingPhotonEtBarrel = 0;
   float leadingPhotonEtBarrelEndcap = 0;
 
-  auto photons = event->GetCollection("genPhoton");
-  auto electrons = event->GetCollection("genElectron");
+  shared_ptr<PhysicsObjects> photons;
+  shared_ptr<PhysicsObjects> electrons;
+
+  try {
+    photons = event->GetCollection("genPhoton");
+    electrons = event->GetCollection("genElectron");
+  } catch (const exception& e) {
+    warn() << "Error in FillGenLevelHistograms: " << e.what() << endl;
+    return;
+  }
 
   for (auto physObject : *photons) {
     auto photon = asPhoton(physObject)->GetFourMomentum();
@@ -612,7 +618,7 @@ float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Event> eve
   return GetDielectronAcoplanarity(asElectron(electrons->at(0)), asElectron(electrons->at(1)));
 }
 
-float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2) {
+float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Electron>& electron1, const shared_ptr<Electron>& electron2) {
   auto electron1vec = electron1->GetFourMomentum();
   auto electron2vec = electron2->GetFourMomentum();
   double deltaPhi = electron1vec.DeltaPhi(electron2vec);
@@ -620,7 +626,7 @@ float LbLHistogramsFiller::GetDielectronAcoplanarity(const shared_ptr<Electron> 
   return acoplanarity;
 }
 
-float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron> &electron1, const shared_ptr<Electron> &electron2) {
+float LbLHistogramsFiller::GetPhiModulation(const shared_ptr<Electron>& electron1, const shared_ptr<Electron>& electron2) {
   TLorentzVector electron, positron;
   if (electron1->GetCharge() > 0) {
     positron = electron1->GetFourMomentum();
@@ -779,7 +785,7 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
     }
     histogramsHandler->Fill("event_ZDCenergyPlus", totalEnergyPlus);
     histogramsHandler->Fill("event_ZDCenergyMinus", totalEnergyMinus);
-  } catch (const Exception &e) {
+  } catch (const Exception& e) {
     warn() << "Cannot fill ZDC histograms, since ZDC collection was not found." << endl;
   }
 }
@@ -792,12 +798,6 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
     auto electron_1 = asElectron(electrons->at(0));
     auto electron_2 = asElectron(electrons->at(1));
     dielectron = electron_1->GetFourMomentum() + electron_2->GetFourMomentum();
-  }
-  auto genElectrons = event->GetCollection("genElectron");
-  if (genElectrons->size() == 2) {
-    auto electron_1 = asElectron(genElectrons->at(0));
-    auto electron_2 = asElectron(genElectrons->at(1));
-    genDielectron = electron_1->GetFourMomentum() + electron_2->GetFourMomentum();
   }
 
   FillCaloHistograms(event);

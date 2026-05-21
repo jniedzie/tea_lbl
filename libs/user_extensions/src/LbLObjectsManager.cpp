@@ -109,7 +109,8 @@ void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event, bool 
   try {
     muons = event->GetCollection(isStandalone ? "standaloneMuon" : "muon");
   } catch (const Exception& e) {
-    error() << "No muon collection found in event. Will not insert " << (isStandalone ? "goodStandaloneMuon" : "goodMuon") <<" collection." << endl;
+    error() << "No muon collection found in event. Will not insert " << (isStandalone ? "goodStandaloneMuon" : "goodMuon") << " collection."
+            << endl;
     return;
   }
   auto goodMuons = make_shared<PhysicsObjects>();
@@ -124,20 +125,42 @@ void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event, bool 
 }
 
 void LbLObjectsManager::InsertGenPhotonsCollection(shared_ptr<Event> event) {
-  auto genParticles = event->GetCollection("genParticle");
+  shared_ptr<PhysicsObjects> genParticles;
+
+  try {
+    genParticles = event->GetCollection("genParticle");
+  } catch (const Exception& e) {
+    error() << "No genParticle collection found in event. Will not insert genPhoton collection." << endl;
+    return;
+  }
   auto genPhotons = GetGenParticles(event, 22);
   event->AddCollection("genPhoton", genPhotons);
 }
 
 void LbLObjectsManager::InsertGenElectronsCollection(shared_ptr<Event> event) {
-  auto genParticles = event->GetCollection("genParticle");
+  shared_ptr<PhysicsObjects> genParticles;
+
+  try {
+    genParticles = event->GetCollection("genParticle");
+  } catch (const Exception& e) {
+    error() << "No genParticle collection found in event. Will not insert genPhoton collection." << endl;
+    return;
+  }
   auto genPhotons = GetGenParticles(event, 11);
   event->AddCollection("genElectron", genPhotons);
 }
 
 shared_ptr<PhysicsObjects> LbLObjectsManager::GetGenParticles(const shared_ptr<Event> event, int pid) {
-  auto mcParticles = event->GetCollection("genParticle");
   auto genParticles = make_shared<PhysicsObjects>();
+
+  shared_ptr<PhysicsObjects> mcParticles;
+
+  try {
+    mcParticles = event->GetCollection("genParticle");
+  } catch (const Exception& e) {
+    error() << "No genParticle collection found in event. Will not insert genPhoton collection." << endl;
+    return genParticles;
+  }
 
   for (auto particle : *mcParticles) {
     int particlePid = GetParticlePid(particle);
